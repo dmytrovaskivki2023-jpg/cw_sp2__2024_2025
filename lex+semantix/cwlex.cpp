@@ -450,8 +450,9 @@ int main(int argc, char* argv[]) {
 		printf("Lexical analysis complete success\r\n");
 	}
 
-	(void)declarationVerification();
-	(void)checkingVariableInitialization(); // TODO: implement this
+	(void)checkingInternalCollisionInDeclarations();
+	(void)checkingVariableInitialization();            // TODO: implement this
+	(void)checkingCollisionInDeclarationsByKeyWords(); // TODO: implement this
 
 	printf("Press Enter to exit . . .");
 	(void)getchar();

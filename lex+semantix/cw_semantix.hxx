@@ -6,7 +6,7 @@
 
 #define NO_IMPLEMENT_CODE_STATE 256
 
-int declarationVerification(/*TODO: add arg*/) {
+int checkingInternalCollisionInDeclarations(/*TODO: add arg*/) {
 	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
 		char isDeclaredIdentifier = 0;
 		char isDeclaredIdentifierCollision = 0;
@@ -70,5 +70,12 @@ int checkingVariableInitialization(/*TODO: add args*/) {
 	//TODO: implement this
 
 	printf("\r\nTODO: implent \"int checkingVariableInitialization(/*TODO: add args*/)\"\r\n\r\n");
+	return NO_IMPLEMENT_CODE_STATE;
+}
+
+int checkingCollisionInDeclarationsByKeyWords(/*TODO: add args*/) {
+	//TODO: implement this
+
+	printf("\r\nTODO: implent \"int checkingCollisionInDeclarationsByKeyWords(/*TODO: add args*/)\"\r\n\r\n");
 	return NO_IMPLEMENT_CODE_STATE;
 }
