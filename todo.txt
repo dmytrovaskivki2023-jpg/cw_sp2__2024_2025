@@ -1,0 +1,3 @@
+12/12/2024. Add implementation of variable initialization checking in "cw_semantix_and_cyk_after_lex__sp2__2024_2025/lex+semantix/cw_semantix.hxx".
+
+
