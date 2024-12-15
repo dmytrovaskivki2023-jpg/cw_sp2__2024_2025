@@ -5,7 +5,7 @@
 *                                                           *
 *************************************************************/
 //#define USE_PREDEFINED_PARAMETERS // enable this define for use predefined value
-#pragma comment(linker, "/STACK:516777216")
+//#pragma comment(linker, "/STACK:516777216")
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -121,7 +121,7 @@ unsigned int getIdentifierId(char(*identifierIdsTable)[MAX_LEXEM_SIZE], char * s
 
 // try to get identifier
 unsigned int tryToGetIdentifier(struct LexemInfo* lexemInfoInTable, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
-	char identifiers_re[] = "[A-Z][A-Z]";
+	char identifiers_re[] = "_[A-Z][A-Z][A-Z][A-Z][A-Z][A-Z][A-Z]";
 
 	if (std::regex_match(std::string(lexemInfoInTable->lexemStr), std::regex(identifiers_re))) {
 		lexemInfoInTable->lexemId = getIdentifierId(identifierIdsTable, lexemInfoInTable->lexemStr);
@@ -309,7 +309,7 @@ unsigned int getKeyWordId(char* keywords_, char* lexemStr, unsigned int baseId) 
 
 // try to get KeyWord
 char tryToGetKeyWord(struct LexemInfo* lexemInfoInTable) {
-	char keywords_re[] = ";|<<|\\+\\+|--|\\*\\*|==|!=|:|name|data|body|end|get|put|if|goto|div|mod|le|ge|not|and|or|long|int";
+	char keywords_re[] = ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|NAME|DATA|BODY|END|EXIT|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16";
 	char keywords_[sizeof(keywords_re)] = {'\0'};
 	prepareKeyWordIdGetter(keywords_, keywords_re);
 	
@@ -362,7 +362,7 @@ struct LexemInfo lexicalAnalyze(struct LexemInfo* lexemInfoInPtr, char(*identifi
 }
 
 struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, char(*identifierIdsTable)[MAX_LEXEM_SIZE], struct LexemInfo(*lexicalAnalyzeFunctionPtr)(struct LexemInfo*, char(*)[MAX_LEXEM_SIZE])) {
-	char tokens_re[] = "<<|\\+\\+|--|\\*\\*|==|!=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]";
+	char tokens_re[] = ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]";
 	std::regex tokens_re_(tokens_re);
 	struct LexemInfo ifBadLexemeInfo = { 0 };
 	std::string stringText(text);
@@ -383,7 +383,7 @@ struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, c
 		ifBadLexemeInfo.col = (*lastLexemInfoInTable)->col;			
 	}
 			
-	return ifBadLexemeInfo;
+ 	return ifBadLexemeInfo;
 }
 
 #include "cw_grammar__by_cyk_algorithm.hxx"
@@ -431,9 +431,9 @@ int main(int argc, char* argv[]) {
 		printf("%s\r\n", text);
 		printf("-------------------------------------------------------------------\r\n\r\n");
 	}
-
+	cout         << "tokenize in progress.....[used regex, please wait]";
 	struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
-
+	cout << "\r" << "tokenize complete........[          ok          ]\n";
 	if (ifBadLexemeInfo.tokenType == UNEXPEXTED_LEXEME_TYPE) {
 		UNEXPEXTED_LEXEME_TYPE;
 		ifBadLexemeInfo.tokenType;
