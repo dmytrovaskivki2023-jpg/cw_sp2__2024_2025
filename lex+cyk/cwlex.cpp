@@ -41,7 +41,7 @@
 
 #define DEFAULT_MODE (LEXICAL_ANALISIS_MODE | DEBUG_MODE)
 
-#define DEFAULT_INPUT_FILENAME "file5.cwl"
+#define DEFAULT_INPUT_FILENAME "file5_ki308.cwl"
 
 #define PREDEFINED_TEXT \
 	"name MN\r\n" \
@@ -433,7 +433,7 @@ int main(int argc, char* argv[]) {
 	}
 	cout         << "tokenize in progress.....[used regex, please wait]";
 	struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
-	cout << "\r" << "tokenize complete........[          ok          ]\n";
+	cout << "\r" << "tokenize complete........[           ok          ]\n";
 	if (ifBadLexemeInfo.tokenType == UNEXPEXTED_LEXEME_TYPE) {
 		UNEXPEXTED_LEXEME_TYPE;
 		ifBadLexemeInfo.tokenType;
