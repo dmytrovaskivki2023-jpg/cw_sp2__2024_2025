@@ -277,7 +277,7 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
         }
     }
 
-    cout << "\r" << "cykParse complete........[    ok    ]\n";
+    cout << "\r" << "cykParse complete........[     ok    ]\n";
 
     return !!parseInfoTable[0][lexemIndex - 1].size();
 }
