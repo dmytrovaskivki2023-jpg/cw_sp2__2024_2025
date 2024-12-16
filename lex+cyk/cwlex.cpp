@@ -41,7 +41,7 @@
 
 #define DEFAULT_MODE (LEXICAL_ANALISIS_MODE | DEBUG_MODE)
 
-#define DEFAULT_INPUT_FILENAME "file1.cwl"
+#define DEFAULT_INPUT_FILENAME "file5.cwl"
 
 #define PREDEFINED_TEXT \
 	"name MN\r\n" \
