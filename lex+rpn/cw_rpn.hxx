@@ -136,11 +136,6 @@ unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStruc
 		return false;
 	}
 
-//	return !strncmp(lexemInfoTable[0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE)
-//		&& (!tokenStruct[tokenStructName][1] || !strncmp(lexemInfoTable[1].lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE))
-//		&& (!tokenStruct[tokenStructName][2] || !strncmp(lexemInfoTable[2].lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE))
-//		&& (!tokenStruct[tokenStructName][3] || !strncmp(lexemInfoTable[3].lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE))
-//	;
 	if (!strncmp(lexemInfoTable[0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE)
 		&& (!tokenStruct[tokenStructName][1] || !strncmp(lexemInfoTable[1].lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE))
 		&& (!tokenStruct[tokenStructName][2] || !strncmp(lexemInfoTable[2].lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE))
@@ -155,10 +150,6 @@ unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStruc
 	else {
 		return 0;
 	}
-//	return !strncmp(lexemInfoTable[0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE)
-//		&& (!tokenStruct[tokenStructName][1] || !strncmp(lexemInfoTable[1].lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE))
-//		&& (!tokenStruct[tokenStructName][2] || !strncmp(lexemInfoTable[2].lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE))
-//		&& (!tokenStruct[tokenStructName][3] || !strncmp(lexemInfoTable[3].lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE))
 }
 
 
@@ -281,15 +272,15 @@ unsigned char* makeBeginProgramCode(struct LexemInfo** lastLexemInfoInTable, uns
 }
 
 unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
-	unsigned char code__call_NexInstructionLabel[]          = { 0xE8, 0x00, 0x00, 0x00, 0x00 };       // call NexInstruction // db 0E8h, 00h, 00h, 00h, 00h 
-	                                                                                                  // NexInstruction:
-	unsigned char code__pop_esi[]                           = { 0x5E };                               // pop esi
-	unsigned char code__sub_esi_5[]                         = { 0x83, 0xEE, 0x05 };                   // sub esi, 5
-	unsigned char code__mov_edi_esi[]                       = { 0x8B, 0xFE };                         // mov edi, esi
-	//unsigned char code__add_edi_dataOffsetMinusCodeOffset[] = { 0xE8, 0xC7, 0x00, 0x00, 0x00, 0x00 }; // add edi, 0????????h
-	//unsigned char code__xor_ebp_ebp[]                       = { 0x33, 0xED };                         // xor ebp,ebp
-	unsigned char code__mov_ecx_edi[]                       = { 0x8B, 0xCF };                         // mov ecx, edi
-	unsigned char code__add_ecx_512[]                       = { 0x81, 0xC1, 0x00, 0x02, 0x00, 0x00 }; // add ecx, 512
+	unsigned char code__call_NexInstructionLabel[]          = { 0xE8, 0x00, 0x00, 0x00, 0x00 };      
+	                                                                                                 
+	unsigned char code__pop_esi[]                           = { 0x5E };                              
+	unsigned char code__sub_esi_5[]                         = { 0x83, 0xEE, 0x05 };                  
+	unsigned char code__mov_edi_esi[]                       = { 0x8B, 0xFE };                        
+	//unsigned char code__add_edi_dataOffsetMinusCodeOffset[] = { 0xE8, 0xC7, 0x00, 0x00, 0x00, 0x00 }; 
+	//unsigned char code__xor_ebp_ebp[]                       = { 0x33, 0xED };                     
+	unsigned char code__mov_ecx_edi[]                       = { 0x8B, 0xCF };                       
+	unsigned char code__add_ecx_512[]                       = { 0x81, 0xC1, 0x00, 0x02, 0x00, 0x00 };
 	const unsigned char* dataOffsetMinusCodeOffsetValueParts = (const unsigned char*)&dataOffsetMinusCodeOffset;
 	//code__add_edi_dataOffsetMinusCodeOffset[2] = dataOffsetMinusCodeOffsetValueParts[0];
 	//code__add_edi_dataOffsetMinusCodeOffset[3] = dataOffsetMinusCodeOffsetValueParts[1];
@@ -431,8 +422,8 @@ unsigned char* makePutCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		printf("    ;\"%s\"\r\n", "put");
 #endif
 
-		//const unsigned char code__not_stackTopByECX[]     = { 0xF7, 0x11 }; // not dword ptr[ecx]
-		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 }; // mov eax, dword ptr[ecx]
+		//const unsigned char code__not_stackTopByECX[]     = { 0xF7, 0x11 }; 
+		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 }; 
 
 		//currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__not_stackTopByECX, 2);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECX, 3);
@@ -455,8 +446,8 @@ unsigned char* makeNotCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		printf("    ;\"%s\"\r\n", "not");
 #endif
 
-		const unsigned char code__not_stackTopByECX[]     = { 0xF7, 0x11 }; // not dword ptr[ecx]
-		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 }; // mov eax, dword ptr[ecx]
+		const unsigned char code__not_stackTopByECX[]     = { 0xF7, 0x11 }; 
+		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 }; 
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__not_stackTopByECX, 2);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECX, 3);
@@ -539,10 +530,10 @@ unsigned char* makeMulCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		printf("    ;\"%s\"\r\n", "**");
 #endif
 
-		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC }; // mov eax, dword ptr[ecx - 4]
-		const unsigned char code__imul_stackTopByECX[]          = { 0xF7, 0x29 };       // imul dword ptr [ecx]
-		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 }; // sub ecx, 4
-		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };       // mov dword ptr [ecx], eax
+		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
+		const unsigned char code__imul_stackTopByECX[]          = { 0xF7, 0x29 };      
+		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 };
+		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };      
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECXMinus4, 3);
 		//currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cdq, 1);
@@ -566,18 +557,18 @@ unsigned char* makeMulCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 	return currBytePtr;
 }
 
-unsigned char* makeDivCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) { // task
+unsigned char* makeDivCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
 	if (!strncmp((*lastLexemInfoInTable)->lexemStr, "div", MAX_LEXEM_SIZE)) {
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("\r\n");
 		printf("    ;\"%s\"\r\n", "div");
 #endif
 
-		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC }; // mov eax, dword ptr[ecx - 4]
-		const unsigned char code__cdq[]                         = { 0x99 };             // cdq
-		const unsigned char code__idiv_stackTopByECX[]          = { 0xF7, 0x39 };       // idiv dword ptr [ecx]
-		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 }; // sub ecx, 4
-		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };       // mov dword ptr [ecx], eax
+		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
+		const unsigned char code__cdq[]                         = { 0x99 };            
+		const unsigned char code__idiv_stackTopByECX[]          = { 0xF7, 0x39 };      
+		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 };
+		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };      
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECXMinus4, 3);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cdq, 1);
@@ -693,11 +684,11 @@ unsigned char* makeLeftToRightBindCode(struct LexemInfo** lastLexemInfoInTable, 
 		printf("    ;\">>\"\r\n");
 #endif
 
-		const unsigned char code__mov_ebx_stackTopByECX[]       = { 0x8B, 0x19 };       // mov ebx, dword ptr[ecx]
-		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC }; // mov eax, dword ptr[ecx - 4]
-		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xED, 0x08 }; // sub ecx, 8
-		const unsigned char code__add_ebx_edi[]                 = { 0x03, 0xDF };       // add ebx, edi
-		const unsigned char code__mov_addrFromEBX_eax[]         = { 0x89, 0x03 };       // mov dword ptr [ebx], eax	
+		const unsigned char code__mov_ebx_stackTopByECX[]       = { 0x8B, 0x19 };
+		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
+		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xED, 0x08 };
+		const unsigned char code__add_ebx_edi[]                 = { 0x03, 0xDF };
+		const unsigned char code__mov_addrFromEBX_eax[]         = { 0x89, 0x03 };
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_ebx_stackTopByECX, 2);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECXMinus4, 3);
@@ -719,7 +710,7 @@ unsigned char* makeLeftToRightBindCode(struct LexemInfo** lastLexemInfoInTable, 
 	return currBytePtr;
 }
 
-////////////////////////////////
+//////
 
 void makePrepare4IdentifierOrValue(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) { // 
 
@@ -753,7 +744,7 @@ void makePrepare4IdentifierOrValue(struct LexemInfo** lastLexemInfoInTable, stru
 	}
 }
 
-int op_preced123(char* lexemStr) {
+int precedenceLevel(char* lexemStr) {
 	if (!strncmp(lexemStr, "not", MAX_LEXEM_SIZE)) {
 		return 5;
 	}
@@ -792,7 +783,7 @@ int op_preced123(char* lexemStr) {
 	return 0;
 
 }
-bool op_left_assoc123(char* lexemStr) {
+bool isLeftAssociative(char* lexemStr) {
 	if (!strncmp(lexemStr, "**", MAX_LEXEM_SIZE)) {
 		return true;
 	}
@@ -828,13 +819,13 @@ bool op_left_assoc123(char* lexemStr) {
 	return false;
 }
 void makePrepare4Operators(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
-	if (op_preced123((*lastLexemInfoInTable)->lexemStr)) {
+	if (precedenceLevel((*lastLexemInfoInTable)->lexemStr)) {
 		while (lexemInfoTransformationTempStackSize > 0) {
 			struct LexemInfo& currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
-			if (op_preced123(currLexemInfo.lexemStr) && (
-				(op_left_assoc123((*lastLexemInfoInTable)->lexemStr)  && (op_preced123((*lastLexemInfoInTable)->lexemStr) <= op_preced123(currLexemInfo.lexemStr)))
+			if (precedenceLevel(currLexemInfo.lexemStr) && (
+				(isLeftAssociative((*lastLexemInfoInTable)->lexemStr)  && (precedenceLevel((*lastLexemInfoInTable)->lexemStr) <= precedenceLevel(currLexemInfo.lexemStr)))
 				||					
-				(!op_left_assoc123((*lastLexemInfoInTable)->lexemStr) && (op_preced123((*lastLexemInfoInTable)->lexemStr) <  op_preced123(currLexemInfo.lexemStr)))
+				(!isLeftAssociative((*lastLexemInfoInTable)->lexemStr) && (precedenceLevel((*lastLexemInfoInTable)->lexemStr) <  precedenceLevel(currLexemInfo.lexemStr)))
 				)) {
 
 				**lastTempLexemInfoInTable = currLexemInfo; ++*lastTempLexemInfoInTable;
@@ -865,14 +856,14 @@ void makePrepare4RightParenthesis(struct LexemInfo** lastLexemInfoInTable, struc
 				break;
 			}
 			else {
-				**lastTempLexemInfoInTable/*++*/ = currLexemInfo; ++*lastTempLexemInfoInTable; //
+				**lastTempLexemInfoInTable = currLexemInfo; ++*lastTempLexemInfoInTable;
 				lexemInfoTransformationTempStackSize--;
 			}
 		}
 		if (!findLeftParenthesis) {
 			printf("Warning: parentheses mismatched\n");
-			//exit(0);
-			**lastTempLexemInfoInTable/*++*/ = **lastLexemInfoInTable; ++*lastTempLexemInfoInTable; //
+
+			**lastTempLexemInfoInTable = **lastLexemInfoInTable; ++*lastTempLexemInfoInTable;
 		}
 		else {
 			--lexemInfoTransformationTempStackSize;
@@ -883,23 +874,18 @@ void makePrepare4RightParenthesis(struct LexemInfo** lastLexemInfoInTable, struc
 }
 
 void makePrepareEnder(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
-
-	// When there are no more tokens to read:
-	// While there are still operator tokens in the stack:
 	while (lexemInfoTransformationTempStackSize > 0) {
 		struct LexemInfo& currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 		if (currLexemInfo.lexemStr[0] == '(' || currLexemInfo.lexemStr[0] == ')') {
 			printf("Error: parentheses mismatched\n");
 			exit(0);
 		}
-		//*outpos = sc; ++outpos;
-		**lastTempLexemInfoInTable/*++*/ = currLexemInfo; ++(*lastTempLexemInfoInTable); //
+
+		**lastTempLexemInfoInTable = currLexemInfo; ++(*lastTempLexemInfoInTable);
 		--lexemInfoTransformationTempStackSize;
 	}
-	//*outpos = 0; // Null terminator
-	(*lastTempLexemInfoInTable)->lexemStr[0] = '\0';
-	//return true;
 
+	(*lastTempLexemInfoInTable)->lexemStr[0] = '\0';
 }
 
 void makePrepare(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
