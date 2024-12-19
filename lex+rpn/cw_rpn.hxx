@@ -45,7 +45,7 @@ unsigned char outText[MAX_OUTTEXT_SIZE] = ""; // !!!
 
 //int data[M1];
 
-unsigned long long int dataOffsetMinusCodeOffset = 0x00012000;
+unsigned long long int dataOffsetMinusCodeOffset = 0x00003000;
 
 struct LabelOffsetInfo {
 	char labelStr[MAX_LEXEM_SIZE];
@@ -204,14 +204,84 @@ unsigned char* makeEndProgramCode(struct LexemInfo** lastLexemInfoInTable, unsig
 	printf("        call wsprintfA\r\n");						
 	printf("        add esp, 12\r\n");																	
 	printf("\r\n");							
-	printf("        push 40h\r\n");								
-	printf("        push offset title_msg\r\n");									
-	printf("        push offset valueTemp_msg;\r\n");										
-	printf("        push 0\r\n");												
-	printf("        call MessageBoxA\r\n");												
-	printf("\r\n");												
+	printf("        ;push 40h\r\n");								
+	printf("        ;push offset title_msg\r\n");									
+	printf("        ;push offset valueTemp_msg;\r\n");										
+	printf("        ;push 0\r\n");												
+	printf("        ;call MessageBoxA\r\n");												
+	printf("\r\n");
+	printf("        push 0\r\n");
+	printf("        push 0; offset NumberOfCharsWritten\r\n");
+	printf("        push eax; NumberOfCharsToWrite\r\n");
+	printf("        push offset valueTemp_msg\r\n");
+	printf("        push hConsoleOutput\r\n");
+	printf("        call WriteConsoleA\r\n");
+	printf("\r\n");
 	printf("        ret\r\n");												
 	printf("    putProc ENDP\r\n");
+
+	printf("\r\n\r\n");
+
+	//printf("    getProc PROC\r\n");
+	//printf("        push eax\r\n");
+	//printf("        push offset valueTemp_fmt\r\n");
+	//printf("        push offset valueTemp_msg\r\n");
+	//printf("        call wsprintfA\r\n");
+	//printf("        add esp, 12\r\n");
+	//printf("\r\n");
+	//printf("        push 40h\r\n");
+	//printf("        push offset title_msg\r\n");
+	//printf("        push offset valueTemp_msg;\r\n");
+	//printf("        push 0\r\n");
+	//printf("        call MessageBoxA\r\n");
+	//printf("\r\n");
+	//printf("        ret\r\n");
+	//printf("    getProc ENDP\r\n");
+
+	printf("    getProc PROC\r\n");		
+	printf("        push ebp\r\n");			
+	printf("        mov ebp, esp\r\n");				
+	printf("\r\n");				
+	printf("        push 0\r\n");					
+	printf("        push offset readOutCount\r\n");						
+	printf("        push 15\r\n");							
+	printf("        push offset buffer + 1\r\n");								
+	printf("        push hConsoleInput\r\n");									
+	printf("        call ReadConsoleA\r\n");										
+	printf("\r\n");										
+	printf("        lea esi, offset buffer\r\n");											
+	printf("        add esi, readOutCount\r\n");												
+	printf("        sub esi, 2\r\n");													
+	printf("        call string_to_int\r\n");														
+	printf("\r\n");														
+	printf("        mov esp, ebp\r\n");															
+	printf("        pop ebp\r\n");																
+	printf("        ret\r\n");																																	
+	printf("    getProc ENDP\r\n");
+
+	printf("\r\n\r\n");
+
+	printf("    string_to_int PROC\r\n");
+	printf("    ;  input: ESI - string\r\n");
+	printf("    ; output: EAX - value\r\n");
+	printf("        xor eax, eax\r\n");
+	printf("        mov ebx, 1\r\n");
+	printf("        xor ecx, ecx\r\n");
+	printf("\r\n");
+	printf("convert_loop :\r\n");
+	printf("        movzx ecx, byte ptr[esi]\r\n");
+	printf("        test ecx, ecx\r\n");
+	printf("        jz done\r\n");
+	printf("        sub ecx, '0'\r\n");
+	printf("        imul ecx, ebx\r\n");
+	printf("        add eax, ecx\r\n");
+	printf("        imul ebx, ebx, 10\r\n");
+	printf("        dec esi\r\n");
+	printf("	    jmp convert_loop\r\n");
+	printf("\r\n");
+	printf("done:\r\n");
+	printf("        ret\r\n");
+	printf("    string_to_int ENDP\r\n");
 
 	printf("\r\n\r\n");
 
@@ -241,8 +311,16 @@ unsigned char* makeDependenciesDeclaration(struct LexemInfo** lastLexemInfoInTab
 	printf("\r\n");
 	printf("GetStdHandle proto STDCALL, nStdHandle : DWORD\r\n");
 	printf("ExitProcess proto STDCALL, uExitCode : DWORD\r\n");
-	printf("MessageBoxA PROTO hwnd : DWORD, lpText : DWORD, lpCaption : DWORD, uType : DWORD\r\n");
+	printf("ReadConsoleA proto STDCALL, hConsoleInput : DWORD, lpBuffer : DWORD, nNumberOfCharsToRead : DWORD, lpNumberOfCharsRead : DWORD, lpReserved : DWORD\r\n");
+	printf("WriteConsoleA proto STDCALL, hConsoleOutput : DWORD, lpBuffert : DWORD, nNumberOfCharsToWrite : DWORD, lpNumberOfCharsWritten : DWORD, lpReserved : DWORD\r\n");
 	printf("wsprintfA PROTO C : VARARG\r\n");
+	printf("\r\n");
+	printf("GetConsoleMode PROTO STDCALL, hConsoleHandle:DWORD, lpMode : DWORD\r\n");
+	printf("\r\n");
+	printf("SetConsoleMode PROTO STDCALL, hConsoleHandle:DWORD, dwMode : DWORD\r\n");
+	printf("\r\n");
+	printf("ENABLE_LINE_INPUT EQU 0002h\r\n");
+	printf("ENABLE_ECHO_INPUT EQU 0004h\r\n");
 #endif
 		
 	return currBytePtr;
@@ -253,9 +331,14 @@ unsigned char* makeDataSection(struct LexemInfo** lastLexemInfoInTable, unsigned
 	printf("\r\n");
 	printf(".data\r\n");
 	printf("    data_start db 8192 dup (0)\r\n");
-	printf("    title_msg db \"Output:\", 0\r\n");
+	printf("    ;title_msg db \"Output:\", 0\r\n");
 	printf("    valueTemp_msg db 256 dup(0)\r\n");
 	printf("    valueTemp_fmt db \"%%d\", 10, 13, 0\r\n");
+	printf("    ;NumberOfCharsWritten dd 0\r\n");
+	printf("    hConsoleInput dd 0\r\n");
+	printf("    hConsoleOutput dd 0\r\n");
+	printf("    buffer db 128 dup(0)\r\n");
+	printf("    readOutCount dd ?\r\n");
 #endif
 
 	return currBytePtr;
@@ -277,7 +360,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 	unsigned char code__pop_esi[]                           = { 0x5E };                              
 	unsigned char code__sub_esi_5[]                         = { 0x83, 0xEE, 0x05 };                  
 	unsigned char code__mov_edi_esi[]                       = { 0x8B, 0xFE };                        
-	//unsigned char code__add_edi_dataOffsetMinusCodeOffset[] = { 0xE8, 0xC7, 0x00, 0x00, 0x00, 0x00 }; 
+	unsigned char code__add_edi_dataOffsetMinusCodeOffset[] = { 0xE8, 0xC7, 0x00, 0x00, 0x00, 0x00 }; 
 	//unsigned char code__xor_ebp_ebp[]                       = { 0x33, 0xED };                     
 	unsigned char code__mov_ecx_edi[]                       = { 0x8B, 0xCF };                       
 	unsigned char code__add_ecx_512[]                       = { 0x81, 0xC1, 0x00, 0x02, 0x00, 0x00 };
@@ -302,11 +385,36 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 	printf(";NexInstruction:\r\n");
 	printf("    pop esi\r\n");
 	printf("    sub esi, 5\r\n");
-	printf("    mov edi, offset data_start\r\n");
-	//printf("    add edi, 0%08Xh\r\n", (int)dataOffsetMinusCodeOffset);
+	printf("    mov edi, esi\r\n");//printf("    mov edi, offset data_start\r\n");
+	printf("    add edi, 0%08Xh\r\n", (int)dataOffsetMinusCodeOffset);
 	//printf("    xor ebp, ebp\r\n");
 	printf("    mov ecx, edi\r\n");
 	printf("    add ecx, 512\r\n");
+	printf("    push -10\r\n");
+	printf("    call GetStdHandle\r\n");
+	printf("    mov hConsoleInput, eax\r\n");
+	printf("    push -11\r\n");
+	printf("    call GetStdHandle\r\n");
+	printf("    mov hConsoleOutput, eax\r\n");
+	printf("    \r\n");
+	printf("    ;push ecx\r\n");		
+	printf("    ;push ebx\r\n");			
+	printf("    ;push esi\r\n");				
+	printf("    ;push edi\r\n");
+	printf("    ;push offset mode\r\n");
+	printf("    ;push hConsoleInput\r\n");
+	printf("    ;call GetConsoleMode\r\n");
+	printf("    ;mov ebx, eax\r\n");
+	printf("    ;or ebx, ENABLE_LINE_INPUT \r\n");
+	printf("    ;or ebx, ENABLE_ECHO_INPUT\r\n");
+	printf("    ;push ebx\r\n");
+	printf("    ;push hConsoleInput\r\n");
+	printf("    ;call SetConsoleMode\r\n");
+	printf("    ;pop edi\r\n");
+	printf("    ;pop esi\r\n");
+	printf("    ;pop ebx\r\n");
+	printf("    ;pop ecx\r\n");
+
 #endif
 
 	return currBytePtr;
@@ -397,12 +505,21 @@ unsigned char* makeGetCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("\r\n");
 		printf("    ;\"%s\"\r\n", "get");
+		printf("    push ecx\r\n");
+		printf("    push ebx\r\n");
+		printf("    push esi\r\n");
+		printf("    push edi\r\n");
+		printf("    call getProc\r\n");
+		printf("    pop edi\r\n");
+		printf("    pop esi\r\n");
+		printf("    pop ebx\r\n");
+		printf("    pop ecx\r\n");
+
 #endif
 
 		// TODO: ...
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    mov eax, 1;TODO: impl.\r\n");
 		printf("    mov ebx, dword ptr[ecx]\r\n");
 		printf("    sub ecx, 4\r\n");
 		printf("    add ebx, edi\r\n");
@@ -431,6 +548,8 @@ unsigned char* makePutCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("    mov eax, dword ptr[ecx]\r\n");
 		printf("    call putProc\r\n");
+		printf("    ;db 0FFh, 15h\r\n");	
+		printf("    ;dd 00831113h\r\n"); // add adress
 #endif
 
 		return ++ * lastLexemInfoInTable, currBytePtr;
