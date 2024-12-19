@@ -277,7 +277,7 @@ unsigned char* makeEndProgramCode(struct LexemInfo** lastLexemInfoInTable, unsig
 	printf("        add eax, ecx\r\n");
 	printf("        imul ebx, ebx, 10\r\n");
 	printf("        dec esi\r\n");
-	printf("	    jmp convert_loop\r\n");
+	printf("        jmp convert_loop\r\n");
 	printf("\r\n");
 	printf("done:\r\n");
 	printf("        ret\r\n");
