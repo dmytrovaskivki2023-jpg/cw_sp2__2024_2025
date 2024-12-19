@@ -311,6 +311,7 @@ unsigned char* makeDependenciesDeclaration(struct LexemInfo** lastLexemInfoInTab
 	printf("\r\n");
 	printf("GetStdHandle proto STDCALL, nStdHandle : DWORD\r\n");
 	printf("ExitProcess proto STDCALL, uExitCode : DWORD\r\n");
+	printf(";MessageBoxA PROTO hwnd : DWORD, lpText : DWORD, lpCaption : DWORD, uType : DWORD\r\n");
 	printf("ReadConsoleA proto STDCALL, hConsoleInput : DWORD, lpBuffer : DWORD, nNumberOfCharsToRead : DWORD, lpNumberOfCharsRead : DWORD, lpReserved : DWORD\r\n");
 	printf("WriteConsoleA proto STDCALL, hConsoleOutput : DWORD, lpBuffert : DWORD, nNumberOfCharsToWrite : DWORD, lpNumberOfCharsWritten : DWORD, lpReserved : DWORD\r\n");
 	printf("wsprintfA PROTO C : VARARG\r\n");

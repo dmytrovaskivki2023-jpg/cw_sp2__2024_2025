@@ -11,5 +11,5 @@ body
     get ( BB );
     get ( DD );
     get ( EE );
-    put ( KK ++ BB -- DD div 2 ++ EE ** 4);
+    put ( KK ++ BB -- DD div 2 ++ EE ** 4 );
 end
