@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG_MODE_BY_ASSEMBLY
+//#define DEBUG_MODE_BY_ASSEMBLY
 
 #define MAX_TEXT_SIZE 8192
 #define MAX_GENERATED_TEXT_SIZE (MAX_TEXT_SIZE * 6)
