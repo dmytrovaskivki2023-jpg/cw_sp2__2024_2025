@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define DEBUG_MODE_BY_ASSEMBLY
+#define DEBUG_MODE_BY_ASSEMBLY
 
 #define MAX_TEXT_SIZE 8192
 #define MAX_GENERATED_TEXT_SIZE (MAX_TEXT_SIZE * 6)
@@ -661,7 +661,7 @@ unsigned char* makeAddCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 #endif
 
 		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 };       
-		const unsigned char code__sub_ecx_4[]             = { 0x83, 0xED, 0x04 };
+		const unsigned char code__sub_ecx_4[]             = { 0x83, 0xE9, 0x04 };
 		const unsigned char code__add_stackTopByECX_eax[] = { 0x01, 0x01};       
 		//const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 };       
 
@@ -691,7 +691,7 @@ unsigned char* makeSubCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 #endif
 
 		const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 };
-		const unsigned char code__sub_ecx_4[]             = { 0x83, 0xED, 0x04 };
+		const unsigned char code__sub_ecx_4[]             = { 0x83, 0xE9, 0x04 };
 		const unsigned char code__sub_stackTopByECX_eax[] = { 0x29, 0x01 };
 		//const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 };
 
@@ -722,7 +722,7 @@ unsigned char* makeMulCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 
 		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
 		const unsigned char code__imul_stackTopByECX[]          = { 0xF7, 0x29 };      
-		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 };
+		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xE9, 0x04 };
 		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };      
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECXMinus4, 3);
@@ -735,7 +735,7 @@ unsigned char* makeMulCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("    mov eax, dword ptr[ecx - 4]\r\n");
-		printf("    cdq\r\n");
+		printf("    ;cdq\r\n");
 		printf("    imul dword ptr [ecx]\r\n");
 		printf("    sub ecx, 4\r\n");
 		printf("    mov dword ptr [ecx], eax\r\n");
@@ -757,7 +757,7 @@ unsigned char* makeDivCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
 		const unsigned char code__cdq[]                         = { 0x99 };            
 		const unsigned char code__idiv_stackTopByECX[]          = { 0xF7, 0x39 };      
-		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 };
+		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xE9, 0x04 };
 		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };      
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECXMinus4, 3);
@@ -791,7 +791,7 @@ unsigned char* makeModCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC }; // mov eax, dword ptr[ecx - 4]
 		const unsigned char code__cdq[]                         = { 0x99 };             // cdq
 		const unsigned char code__idiv_stackTopByECX[]          = { 0xF7, 0x39 };       // idiv dword ptr [ecx]
-		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xED, 0x04 }; // sub ecx, 4
+		const unsigned char code__sub_ecx_4[]                   = { 0x83, 0xE9, 0x04 }; // sub ecx, 4
 		const unsigned char code__mov_eax_edx[]                 = { 0x8B, 0xC2 };       // mov eax, edx
 		const unsigned char code__mov_toAddrFromECX_eax[]       = { 0x89, 0x01 };       // mov dword ptr [ecx], eax
 
@@ -843,7 +843,7 @@ unsigned char* makeRightToLeftBindCode(struct LexemInfo** lastLexemInfoInTable, 
 
 		const unsigned char code__mov_eax_stackTopByECX[]       = { 0x8B, 0x01 };       // mov eax, dword ptr[ecx]
 		const unsigned char code__mov_ebx_stackTopByECXMinus4[] = { 0x8B, 0x59, 0xFC }; // mov ebx, dword ptr[ecx - 4]
-		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xED, 0x08 }; // sub ecx, 8
+		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xE9, 0x08 }; // sub ecx, 8
 		const unsigned char code__add_ebx_edi[]                 = { 0x03, 0xDF };       // add ebx, edi
 		const unsigned char code__mov_addrFromEBX_eax[]         = { 0x89, 0x03 };       // mov dword ptr [ebx], eax	
 
@@ -876,7 +876,7 @@ unsigned char* makeLeftToRightBindCode(struct LexemInfo** lastLexemInfoInTable, 
 
 		const unsigned char code__mov_ebx_stackTopByECX[]       = { 0x8B, 0x19 };
 		const unsigned char code__mov_eax_stackTopByECXMinus4[] = { 0x8B, 0x41, 0xFC };
-		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xED, 0x08 };
+		const unsigned char code__sub_ecx_8[]                   = { 0x83, 0xE9, 0x08 };
 		const unsigned char code__add_ebx_edi[]                 = { 0x03, 0xDF };
 		const unsigned char code__mov_addrFromEBX_eax[]         = { 0x89, 0x03 };
 
