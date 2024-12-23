@@ -1,2 +1,0 @@
-12/12/2024. Add implementation of variable initializations checking in "cw_semantix_and_cyk_after_lex__sp2__2024_2025/lex+semantix/cw_semantix.hxx".
-Homework. Add implementation to check that reserved words are not used as variable names in "cw_semantix_and_cyk_after_lex__sp2__2024_2025/lex+semantix/cw_semantix.hxx".
