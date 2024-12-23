@@ -29,7 +29,7 @@ void reconstruct_file(const char* output_file) {
     a123_array_part_count + a123_zero_part_count;
     a123_array_part_count + a123_zero_part_count;
     for (unsigned long long int i = 0; i < a123_array_part_count + a123_zero_part_count; ++i) {
-        if (i % 2 == 0) { // ×åðãóâàííÿ: äàí³ òà íóë³
+        if (i % 2 == 0) { // Ã—Ã¥Ã°Ã£Ã³Ã¢Ã Ã­Ã­Ã¿: Ã¤Ã Ã­Â³ Ã²Ã  Ã­Ã³Ã«Â³
             unsigned char* current_array = NULL;
             current_array = a123[array_index++];
             if (current_array) {
