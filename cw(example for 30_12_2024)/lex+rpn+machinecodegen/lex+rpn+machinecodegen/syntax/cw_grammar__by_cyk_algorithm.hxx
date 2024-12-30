@@ -279,5 +279,5 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
 
     cout << "\r" << "cykParse complete........[     ok    ]\n";
 
-    return !!parseInfoTable[0][lexemIndex - 1].size();
+    return parseInfoTable[0][lexemIndex - 1].find(grammar->start_symbol) != parseInfoTable[0][lexemIndex - 1].end(); // return !!parseInfoTable[0][lexemIndex - 1].size();
 }
