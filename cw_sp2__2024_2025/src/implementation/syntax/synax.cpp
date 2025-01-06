@@ -122,8 +122,8 @@ Grammar grammar = {
         {"statement", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},
         {"statement", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},
         {"statement", 2, {"tokenREPEAT","tokenUNTIL__expression"}},
-        {"statement", 2, {"label","tokenCOLON"}},
-        {"statement", 2, {"tokenGOTO","label"}},
+        {"statement", 2, {"ident","tokenCOLON"}},
+        {"statement", 2, {"tokenGOTO","ident"}},
         {"statement", 2, {"input__first_part","input__second_part"}},
         {"statement", 2, {"output__first_part","output__second_part"}},
         {"statement____iteration_after_two", 2, {"statement","statement____iteration_after_two"}},
@@ -140,8 +140,8 @@ Grammar grammar = {
         { "statement_in_while_body", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"} },
         { "statement_in_while_body", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"} },
         { "statement_in_while_body", 2, {"tokenREPEAT","tokenUNTIL__expression"} },
-        { "statement_in_while_body", 2, {"label","tokenCOLON"} },
-        { "statement_in_while_body", 2, {"tokenGOTO","label"} },
+        { "statement_in_while_body", 2, {"ident","tokenCOLON"} },
+        { "statement_in_while_body", 2, {"tokenGOTO","ident"} },
         { "statement_in_while_body", 2, {"input__first_part","input__second_part"} },
         { "statement_in_while_body", 2, {"output__first_part","output__second_part"} },
         { "statement_in_while_body", 2, {"tokenCONTINUE","tokenWHILE"} },
@@ -204,7 +204,7 @@ Grammar grammar = {
         //
         { "ident", 1, {"ident_terminal"} },
         //
-        { "label", 1, {"ident_terminal"} },
+//        { "label", 1, {"ident_terminal"} },
         //
         { "", 2, {"",""} }
     },
