@@ -59,7 +59,7 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr] - currBytePtr);
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    jmp LABEL@%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		printf("    jmp LABEL@%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 #endif
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
