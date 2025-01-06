@@ -24,8 +24,8 @@ template <typename Iterator>
 struct cwgrammar : qi::grammar<Iterator> {
     cwgrammar(std::ostringstream& error_stream) : cwgrammar::base_type(program), error_stream_(error_stream) {
         //
-        labeled_point = label >> tokenCOLON;
-        goto_label = tokenGOTO >> label;
+        labeled_point = ident >> tokenCOLON;
+        goto_label = tokenGOTO >> ident;
         program_name = SAME_RULE(ident);
         value_type = SAME_RULE(tokenINTEGER16);
         other_declaration_ident = tokenCOMMA >> ident;
@@ -90,7 +90,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         letter_in_lower_case = a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z;
         letter_in_upper_case = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z;
         ident = tokenUNDERSCORE >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> STRICT_BOUNDARIES;
-        label = letter_in_lower_case >> *letter_in_lower_case >> STRICT_BOUNDARIES;
+        //label = letter_in_lower_case >> *letter_in_lower_case >> STRICT_BOUNDARIES;
         //
         sign = sign_plus | sign_minus;
         sign_plus = '-' >> BOUNDARIES;
@@ -272,7 +272,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         digit_0, digit_1, digit_2, digit_3, digit_4, digit_5, digit_6, digit_7, digit_8, digit_9,
         digit, non_zero_digit, value, unsigned_value,
         letter_in_upper_case, letter_in_lower_case, ident,
-        label,
+        //label,
         tokenUNDERSCORE,
         a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
@@ -324,8 +324,8 @@ tokenGROUPEXPRESSIONBEGIN__expression,\
 binary_action____iteration_after_two
     cwgrammar_2(std::ostringstream& error_stream) : cwgrammar_2::base_type(program), error_stream_(error_stream) {
         //
-        labeled_point = label >> tokenCOLON;                                                                                       // +
-        goto_label = tokenGOTO >> label;                                                                                           // +
+        labeled_point = ident >> tokenCOLON;                                                                                       // +
+        goto_label = tokenGOTO >> ident;                                                                                           // +
         program_name = SAME_RULE(ident);                                                                                           // + (!)
         value_type = SAME_RULE(tokenINTEGER16);                                                                                    // + (!)
         other_declaration_ident = (tokenCOMMA >> ident);                                                                           // + (!)
@@ -442,8 +442,8 @@ binary_action____iteration_after_two
             | tokenREPEAT__statement____iteration_after_two >> tokenUNTIL__group_expression // +
             | tokenREPEAT__statement >> tokenUNTIL__group_expression                       // +
             | tokenREPEAT >> tokenUNTIL__group_expression                                 // + (!)
-            | label >> tokenCOLON                                                                                        // + 
-            | tokenGOTO >> label                                                                                            // + 
+            | ident >> tokenCOLON                                                                                        // + 
+            | tokenGOTO >> ident                                                                                            // + 
             | input__first_part >> input__second_part                         // + 
             | output__first_part >> output__second_part;                 // +
         statement____iteration_after_two = statement >> statement____iteration_after_two// + NEW
@@ -460,8 +460,8 @@ binary_action____iteration_after_two
             | tokenREPEAT__statement____iteration_after_two >> tokenUNTIL__group_expression // +
             | tokenREPEAT__statement >> tokenUNTIL__group_expression                       // +
             | tokenREPEAT >> tokenUNTIL__group_expression                                 // + (!)
-            | label >> tokenCOLON                                                                                        // +
-            | tokenGOTO >> label                                                                                            // +
+            | ident >> tokenCOLON                                                                                        // +
+            | tokenGOTO >> ident                                                                                            // +
             | input__first_part >> input__second_part                         // +
             | output__first_part >> output__second_part                  // +
             | tokenCONTINUE >> tokenWHILE                                                                                                        // + (!)
@@ -495,7 +495,7 @@ binary_action____iteration_after_two
         letter_in_lower_case = a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z;
         letter_in_upper_case = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z;
         ident = tokenUNDERSCORE >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> letter_in_upper_case >> STRICT_BOUNDARIES;
-        label = letter_in_lower_case >> *letter_in_lower_case >> STRICT_BOUNDARIES; // !
+        //label = letter_in_lower_case >> *letter_in_lower_case >> STRICT_BOUNDARIES; // !
         //
         sign = sign_plus           // + (!)
             | sign_minus;         // + (!)
@@ -675,7 +675,7 @@ binary_action____iteration_after_two
         digit_0, digit_1, digit_2, digit_3, digit_4, digit_5, digit_6, digit_7, digit_8, digit_9,
         digit, non_zero_digit, value, unsigned_value,
         letter_in_upper_case, letter_in_lower_case, ident,
-        label,
+        //label,
         tokenUNDERSCORE,
         a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
@@ -783,7 +783,7 @@ int commentRemover(char* text, const char* openStrSpc, const char* closeStrSpc) 
     return 0;
 }
 
-#define DEFAULT_INPUT_FILE "../cw_sp2__2024_2025/file46.cwl"
+#define DEFAULT_INPUT_FILE "../../cw_sp2__2024_2025/file46.cwl"
 
 int main() {
     char* text_;
