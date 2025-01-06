@@ -16,14 +16,18 @@
 std::map<std::string, unsigned long long int> labelInfoTable;
 
 unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
-	if ((*lastLexemInfoInTable)->tokenType != IDENTIFIER_LEXEME_TYPE) {
+	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable + 1, MULTI_TOKEN_NULL_STATEMENT);
+	if ((*lastLexemInfoInTable)->tokenType != IDENTIFIER_LEXEME_TYPE
+		|| !(multitokenSize += detectMultiToken(*lastLexemInfoInTable + multitokenSize + 1, MULTI_TOKEN_COLON))) {
 		return currBytePtr;
 	}
-	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable + 1, MULTI_TOKEN_COLON);
+	else {
+		++multitokenSize;
+	}
 	if (multitokenSize) {
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("\r\n");
-		printf("    ;\"%s\" after %s(as label)\r\n", tokenStruct[MULTI_TOKEN_COLON][0], (*lastLexemInfoInTable)->lexemStr);
+		printf("    ;ident \"%s\" previous \"%s\" (as label)\r\n", (*lastLexemInfoInTable)->lexemStr, tokenStruct[MULTI_TOKEN_COLON][0]);
 #endif
 
 		labelInfoTable[(*lastLexemInfoInTable)->lexemStr] = (unsigned long long int)currBytePtr;

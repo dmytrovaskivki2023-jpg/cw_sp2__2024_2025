@@ -656,7 +656,7 @@ void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char
 		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = noMake(lastLexemInfoInTable, currBytePtr);
 
 		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) {
-			printf("\r\nError in the code generator! Unknown token!\r\n");
+			printf("\r\nError in the code generator! \"%s\" - unexpected token!\r\n", (*lastLexemInfoInTable)->lexemStr);
 			exit(0);
 		}
 
