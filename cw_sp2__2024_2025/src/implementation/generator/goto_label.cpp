@@ -41,7 +41,7 @@ unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 
-		printf("    LABEL@%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		printf("    LABEL@%016llX:\r\n", (unsigned long long int)&labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
 #endif
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
@@ -77,7 +77,7 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		}
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    jmp LABEL@%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		printf("    jmp LABEL@%016llX\r\n", (unsigned long long int)&labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first);
 #endif
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;

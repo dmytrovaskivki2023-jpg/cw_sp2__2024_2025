@@ -17,25 +17,46 @@
 
 int precedenceLevel(char* lexemStr) {
 	printf("TODO: (in precedenceLevel)\r\n");
-	//tokenStruct[MULTI_TOKEN_NOT][0];
-	if (!strncmp(lexemStr, "NOT", MAX_LEXEM_SIZE)) {
-		return 5;
+	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT][0], MAX_LEXEM_SIZE)) { // !strncmp(lexemStr, "NOT", MAX_LEXEM_SIZE)		
+		return 6;
+	}
+	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_NOT][0], MAX_LEXEM_SIZE)) { // !strncmp(lexemStr, "NOT", MAX_LEXEM_SIZE)		
+		return 6;
 	}
 
 	else if (!strncmp(lexemStr, "*", MAX_LEXEM_SIZE)) {
-		return 4;
+		return 5;
 	}
 	else if (!strncmp(lexemStr, "DIV", MAX_LEXEM_SIZE)) {
-		return 4;
+		return 5;
 	}
 	else if (!strncmp(lexemStr, "MOD", MAX_LEXEM_SIZE)) {
-		return 4;
+		return 5;
 	}
 
 	else if (!strncmp(lexemStr, "+", MAX_LEXEM_SIZE)) {
-		return 3;
+		return 4;
 	}
 	else if (!strncmp(lexemStr, "-", MAX_LEXEM_SIZE)) {
+		return 4;
+	}
+
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return 3;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return 3;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS][0], MAX_LEXEM_SIZE)) {
+		return 3;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER][0], MAX_LEXEM_SIZE)) {
+		return 3;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return 3;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
 		return 3;
 	}
 
@@ -71,6 +92,24 @@ bool isLeftAssociative(char* lexemStr) {
 		return true;
 	}
 	else if (!strncmp(lexemStr, "-", MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS][0], MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER][0], MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
+		return true;
+	}
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
 		return true;
 	}
 	else if (!strncmp(lexemStr, ">>", MAX_LEXEM_SIZE)) { // ! TODO: ...

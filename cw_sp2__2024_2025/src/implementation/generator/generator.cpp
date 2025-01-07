@@ -111,8 +111,8 @@ void intitTokenStruct() {
 	tokenStruct[MULTI_TOKEN_NOT_EQUAL][0] = (char*)"!=";
 	tokenStruct[MULTI_TOKEN_LESS][0] = (char*)"<";
 	tokenStruct[MULTI_TOKEN_GREATER][0] = (char*)">";
-	tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0] = (char*)">=";
-	tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0] = (char*)"<=";
+	tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0] = (char*)"<=";
+	tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0] = (char*)">=";
 
 	tokenStruct[MULTI_TOKEN_ADD][0] = (char*)"+";
 	tokenStruct[MULTI_TOKEN_SUB][0] = (char*)"-";
