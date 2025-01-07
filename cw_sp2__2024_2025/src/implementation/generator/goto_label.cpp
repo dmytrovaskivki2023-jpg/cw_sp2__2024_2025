@@ -35,7 +35,7 @@ unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 		labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first = (unsigned long long int)currBytePtr;
 
 		while(!labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.empty()){
-			*(unsigned int*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() - currBytePtr - 4);
+			*(unsigned int*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() = (unsigned int)(currBytePtr - (unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() - 4);
 			labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.pop();
 		}
 
@@ -70,7 +70,7 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		}
 
 		if (labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first == ~0) {
-			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].second.push((unsigned long long int)currBytePtr);
+			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].second.push((unsigned long long int)(currBytePtr - 4));
 		}
 		else {
 			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first - currBytePtr);
