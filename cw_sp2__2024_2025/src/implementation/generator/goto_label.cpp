@@ -7,13 +7,15 @@
 
 #include <string>
 #include <map>
+//#include <utility>
+#include <stack>
 
 #include "../../include/def.h"
 #include "../../include/generator/generator.h"
 #include "../../include/lexica/lexica.h"
 #include "stdio.h"
 
-std::map<std::string, unsigned long long int> labelInfoTable;
+std::map<std::string, std::pair<unsigned long long int, std::stack<unsigned long long int>>> labelInfoTable;
 
 unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	unsigned char multitokenSize, multitokenSize_ = detectMultiToken(*lastLexemInfoInTable + 1, MULTI_TOKEN_NULL_STATEMENT);
@@ -29,10 +31,16 @@ unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 		printf("\r\n");
 		printf("    ;ident \"%s\"(as label) previous \"%s\"\r\n", (*lastLexemInfoInTable)->lexemStr, tokenStruct[MULTI_TOKEN_COLON][0]);
 #endif
+		
+		labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first = (unsigned long long int)currBytePtr;
 
-		labelInfoTable[(*lastLexemInfoInTable)->lexemStr] = (unsigned long long int)currBytePtr;
+		while(!labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.empty()){
+			*(unsigned int*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() - currBytePtr - 4);
+			labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.pop();
+		}
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
+
 		printf("    LABEL@%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 #endif
 
@@ -56,7 +64,17 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
 
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
-		*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr] - currBytePtr);
+
+		if (labelInfoTable.find((*lastLexemInfoInTable)[1].lexemStr) == labelInfoTable.end()) {
+			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first = ~0;
+		}
+
+		if (labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first == ~0) {
+			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].second.push((unsigned long long int)currBytePtr);
+		}
+		else {
+			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first - currBytePtr);
+		}
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("    jmp LABEL@%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
