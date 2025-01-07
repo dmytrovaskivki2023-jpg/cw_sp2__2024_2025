@@ -20,13 +20,14 @@
 #include "src/include/config.h"
 
 #include "src/include/cli/cli.h"
-char* a123 = strcpy(parameters[INPUT_FILENAME_PARAMETER], "file46.cwl");
+char* a123_ = strcpy(parameters[INPUT_FILENAME_PARAMETER], "file46.cwl");
+char* a123 = strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file1_ki308.cwl");
 #include "src/include/lexica/lexica.h"
 
 #include "src/include/syntax/syntax.h"
 #include "src/include/semantix/semantix.h"
 #include "src/include/preparer/preparer.h"
-#include "src/include/generator/generator.h" // #include "cw_rpn.hxx"
+#include "src/include/generator/generator.h"
 
 struct LexemInfo lexemesInfoTableTemp[MAX_WORD_COUNT] = { { "", 0, 0, 0 } };
 struct LexemInfo* lastLexemInfoInTableTemp = lexemesInfoTableTemp; // first for begin

@@ -547,6 +547,36 @@ unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* 
 	return currBytePtr;
 }
 
+unsigned char* makeSaveHWStack(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
+	const unsigned char code__mov_ebp_esp[] = { 0x8B, 0xEC };
+
+	currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_ebp_esp, 2);
+
+#ifdef DEBUG_MODE_BY_ASSEMBLY
+	printf("\r\n");
+	printf("    ;hw stack save(save esp)\r\n");
+	printf("    mov ebp, esp\r\n");
+
+#endif
+
+	return currBytePtr;
+}
+
+unsigned char* makeResetHWStack(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
+	const unsigned char code__mov_esp_ebp[] = { 0x8B, 0xE5 };
+
+	currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_esp_ebp, 2);
+
+#ifdef DEBUG_MODE_BY_ASSEMBLY
+	printf("\r\n");
+	printf("    ;hw stack reset(restore esp)\r\n");
+	printf("    mov esp, ebp\r\n");
+
+#endif
+
+	return currBytePtr;
+}
+
 unsigned char* noMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
 	if (!strncmp((*lastLexemInfoInTable)->lexemStr, "NAME", MAX_LEXEM_SIZE)
 		|| !strncmp((*lastLexemInfoInTable)->lexemStr, "DATA", MAX_LEXEM_SIZE)
@@ -584,6 +614,7 @@ void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char
 	lexemInfoTransformationTempStackSize = 0;
 	currBytePtr = makeInitCode(lastLexemInfoInTable, currBytePtr);
 	currBytePtr = initMake(lastLexemInfoInTable, currBytePtr);
+	currBytePtr = makeSaveHWStack(lastLexemInfoInTable, currBytePtr);
 	for (struct LexemInfo* lastLexemInfoInTable_; lastLexemInfoInTable_ = *lastLexemInfoInTable, (*lastLexemInfoInTable)->lexemStr[0] != '\0';) {
 
 		LABEL_GOTO_LABELE_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
@@ -662,6 +693,7 @@ void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char
 
 	}
 
+	currBytePtr = makeResetHWStack(lastLexemInfoInTable, currBytePtr);
 	currBytePtr = makeEndProgramCode(lastLexemInfoInTable, currBytePtr);
 }
 
