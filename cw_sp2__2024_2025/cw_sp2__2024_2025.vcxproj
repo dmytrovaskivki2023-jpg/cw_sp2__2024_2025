@@ -143,7 +143,7 @@
     <ClCompile Include="src\implementation\cli\cli.cpp" />
     <ClCompile Include="src\implementation\generator\add.cpp" />
     <ClCompile Include="src\implementation\generator\and.cpp" />
-    <ClCompile Include="src\implementation\generator\AsmForCode.cpp" />
+    <ClCompile Include="src\implementation\generator\machinecodegen_pattern.cpp" />
     <ClCompile Include="src\implementation\generator\bitwise_and.cpp" />
     <ClCompile Include="src\implementation\generator\bitwise_not.cpp" />
     <ClCompile Include="src\implementation\generator\bitwise_or.cpp" />
@@ -177,7 +177,7 @@
     <ClCompile Include="src\implementation\lexica\lexica.cpp" />
     <ClCompile Include="src\implementation\preparer\preparer.cpp" />
     <ClCompile Include="src\implementation\semantix\semantix.cpp" />
-    <ClCompile Include="src\implementation\syntax\synax.cpp" />
+    <ClCompile Include="src\implementation\syntax\syntax.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\cli\cli.h" />
@@ -220,9 +220,9 @@
     <ClInclude Include="src\include\syntax\syntax.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\verify_syntax_by_EBNF\file23.cwl" />
-    <None Include="..\verify_syntax_by_EBNF\file44.cwl" />
-    <None Include="..\verify_syntax_by_EBNF\file46.cwl" />
+    <None Include="file23.cwl" />
+    <None Include="file44.cwl" />
+    <None Include="file46.cwl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

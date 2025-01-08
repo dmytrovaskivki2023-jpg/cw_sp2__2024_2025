@@ -27,7 +27,7 @@
     <ClCompile Include="src\implementation\generator\and.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\generator\AsmForCode.cpp">
+    <ClCompile Include="src\implementation\generator\machinecodegen_pattern.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\generator\bitwise_and.cpp">
@@ -129,7 +129,7 @@
     <ClCompile Include="src\implementation\semantix\semantix.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\syntax\synax.cpp">
+    <ClCompile Include="src\implementation\syntax\syntax.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -250,8 +250,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\verify_syntax_by_EBNF\file23.cwl" />
-    <None Include="..\verify_syntax_by_EBNF\file44.cwl" />
-    <None Include="..\verify_syntax_by_EBNF\file46.cwl" />
+    <None Include="file23.cwl" />
+    <None Include="file44.cwl" />
+    <None Include="file46.cwl" />
   </ItemGroup>
 </Project>
