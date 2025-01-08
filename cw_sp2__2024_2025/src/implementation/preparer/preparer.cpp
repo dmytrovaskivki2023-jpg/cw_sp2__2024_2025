@@ -178,7 +178,7 @@ void makePrepare4IdentifierOrValue(struct LexemInfo** lastLexemInfoInTable, stru
 void makePrepare4Operators(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	if (precedenceLevel((*lastLexemInfoInTable)->lexemStr)) {
 		while (lexemInfoTransformationTempStackSize > 0) {
-			struct LexemInfo& currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
+			struct LexemInfo/*&*/ currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 			if (precedenceLevel(currLexemInfo.lexemStr) && (
 				(isLeftAssociative((*lastLexemInfoInTable)->lexemStr) && (precedenceLevel((*lastLexemInfoInTable)->lexemStr) <= precedenceLevel(currLexemInfo.lexemStr)))
 				||
@@ -207,7 +207,7 @@ void makePrepare4RightParenthesis(struct LexemInfo** lastLexemInfoInTable, struc
 	if ((*lastLexemInfoInTable)->lexemStr[0] == ')') {
 		bool findLeftParenthesis = false;
 		while (lexemInfoTransformationTempStackSize > 0) {
-			struct LexemInfo& currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
+			struct LexemInfo/*&*/ currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 			if (currLexemInfo.lexemStr[0] == '(') {
 				findLeftParenthesis = true;
 				break;
@@ -233,7 +233,7 @@ void makePrepare4RightParenthesis(struct LexemInfo** lastLexemInfoInTable, struc
 unsigned int makePrepareEnder(struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	unsigned int addedLexemCount = (unsigned int)lexemInfoTransformationTempStackSize;
 	while (lexemInfoTransformationTempStackSize > 0) {
-		struct LexemInfo& currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
+		struct LexemInfo/*&*/ currLexemInfo = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 		if (currLexemInfo.lexemStr[0] == '(' || currLexemInfo.lexemStr[0] == ')') {
 			printf("Error: parentheses mismatched\n");
 			exit(0);

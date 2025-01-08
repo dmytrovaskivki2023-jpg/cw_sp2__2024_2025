@@ -13,9 +13,12 @@
 #define VALUE_LEXEME_TYPE 4
 #define UNEXPEXTED_LEXEME_TYPE 127
 
+
+
 #ifndef LEXEM_INFO_
 #define LEXEM_INFO_
-struct LexemInfo {
+struct NonContainedLexemInfo;
+struct LexemInfo {public:
 	char lexemStr[MAX_LEXEM_SIZE];
 	unsigned int lexemId;
 	unsigned int tokenType;
@@ -23,6 +26,27 @@ struct LexemInfo {
 	unsigned int row;
 	unsigned int col;
 	// TODO: ...
+
+	LexemInfo();
+	LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo);
+};
+#endif
+
+#ifndef NON_CONTAINED_LEXEM_INFO_
+#define NON_CONTAINED_LEXEM_INFO_
+struct LexemInfo;
+struct NonContainedLexemInfo {
+	//char lexemStr[MAX_LEXEM_SIZE]; 
+	char* lexemStr;
+	unsigned int lexemId;
+	unsigned int tokenType;
+	unsigned int ifvalue;
+	unsigned int row;
+	unsigned int col;
+	// TODO: ...
+
+	NonContainedLexemInfo();
+	NonContainedLexemInfo(const LexemInfo& lexemInfo);
 };
 #endif
 

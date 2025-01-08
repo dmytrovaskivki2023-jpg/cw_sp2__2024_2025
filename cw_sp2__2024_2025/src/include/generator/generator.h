@@ -107,7 +107,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStructName tokenStructName);
 unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStructName tokenStructName);
 #define MAX_ACCESSORY_STACK_SIZE 128
-extern struct LexemInfo lexemInfoTransformationTempStack[MAX_ACCESSORY_STACK_SIZE];
+extern struct NonContainedLexemInfo lexemInfoTransformationTempStack[MAX_ACCESSORY_STACK_SIZE];
 extern unsigned long long int lexemInfoTransformationTempStackSize;
 unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragmentFirstBytePtr, unsigned long long int bytesCout);
 

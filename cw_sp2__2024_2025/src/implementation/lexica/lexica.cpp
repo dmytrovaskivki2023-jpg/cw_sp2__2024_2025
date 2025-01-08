@@ -27,10 +27,46 @@
 //	// TODO: ...
 //};
 
-struct LexemInfo lexemesInfoTable[MAX_WORD_COUNT] = { { "", 0, 0, 0 } };
+struct LexemInfo lexemesInfoTable[MAX_WORD_COUNT];// = { { "", 0, 0, 0 } };
 struct LexemInfo* lastLexemInfoInTable = lexemesInfoTable; // first for begin
 
 char identifierIdsTable[MAX_WORD_COUNT][MAX_LEXEM_SIZE] = { "" };
+
+LexemInfo::LexemInfo() {
+	lexemStr[0] = '\0';
+	lexemId = 0;
+	tokenType = 0;
+	ifvalue = 0;
+	row = ~0;
+	col = ~0;
+}
+LexemInfo::LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo){
+	strncpy(lexemStr, nonContainedLexemInfo.lexemStr, MAX_LEXEM_SIZE);
+	lexemId = nonContainedLexemInfo.lexemId;
+	tokenType = nonContainedLexemInfo.tokenType;
+	ifvalue = nonContainedLexemInfo.ifvalue;
+	row = nonContainedLexemInfo.row;
+	col = nonContainedLexemInfo.col;
+}
+
+NonContainedLexemInfo::NonContainedLexemInfo() {
+	//lexemStr[0] = '\0'; 
+	lexemStr = (char*)"";
+	lexemId = 0;
+	tokenType = 0;
+	ifvalue = 0;
+	row = ~0;
+	col = ~0;
+}
+NonContainedLexemInfo::NonContainedLexemInfo(const LexemInfo& lexemInfo) {
+	//strncpy(lexemStr, lexemInfo.lexemStr, MAX_LEXEM_SIZE); // 
+	lexemStr = (char*)lexemInfo.lexemStr;
+	lexemId = lexemInfo.lexemId;
+	tokenType = lexemInfo.tokenType;
+	ifvalue = lexemInfo.ifvalue;
+	row = lexemInfo.row;
+	col = lexemInfo.col;
+}
 
 void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 	if (printBadLexeme) {
@@ -206,7 +242,7 @@ void setPositions(const char* text, struct LexemInfo* lexemInfoTable) {
 }
 
 struct LexemInfo lexicalAnalyze(struct LexemInfo* lexemInfoInPtr, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
-	struct LexemInfo ifBadLexemeInfo = { 0 };
+	struct LexemInfo ifBadLexemeInfo; // = { 0 };
 
 	if (tryToGetKeyWord(lexemInfoInPtr) == SUCCESS_STATE);
 	else if (tryToGetIdentifier(lexemInfoInPtr, identifierIdsTable) == SUCCESS_STATE);
@@ -222,7 +258,7 @@ struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, c
 	char tokens_re[] = ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]";
 	//char tokens_re[] = "<<|\\+\\+|--|\\*\\*|==|\\(|\\)|!=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]";
 	std::regex tokens_re_(tokens_re);
-	struct LexemInfo ifBadLexemeInfo = { 0 };
+	struct LexemInfo ifBadLexemeInfo; // = { 0 };
 	std::string stringText(text);
 
 	for (std::sregex_token_iterator end, tokenIterator(stringText.begin(), stringText.end(), tokens_re_); tokenIterator != end; ++tokenIterator, ++ * lastLexemInfoInTable) {

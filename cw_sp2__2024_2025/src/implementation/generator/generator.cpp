@@ -199,32 +199,53 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 	}
 
 	if (tokenStruct[tokenStructName][0]) {
-		**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
-		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE);
+		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+		strncpy(lexemInfoTable[0][0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE);
+		lexemInfoTable[0][0].lexemId = 0;
+		lexemInfoTable[0][0].tokenType = 0;
+		lexemInfoTable[0][0].ifvalue = 0;
+		lexemInfoTable[0][0].row = ~0;
+		lexemInfoTable[0][0].col = ~0;
+
 		++* lexemInfoTable;
 	}
 	else {
 		return 0;
 	}
 	if (tokenStruct[tokenStructName][1]) {
-		**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE);
+		lexemInfoTable[0][0].lexemId = 0;
+		lexemInfoTable[0][0].tokenType = 0;
+		lexemInfoTable[0][0].ifvalue = 0;
+		lexemInfoTable[0][0].row = ~0;
+		lexemInfoTable[0][0].col = ~0;
 		++* lexemInfoTable;
 	}
 	else {
 		return 1;
 	}
 	if (tokenStruct[tokenStructName][2]) {
-		**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE);
+		lexemInfoTable[0][0].lexemId = 0;
+		lexemInfoTable[0][0].tokenType = 0;
+		lexemInfoTable[0][0].ifvalue = 0;
+		lexemInfoTable[0][0].row = ~0;
+		lexemInfoTable[0][0].col = ~0;
 		++* lexemInfoTable;
 	}
 	else {
 		return 2;
 	}
 	if (tokenStruct[tokenStructName][3]) {
-		**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE);
+		lexemInfoTable[0][0].lexemId = 0;
+		lexemInfoTable[0][0].tokenType = 0;
+		lexemInfoTable[0][0].ifvalue = 0;
+		lexemInfoTable[0][0].row = ~0;
+		lexemInfoTable[0][0].col = ~0;
 		++* lexemInfoTable;
 	}
 	else {
@@ -236,7 +257,7 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 
 
 //#define MAX_ACCESSORY_STACK_SIZE 128
-struct LexemInfo lexemInfoTransformationTempStack[MAX_ACCESSORY_STACK_SIZE];
+struct NonContainedLexemInfo lexemInfoTransformationTempStack[MAX_ACCESSORY_STACK_SIZE];
 unsigned long long int lexemInfoTransformationTempStackSize = 0;
 
 //
