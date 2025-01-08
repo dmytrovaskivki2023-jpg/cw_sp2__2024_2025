@@ -35,6 +35,12 @@ struct LexemInfo* lastLexemInfoInTableTemp = lexemesInfoTableTemp; // first for 
 unsigned char new_code[8 * 1024 * 1024] = { '\0' };
 int main(int argc, char* argv[]) {
 
+#if defined(_DEBUG) || !defined(_WIN32) || !defined(_M_IX86)
+		printf("Please, switch to mode VS + x86 + Release.\r\n");
+		(void)getchar();
+		return 0;
+#endif
+
 #ifdef	USE_PREDEFINED_PARAMETERS
 	mode = DEFAULT_MODE;
 	char text[MAX_TEXT_SIZE] = PREDEFINED_TEXT;

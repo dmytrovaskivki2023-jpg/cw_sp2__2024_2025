@@ -219,11 +219,6 @@
     <ClInclude Include="src\include\semantix\semantix.h" />
     <ClInclude Include="src\include\syntax\syntax.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="file23.cwl" />
-    <None Include="file44.cwl" />
-    <None Include="file46.cwl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
