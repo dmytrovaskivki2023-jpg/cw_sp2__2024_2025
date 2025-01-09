@@ -783,7 +783,7 @@ int commentRemover(char* text, const char* openStrSpc, const char* closeStrSpc) 
     return 0;
 }
 
-#define DEFAULT_INPUT_FILE "../../test_programs/file1_ki308.cwl"
+#define DEFAULT_INPUT_FILE "../../test_programs/file1.cwl"
 
 int main() {
     char* text_;
