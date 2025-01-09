@@ -20,11 +20,11 @@
 struct NonContainedLexemInfo;
 struct LexemInfo {public:
 	char lexemStr[MAX_LEXEM_SIZE];
-	unsigned long long int lexemId;
-	unsigned long long int tokenType;
-	unsigned long long int ifvalue;
-	unsigned long long int row;
-	unsigned long long int col;
+	unsigned int lexemId;
+	unsigned int tokenType;
+	unsigned int ifvalue;
+	unsigned int row;
+	unsigned int col;
 	// TODO: ...
 
 	LexemInfo();
@@ -38,11 +38,11 @@ struct LexemInfo;
 struct NonContainedLexemInfo {
 	//char lexemStr[MAX_LEXEM_SIZE]; 
 	char* lexemStr;
-	unsigned long long int lexemId;
-	unsigned long long int tokenType;
-	unsigned long long int ifvalue;
-	unsigned long long int row;
-	unsigned long long int col;
+	unsigned int lexemId;
+	unsigned int tokenType;
+	unsigned int ifvalue;
+	unsigned int row;
+	unsigned int col;
 	// TODO: ...
 
 	NonContainedLexemInfo();

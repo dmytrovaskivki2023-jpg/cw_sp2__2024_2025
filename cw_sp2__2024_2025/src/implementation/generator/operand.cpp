@@ -16,7 +16,7 @@ unsigned char* makeValueCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 	if ((*lastLexemInfoInTable)->tokenType == VALUE_LEXEME_TYPE) {
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 		printf("\r\n");
-		printf("    ;\"%lld\"\r\n", (*lastLexemInfoInTable)->ifvalue);
+		printf("    ;\"%d\"\r\n", (*lastLexemInfoInTable)->ifvalue);
 #endif
 		const unsigned char code__add_ecx_4[]       = { 0x83, 0xC1, 0x04 };
 		const unsigned char code__mov_eax_value[]   = { 0xB8, 0x00, 0x00, 0x00, 0x00 };
