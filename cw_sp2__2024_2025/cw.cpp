@@ -21,7 +21,7 @@
 
 #include "src/include/cli/cli.h"
 bool reSetDefaultInputFileName_ = 
-strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file2.cwl") // _ki308
+strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file1.cwl")
 != NULL;
 #include "src/include/lexica/lexica.h"
 
