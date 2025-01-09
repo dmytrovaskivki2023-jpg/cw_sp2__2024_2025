@@ -219,6 +219,26 @@
     <ClInclude Include="src\include\semantix\semantix.h" />
     <ClInclude Include="src\include\syntax\syntax.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\test_programs\file1.cwl" />
+    <None Include="..\test_programs\file1_ki308.cwl" />
+    <None Include="..\test_programs\file2.cwl" />
+    <None Include="..\test_programs\file2_ki308.cwl" />
+    <None Include="..\test_programs\file3.cwl" />
+    <None Include="..\test_programs\file3_ki308.cwl" />
+    <None Include="..\test_programs\file4.cwl" />
+    <None Include="..\test_programs\file4_.cwl" />
+    <None Include="..\test_programs\file4_ki308.cwl" />
+    <None Include="..\test_programs\file4_ki308_.cwl" />
+    <None Include="..\test_programs\file5.cwl" />
+    <None Include="..\test_programs\file5_.cwl" />
+    <None Include="..\test_programs\file5_ki308.cwl" />
+    <None Include="..\test_programs\file5_ki308_.cwl" />
+    <None Include="..\test_programs\file6.cwl" />
+    <None Include="..\test_programs\file6_ki308.cwl" />
+    <None Include="..\test_programs\file7.cwl" />
+    <None Include="..\test_programs\file7_ki308.cwl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

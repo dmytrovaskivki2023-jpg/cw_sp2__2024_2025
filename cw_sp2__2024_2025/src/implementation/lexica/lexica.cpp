@@ -27,6 +27,11 @@
 //	// TODO: ...
 //};
 
+#define MAX_ACCESSORY_STACK_SIZE_123 128
+
+char tempStrFor_123[MAX_TEXT_SIZE/*?TODO:... MAX_ACCESSORY_STACK_SIZE_123 * 64*/] = {'\0'};
+unsigned long long int tempStrForCurrIndex = 0;
+
 struct LexemInfo lexemesInfoTable[MAX_WORD_COUNT];// = { { "", 0, 0, 0 } };
 struct LexemInfo* lastLexemInfoInTable = lexemesInfoTable; // first for begin
 
@@ -50,13 +55,17 @@ LexemInfo::LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo){
 }
 
 NonContainedLexemInfo::NonContainedLexemInfo() {
-	//lexemStr[0] = '\0'; 
-	lexemStr = (char*)"";
+//	lexemStr[0] = '\0';
+//    lexemStr = NULL; 
+	//tempStrFor_123[tempStrForCurrIndex] = '\0';
+	(lexemStr = tempStrFor_123 + tempStrForCurrIndex)[0] = '\0';
+	tempStrForCurrIndex += 32;// MAX_LEXEM_SIZE;
 	lexemId = 0;
 	tokenType = 0;
 	ifvalue = 0;
 	row = ~0;
 	col = ~0;
+	printf("+%d", tempStrForCurrIndex);
 }
 NonContainedLexemInfo::NonContainedLexemInfo(const LexemInfo& lexemInfo) {
 	//strncpy(lexemStr, lexemInfo.lexemStr, MAX_LEXEM_SIZE); // 

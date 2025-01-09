@@ -46,8 +46,10 @@ unsigned char* makeThenCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 			printf("    ;after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_IF][0]);
 #endif	
   
+		const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };
 		const unsigned char code__jz_offset[] = { 0x0F, 0x84, 0x00, 0x00, 0x00, 0x00 };
 			
+		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cmp_eax_0, 3);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jz_offset, 6);
 
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = **lastLexemInfoInTable;
@@ -55,6 +57,7 @@ unsigned char* makeThenCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned long long int)(currBytePtr - 4);
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
+		printf("    cmp eax, 0\r\n");
 		printf("    jz LABEL@AFTER_THEN_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 #endif
 
@@ -67,8 +70,8 @@ unsigned char* makeThenCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 unsigned char* makePostThenCode_(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	const unsigned char code__mov_eax_1[]  = { 0xB8, 0x01, 0x00, 0x00, 0x00 };
 
-	*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue - 4);
 	currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_1, 5);
+	*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue - 4);
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
 	printf("    mov eax, 1\r\n");

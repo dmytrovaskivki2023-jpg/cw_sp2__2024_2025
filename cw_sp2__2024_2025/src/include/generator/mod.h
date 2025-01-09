@@ -6,6 +6,6 @@
 *************************************************************/
 
 #define MOD_CODER(A, B, C, M, R)\
-if (A ==* B) C = makeAndCode(B, C, M);
+if (A ==* B) C = makeModCode(B, C, M);
 
 unsigned char* makeModCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode);

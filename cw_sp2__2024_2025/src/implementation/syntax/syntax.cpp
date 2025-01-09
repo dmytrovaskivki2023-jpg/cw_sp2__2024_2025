@@ -219,6 +219,10 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
         return false;
     }
 
+#if defined(_DEBUG)
+    printf("ATTENTION: for better performance, use Release mode!\r\n");
+#endif
+
 #ifndef DEBUG_STATES
     cout << "cykParse in progress.....[please wait]";
 #else

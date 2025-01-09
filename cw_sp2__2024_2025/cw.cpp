@@ -12,7 +12,7 @@
 
 #include <fstream>
 #include <iostream>
-//#include <algorithm>
+#include <algorithm>//
 #include <iterator>
 #include <regex>
 
@@ -20,8 +20,9 @@
 #include "src/include/config.h"
 
 #include "src/include/cli/cli.h"
-char* a123_ = strcpy(parameters[INPUT_FILENAME_PARAMETER], "file46.cwl");
-char* a123 = strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file1_ki308.cwl");
+bool reSetDefaultInputFileName_ = 
+strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file7.cwl") // _ki308
+!= NULL;
 #include "src/include/lexica/lexica.h"
 
 #include "src/include/syntax/syntax.h"
@@ -37,8 +38,8 @@ int main(int argc, char* argv[]) {
 
 #if defined(_DEBUG) || !defined(_WIN32) || !defined(_M_IX86)
 		printf("Please, switch to mode VS + x86 + Release.\r\n");
-		(void)getchar();
-		return 0;
+		//(void)getchar();
+		//return 0;
 #endif
 
 #ifdef	USE_PREDEFINED_PARAMETERS

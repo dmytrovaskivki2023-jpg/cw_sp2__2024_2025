@@ -19,14 +19,17 @@ unsigned char* makeElseCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		printf("    ;\"%s\"\r\n", tokenStruct[MULTI_TOKEN_ELSE][0]);
 #endif
 
+		const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };
 		const unsigned char code__jnz_offset[] = { 0x0F, 0x85, 0x00, 0x00, 0x00, 0x00 };
 
+		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cmp_eax_0, 3);
 		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jnz_offset, 6);
 
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = **lastLexemInfoInTable;
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned long long int)(currBytePtr - 4);
 
 #ifdef DEBUG_MODE_BY_ASSEMBLY
+		printf("    cmp eax, 0\r\n");
 		printf("    jnz LABEL@AFTER_ELSE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 #endif
 
