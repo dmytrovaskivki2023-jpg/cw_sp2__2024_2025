@@ -28,6 +28,7 @@ struct LexemInfo {public:
 	// TODO: ...
 
 	LexemInfo();
+	LexemInfo(const char* lexemStr, unsigned long long int lexemId, unsigned long long int tokenType, unsigned long long int ifvalue, unsigned long long int row, unsigned long long int col);
 	LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo);
 };
 #endif

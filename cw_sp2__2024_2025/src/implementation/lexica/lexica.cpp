@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
 * N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
-*                         file: lexica.h                    *
+*                         file: lexica.cpp                  *
 *                                                  (draft!) *
 *************************************************************/
 #include "../../include/def.h"
@@ -45,6 +45,14 @@ LexemInfo::LexemInfo() {
 	row = ~0;
 	col = ~0;
 }
+LexemInfo::LexemInfo(const char * lexemStr, unsigned long long int lexemId, unsigned long long int tokenType, unsigned long long int ifvalue, unsigned long long int row, unsigned long long int col) {
+	strncpy(this->lexemStr, lexemStr, MAX_LEXEM_SIZE);
+	this->lexemId = lexemId;
+	this->tokenType = tokenType;
+	this->ifvalue = ifvalue;
+	this->row = row;
+	this->col = col;
+}
 LexemInfo::LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo){
 	strncpy(lexemStr, nonContainedLexemInfo.lexemStr, MAX_LEXEM_SIZE);
 	lexemId = nonContainedLexemInfo.lexemId;
@@ -55,9 +63,6 @@ LexemInfo::LexemInfo(const NonContainedLexemInfo& nonContainedLexemInfo){
 }
 
 NonContainedLexemInfo::NonContainedLexemInfo() {
-//	lexemStr[0] = '\0';
-//    lexemStr = NULL; 
-	//tempStrFor_123[tempStrForCurrIndex] = '\0';
 	(lexemStr = tempStrFor_123 + tempStrForCurrIndex)[0] = '\0';
 	tempStrForCurrIndex += 32;// MAX_LEXEM_SIZE;
 	lexemId = 0;
@@ -65,7 +70,6 @@ NonContainedLexemInfo::NonContainedLexemInfo() {
 	ifvalue = 0;
 	row = ~0;
 	col = ~0;
-	printf("+%d", tempStrForCurrIndex);
 }
 NonContainedLexemInfo::NonContainedLexemInfo(const LexemInfo& lexemInfo) {
 	//strncpy(lexemStr, lexemInfo.lexemStr, MAX_LEXEM_SIZE); // 
@@ -87,8 +91,8 @@ void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 	printf("-------------------------------------------------------------------\r\n");
 	printf("index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
 	printf("-------------------------------------------------------------------\r\n");
-	for (unsigned int index = 0; (!index || !printBadLexeme) && lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
-		printf("%5d%17s%12d%10d%11d%4d%8d\r\n", index, lexemInfoTable[index].lexemStr, lexemInfoTable[index].lexemId, lexemInfoTable[index].tokenType, lexemInfoTable[index].ifvalue, lexemInfoTable[index].row, lexemInfoTable[index].col);
+	for (unsigned long long int index = 0; (!index || !printBadLexeme) && lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
+		printf("%5llu%17s%12llu%10llu%11llu%4lld%8lld\r\n", index, lexemInfoTable[index].lexemStr, lexemInfoTable[index].lexemId, lexemInfoTable[index].tokenType, lexemInfoTable[index].ifvalue, lexemInfoTable[index].row, lexemInfoTable[index].col);
 	}
 	printf("-------------------------------------------------------------------\r\n\r\n");
 
@@ -225,7 +229,7 @@ char tryToGetKeyWord(struct LexemInfo* lexemInfoInTable) {
 }
 
 void setPositions(const char* text, struct LexemInfo* lexemInfoTable) {
-	int line_number = 1;
+	unsigned long long int line_number = 1;
 	const char* pos = text, * line_start = text;
 
 	if (lexemInfoTable) while (*pos != '\0' && lexemInfoTable->lexemStr[0] != '\0') {
@@ -240,7 +244,7 @@ void setPositions(const char* text, struct LexemInfo* lexemInfoTable) {
 
 		for (char* found_pos; lexemInfoTable->lexemStr[0] != '\0' && (found_pos = strstr(line, lexemInfoTable->lexemStr)); line += strlen(lexemInfoTable->lexemStr), ++lexemInfoTable) {
 			lexemInfoTable->row = line_number;
-			lexemInfoTable->col = found_pos - line_ + 1;
+			lexemInfoTable->col = found_pos - line_ + 1ull;
 		}
 		line_number++;
 		pos = line_end;

@@ -102,11 +102,7 @@ int main(int argc, char* argv[]) {
 		printf("Lexical analysis complete success\r\n");
 	}
 
-	bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, &grammar, 32);
-
-	printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");
-
-	if (!cykAlgorithmImplementationReturnValue) {
+	if (!syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) {
 		return 0;
 	}
 
