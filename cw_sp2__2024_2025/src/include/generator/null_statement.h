@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
-*                         file: null_statement.hxx          *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: null_statement.h            *
 *                                                  (draft!) *
 *************************************************************/
 

@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
 *                         file: syntax.h                    *
 *                                                  (draft!) *
 *************************************************************/
@@ -37,5 +37,6 @@ extern Grammar grammar;
 
 #define DEBUG_STATES
 
+bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal);
 //bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar);
-bool syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode);
+int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode);

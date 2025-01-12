@@ -1,3 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
+/************************************************************
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: config.h                    *
+*                                                  (draft!) *
+*************************************************************/
+
 #include "../include/def.h"
 #define LEXICAL_ANALISIS_MODE 1
 #define SEMANTIC_ANALISIS_MODE 2

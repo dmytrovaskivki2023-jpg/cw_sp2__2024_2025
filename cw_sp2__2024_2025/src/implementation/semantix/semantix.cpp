@@ -1,13 +1,19 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
-*                         file: semantix.h                  *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: semantix.cpp                *
 *                                                  (draft!) *
 *************************************************************/
 
+//#include "../../include/config.h"
+#include "../../include/syntax/syntax.h"
 #include "../../include/semantix/semantix.h"
 #include "stdio.h"
 #include "string.h"
+
+//#include <iterator>
+#include <regex>
+
 //
 //#define COLLISION_II_STATE 128
 //#define COLLISION_LL_STATE 129
@@ -17,23 +23,31 @@
 //
 //#define NO_IMPLEMENT_CODE_STATE 256
 
-int checkingInternalCollisionInDeclarations(/*TODO: add arg*/) {
+unsigned long long int getLastDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
+	int lexemIndex = 0;
+	const struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
+
+	if (recursiveDescentParserRuleWithDebug("program____part1", lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal)
+		&& lexemInfoTable[lexemIndex].lexemStr[0] != '\0') {
+		return lexemIndex;
+	}
+
+	printf("Error: No find code section strat index!\r\n");
+	return ~0;
+}
+
+int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+//	int returnState = SUCCESS_STATE;
+	unsigned int lastDataSectionLexemIndex = 0;
+	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+		return ~SUCCESS_STATE;
+	}
 	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
 		char isDeclaredIdentifier = 0;
 		char isDeclaredIdentifierCollision = 0;
 		unsigned int lexemIndex = 0;
-		for (; strncmp(lexemesInfoTable[lexemIndex].lexemStr, ";", MAX_LEXEM_SIZE) && lexemesInfoTable[lexemIndex].lexemStr[0] != '\0'; ++lexemIndex) {
-			if (lexemesInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE) {
-				if (!strncmp(identifierIdsTable[index], lexemesInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)) {
-					if (isDeclaredIdentifier) {
-						isDeclaredIdentifierCollision = 1;
-					}
-					isDeclaredIdentifier = 1;
-				}
-			}
-		}
-		++lexemIndex;
-		for (; strncmp(lexemesInfoTable[lexemIndex].lexemStr, ";", MAX_LEXEM_SIZE) && lexemesInfoTable[lexemIndex].lexemStr[0] != '\0'; ++lexemIndex) {
+
+		for (lexemIndex = 0; lexemIndex <= lastDataSectionLexemIndex; ++lexemIndex) {
 			if (lexemesInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE) {
 				if (!strncmp(identifierIdsTable[index], lexemesInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)) {
 					if (isDeclaredIdentifier) {
@@ -51,17 +65,22 @@ int checkingInternalCollisionInDeclarations(/*TODO: add arg*/) {
 			if (lexemesInfoTable[lexemIndex].tokenType != IDENTIFIER_LEXEME_TYPE || strncmp(identifierIdsTable[index], lexemesInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)) {
 				continue;
 			}
-			if (lexemesInfoTable[lexemIndex + 1].lexemStr[0] == ':') {
+			if (!strncmp(lexemesInfoTable[lexemIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_COLON][0], MAX_LEXEM_SIZE)) {
 				if (isDeclaredLabel) {
 					isDeclaredLabelCollision = 1;
 				}
 				isLabel = 1;
 				isDeclaredLabel = 1;
 			}
-			if (lexemIndex && !strncmp(lexemesInfoTable[lexemIndex - 1].lexemStr, "GOTO", MAX_LEXEM_SIZE)) {
+			if (lexemIndex && !strncmp(lexemesInfoTable[lexemIndex - 1].lexemStr, tokenStruct[MULTI_TOKEN_GOTO][0], MAX_LEXEM_SIZE)) {
 				isLabel = 1;
 			}
 		}
+
+//		//tryToGetKeyWord(struct LexemInfo* lexemInfoInTable);
+//		if (SUCCESS_STATE != checkingCollisionInDeclarationsByKeyWords(identifierIdsTable[index])) {
+//			return COLLISION_IK_STATE;
+//		}
 
 		if (isDeclaredIdentifierCollision) {
 			printf("Collision(identifier/identifier): %s\r\n", identifierIdsTable[index]);
@@ -85,20 +104,88 @@ int checkingInternalCollisionInDeclarations(/*TODO: add arg*/) {
 		}
 	}
 
-	printf("Declaration verification was successful!\r\n");
+//	if (returnState == SUCCESS_STATE) {
+		printf("Declaration verification was successful!\r\n");
+//	}
+//
 	return SUCCESS_STATE;
 }
 
-int checkingVariableInitialization(/*TODO: add args*/) {
-	//TODO: implement this
+int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+	int returnState = SUCCESS_STATE;
 
-	printf("\r\nTODO: implent \"int checkingVariableInitialization(/*TODO: add args*/)\"\r\n\r\n");
-	return NO_IMPLEMENT_CODE_STATE;
+	unsigned int lastDataSectionLexemIndex = 0;
+	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+		return ~SUCCESS_STATE;
+	}
+
+	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
+		for (unsigned int lexemIndex = lastDataSectionLexemIndex; lexemesInfoTable[lexemIndex].lexemStr[0] != '\0'; ++lexemIndex) {
+			if (lexemesInfoTable[lexemIndex].tokenType != IDENTIFIER_LEXEME_TYPE || strncmp(identifierIdsTable[index], lexemesInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)) {
+				continue;
+			}
+			if (!strncmp(lexemesInfoTable[lexemIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_COLON][0], MAX_LEXEM_SIZE)) {
+				continue;
+			}
+			if (lexemIndex && !strncmp(lexemesInfoTable[lexemIndex - 1].lexemStr, tokenStruct[MULTI_TOKEN_GOTO][0], MAX_LEXEM_SIZE)) {
+				continue;
+			}
+
+			int prevNonOpenParenthesesIndex = -1;
+			for (; !strncmp(lexemesInfoTable[lexemIndex + prevNonOpenParenthesesIndex].lexemStr, "(", MAX_LEXEM_SIZE); --prevNonOpenParenthesesIndex);
+			if (!strncmp(lexemesInfoTable[lexemIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)
+				||					
+				!strncmp(lexemesInfoTable[lexemIndex - 1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)
+				||					
+				//!strncmp(lexemesInfoTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)					
+				//||					
+				//!strncmp(lexemesInfoTable[-2].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)					
+				//||					
+				!strncmp(lexemesInfoTable[lexemIndex + prevNonOpenParenthesesIndex].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)
+				){						
+				break;					
+			}
+
+			printf("Uninitialized: %s\r\n", identifierIdsTable[index]);					
+			returnState = UNINITIALIZED_I_STATE;					
+			break;			
+		}
+	}
+	
+	if (returnState == SUCCESS_STATE) {
+		printf("Variable initialization checking was successful!\r\n");
+	}
+
+	return returnState;
 }
 
-int checkingCollisionInDeclarationsByKeyWords(/*TODO: add args*/) {
-	//TODO: implement this
+int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+	int returnState = SUCCESS_STATE;
+	
+	char keywords_re[] = KEYWORDS_RE;
+	char keywords_[sizeof(keywords_re)] = { '\0' };
+	prepareKeyWordIdGetter(keywords_, keywords_re);
 
-	printf("\r\nTODO: implent \"int checkingCollisionInDeclarationsByKeyWords(/*TODO: add args*/)\"\r\n\r\n");
-	return NO_IMPLEMENT_CODE_STATE;
+	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
+		if (std::regex_match(std::string(identifierIdsTable[index]), std::regex(keywords_re))) {
+			printf("Declaration matches keyword: %s\r\n", identifierIdsTable[index]);
+			returnState = COLLISION_IK_STATE;
+		}
+	}
+
+	printf("Declaration verification for keyword collision was successful!\r\n");
+	return SUCCESS_STATE;
+}
+
+int semantixAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]){
+	int returnState = SUCCESS_STATE;
+
+	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable))
+		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable))
+		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable))
+		) {
+		return returnState;
+	}
+
+	return SUCCESS_STATE;
 }

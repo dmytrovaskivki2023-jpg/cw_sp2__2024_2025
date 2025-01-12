@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
 *                         file: syntax.cpp                  *
 *                                                  (draft!) *
 *************************************************************/
@@ -448,6 +448,39 @@ struct ASTNode {
     }
 };
 
+ASTNode* buildASTByCPPMap(const std::map<int, std::map<int, std::set<std::string>>>& parseInfoTable,
+    Grammar* grammar,
+    int start,
+    int end,
+    const std::string& symbol) {
+    if (start > end) return nullptr;
+
+    ASTNode* node = new ASTNode(symbol, false);
+
+    for (const Rule& rule : grammar->rules) {
+        if (rule.lhs != symbol) continue;
+
+        if (rule.rhs_count == 1) {
+            //if (parseInfoTable.at(start).at(end).count(rule.rhs[0])) {
+            node->children.push_back(new ASTNode(rule.rhs[0], true));
+            return node;
+            //}
+        }
+        else if (rule.rhs_count == 2) {
+            for (int split = start; split < end; ++split) {
+                if (parseInfoTable.at(start).at(split).count(rule.rhs[0]) &&
+                    parseInfoTable.at(split + 1).at(end).count(rule.rhs[1])) {
+                    node->children.push_back(buildASTByCPPMap(parseInfoTable, grammar, start, split, rule.rhs[0]));
+                    node->children.push_back(buildASTByCPPMap(parseInfoTable, grammar, split + 1, end, rule.rhs[1]));
+                    return node;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 ASTNode* buildAST(const std::map<int, std::map<int, std::set<std::string>>>& parseInfoTable,
     Grammar* grammar,
     int start,
@@ -827,13 +860,13 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
 
 //
 
-bool syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode) {
+int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
         cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar);
         printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");  
         if (cykAlgorithmImplementationReturnValue) {
-            return true;
+            return SUCCESS_STATE;
         }
     }
 
@@ -845,11 +878,11 @@ bool syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnal
             if (lexemInfoTable[lexemIndex].lexemStr[0] == '\0') {
                 printf("Parse successful.\n");
                 printf("%d.\n", lexemIndex);
-                return true;
+                return SUCCESS_STATE;
             }
             else {
                 printf("Parse failed: Extra tokens remain.\n");
-                return false;
+                return ~SUCCESS_STATE;
             }
         }
         else {
@@ -860,12 +893,11 @@ bool syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnal
             else {
                 printf("Parse failed: unexpected terminal.\r\n");
             }
-            return false;
+            return ~SUCCESS_STATE;
         }
-        return false;
     }
 
-    return false;
+    return ~SUCCESS_STATE;
 }
 
 bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode) {
@@ -972,7 +1004,7 @@ bool cykAlgorithmImplementationByCPPMap(struct LexemInfo* lexemInfoTable, Gramma
     //    displayParseInfoTable(parseInfoTable);
     //    saveParseInfoTableToFile(parseInfoTable, "parseInfoTable.txt");
 
-    ASTNode* astRoot = buildAST(parseInfoTable, grammar, 0, lexemIndex - 1, grammar->start_symbol);
+    ASTNode* astRoot = buildASTByCPPMap(parseInfoTable, grammar, 0, lexemIndex - 1, grammar->start_symbol);
     if (astRoot) {
         std::cout << "Abstract Syntax Tree:\n";
         printAST(lexemInfoTable, astRoot);

@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 // TODO: CHANGE BY fRESET() TO END
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
 *                         file: generator.cpp               *
 *                                                  (draft!) *
 *************************************************************/

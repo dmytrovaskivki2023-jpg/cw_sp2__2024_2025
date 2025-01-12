@@ -1,3 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
+/************************************************************
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: lexica.h                    *
+*                                                  (draft!) *
+*************************************************************/
+
 /////#define IDENTIFIER_LEXEME_TYPE 2
 /////#define VALUE_LEXEME_TYPE 4
 #define VALUE_SIZE 4

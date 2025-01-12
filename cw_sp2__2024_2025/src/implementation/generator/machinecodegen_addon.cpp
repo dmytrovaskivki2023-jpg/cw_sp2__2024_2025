@@ -1,4 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
+/************************************************************
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: machinecodegen_addon.cpp    *
+*                                                  (draft!) *
+*************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>

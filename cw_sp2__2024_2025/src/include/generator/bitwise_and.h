@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
-* N.Kozak // Lviv'2024 // lex  +  rpn  +  MACHINECODEGEN!   *
-*                         file: bitwise_and.hxx             *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: bitwise_and.h               *
 *                                                  (draft!) *
 *************************************************************/
 

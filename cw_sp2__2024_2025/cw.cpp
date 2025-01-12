@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS  // for using sscanf in VS
 /************************************************************
-* N.Kozak // Lviv'2024 // example lexical analysis by regex *
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
 *                         file: cw.cpp                      *
 *                                                           *
 *************************************************************/
@@ -102,15 +102,13 @@ int main(int argc, char* argv[]) {
 		printf("Lexical analysis complete success\r\n");
 	}
 
-	if (!syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) {
+	if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) {
 		return 0;
 	}
 
-	if (checkingInternalCollisionInDeclarations() != SUCCESS_STATE) {
+	if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable)) {
 		return 0;
 	}
-	(void)checkingVariableInitialization();            // TODO: implement this
-	(void)checkingCollisionInDeclarationsByKeyWords(); // TODO: implement this
 
 	lastLexemInfoInTable = lexemesInfoTable;
 	makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
