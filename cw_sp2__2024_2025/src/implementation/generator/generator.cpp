@@ -96,7 +96,9 @@ unsigned char generatorMode = MACHINE_CODER_MODE;
 
 char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT] = { NULL };
 
-void intitTokenStruct() {
+#if 0
+static void intitTokenStruct__OLD() {
+	//SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, MULTI_TOKEN_BITWISE_NOT, ("~"), (""), (""), (""))
 	//
 	//	a12345_ptr = a12345;
 	//
@@ -170,7 +172,9 @@ void intitTokenStruct() {
 	//		null statement
 		//return 0;
 }
-char intitTokenStruct_ = (intitTokenStruct(), 0);
+//char intitTokenStruct_ = (intitTokenStruct__OLD(), 0);
+#endif
+INIT_TOKEN_STRUCT_NAME(0);
 
 unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStructName tokenStructName) {
 	if (lexemInfoTable == NULL) {
@@ -178,14 +182,14 @@ unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStruc
 	}
 
 	if (!strncmp(lexemInfoTable[0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE)
-		&& (!tokenStruct[tokenStructName][1] || !strncmp(lexemInfoTable[1].lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE))
-		&& (!tokenStruct[tokenStructName][2] || !strncmp(lexemInfoTable[2].lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE))
-		&& (!tokenStruct[tokenStructName][3] || !strncmp(lexemInfoTable[3].lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE))) {
+		&& (tokenStruct[tokenStructName][1] == NULL || tokenStruct[tokenStructName][1][0] == '\0' || !strncmp(lexemInfoTable[1].lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE))
+		&& (tokenStruct[tokenStructName][2] == NULL || tokenStruct[tokenStructName][2][0] == '\0' || !strncmp(lexemInfoTable[2].lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE))
+		&& (tokenStruct[tokenStructName][3] == NULL || tokenStruct[tokenStructName][3][0] == '\0' || !strncmp(lexemInfoTable[3].lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE))) {
 
-		return !!tokenStruct[tokenStructName][0]
-			+ !!tokenStruct[tokenStructName][1]
-			+ !!tokenStruct[tokenStructName][2]
-			+ !!tokenStruct[tokenStructName][3]
+		return !!(tokenStruct[tokenStructName][0] != NULL && tokenStruct[tokenStructName][0][0] != '\0')
+			 + !!(tokenStruct[tokenStructName][1] != NULL && tokenStruct[tokenStructName][1][0] != '\0')
+			 + !!(tokenStruct[tokenStructName][2] != NULL && tokenStruct[tokenStructName][2][0] != '\0')
+			 + !!(tokenStruct[tokenStructName][3] != NULL && tokenStruct[tokenStructName][3][0] != '\0')
 			;
 	}
 	else {
@@ -198,8 +202,7 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 		return false;
 	}
 
-	if (tokenStruct[tokenStructName][0]) {
-		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+	if (tokenStruct[tokenStructName][0] != NULL && tokenStruct[tokenStructName][0][0] != '\0') {
 		strncpy(lexemInfoTable[0][0].lexemStr, tokenStruct[tokenStructName][0], MAX_LEXEM_SIZE);
 		lexemInfoTable[0][0].lexemId = 0;
 		lexemInfoTable[0][0].tokenType = 0;
@@ -212,8 +215,7 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 	else {
 		return 0;
 	}
-	if (tokenStruct[tokenStructName][1]) {
-		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+	if (tokenStruct[tokenStructName][1] != NULL && tokenStruct[tokenStructName][1][0] != '\0') {
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][1], MAX_LEXEM_SIZE);
 		lexemInfoTable[0][0].lexemId = 0;
 		lexemInfoTable[0][0].tokenType = 0;
@@ -225,8 +227,7 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 	else {
 		return 1;
 	}
-	if (tokenStruct[tokenStructName][2]) {
-		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+	if (tokenStruct[tokenStructName][2] != NULL && tokenStruct[tokenStructName][2][0] != '\0') {
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][2], MAX_LEXEM_SIZE);
 		lexemInfoTable[0][0].lexemId = 0;
 		lexemInfoTable[0][0].tokenType = 0;
@@ -238,8 +239,7 @@ unsigned char createMultiToken(struct LexemInfo** lexemInfoTable, enum TokenStru
 	else {
 		return 2;
 	}
-	if (tokenStruct[tokenStructName][3]) {
-		//**lexemInfoTable = { 0/*NULL*/, 0, 0, 0, ~0, ~0 };
+	if (tokenStruct[tokenStructName][3] != NULL && tokenStruct[tokenStructName][3][0] != '\0') {
 		strncpy((*lexemInfoTable)->lexemStr, tokenStruct[tokenStructName][3], MAX_LEXEM_SIZE);
 		lexemInfoTable[0][0].lexemId = 0;
 		lexemInfoTable[0][0].tokenType = 0;
@@ -562,10 +562,10 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 //
 
 unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
-	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, "BODY", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
-	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, ";", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
-
 	return currBytePtr;
+//	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, "BODY", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
+//	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, ";", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
+//	return currBytePtr;
 }
 
 unsigned char* makeSaveHWStack(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
@@ -599,14 +599,12 @@ unsigned char* makeResetHWStack(struct LexemInfo** lastLexemInfoInTable, unsigne
 }
 
 unsigned char* noMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
-	if (!strncmp((*lastLexemInfoInTable)->lexemStr, "NAME", MAX_LEXEM_SIZE)
-		|| !strncmp((*lastLexemInfoInTable)->lexemStr, "DATA", MAX_LEXEM_SIZE)
-		//|| !strncmp((*lastLexemInfoInTable)->lexemStr, "long", MAX_LEXEM_SIZE)
-		//|| !strncmp((*lastLexemInfoInTable)->lexemStr, "int", MAX_LEXEM_SIZE) 
-		|| !strncmp((*lastLexemInfoInTable)->lexemStr, "BODY", MAX_LEXEM_SIZE)
-		|| !strncmp((*lastLexemInfoInTable)->lexemStr, "INTEGER16", MAX_LEXEM_SIZE)
-		|| !strncmp((*lastLexemInfoInTable)->lexemStr, ",", MAX_LEXEM_SIZE)
-		|| !strncmp((*lastLexemInfoInTable)->lexemStr, "END", MAX_LEXEM_SIZE)
+	if (!strncmp((*lastLexemInfoInTable)->lexemStr, T_NAME_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_DATA_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_BODY_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_DATA_TYPE_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_COMA_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_END_0, MAX_LEXEM_SIZE)
 		) {
 
 		return ++ * lastLexemInfoInTable, currBytePtr;
@@ -705,7 +703,9 @@ void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char
 
 		NON_CONTEXT_NULL_STATEMENT(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 
-		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = noMake(lastLexemInfoInTable, currBytePtr);
+		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) {
+			currBytePtr = noMake(lastLexemInfoInTable, currBytePtr);
+		}
 
 		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) {
 			printf("\r\nError in the code generator! \"%s\" - unexpected token!\r\n", (*lastLexemInfoInTable)->lexemStr);

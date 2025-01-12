@@ -1,4 +1,29 @@
+/************************************************************
+* N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
+*                         file: def.h                       *
+*                                                  (draft!) *
+*************************************************************/
+
 #define SUCCESS_STATE 0
+
+//#define DECLENUM(NAME, ...) typedef enum {__VA_ARGS__, size##NAME} NAME;
+#define DECLENUM(NAME, ...) enum NAME {__VA_ARGS__, size##NAME};
+#define GET_ENUM_SIZE(NAME) size##NAME
+#define SET_QUADRUPLE_STR_MACRO_IN_ARRAY(ARRAY, NAME)\
+ARRAY[MULTI_TOKEN_##NAME][0] = (char*)T_##NAME##_0;\
+ARRAY[MULTI_TOKEN_##NAME][1] = (char*)T_##NAME##_1;\
+ARRAY[MULTI_TOKEN_##NAME][2] = (char*)T_##NAME##_2;\
+ARRAY[MULTI_TOKEN_##NAME][3] = (char*)T_##NAME##_3;
+
+
+//#define EXPAND_MACRO(...) __VA_ARGS__ // Проміжний макрос для розгортання
+//
+//#define SET_QUADRUPLE_STR_MACRO_IN_ARRAY_(ARRAY, QUADRUPLE_ELEMENT_INDEX, ...)\
+//SET_QUADRUPLE_STR_MACRO_IN_ARRAY(ARRAY, QUADRUPLE_ELEMENT_INDEX, EXPAND_MACRO(__VA_ARGS__) )
+//
+//#define TOKENS_FOR_MULTI_TOKEN_BITWISE_NOT "~", "", "", ""
+//
+//SET_QUADRUPLE_STR_MACRO_IN_ARRAY_(tokenStruct, MULTI_TOKEN_BITWISE_NOT, TOKENS_FOR_MULTI_TOKEN_BITWISE_NOT)
 
 //#define MAX_TEXT_SIZE 8192
 //#define MAX_WORD_COUNT (MAX_TEXT_SIZE / 5)
