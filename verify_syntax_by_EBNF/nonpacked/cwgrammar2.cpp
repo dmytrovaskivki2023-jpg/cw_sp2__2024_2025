@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS  // for using sscanf in VS
-/*******************************************************************
-* N.Kozak // Lviv'2024 // example syntax analysis by boost::spirit *
-*                         file: cwgrammar2.cpp                     *
-*                                           (0.04v/draft version ) *
-********************************************************************/
+/***********************************************************************
+* N.Kozak // Lviv'2024-2025 // example syntax analysis by boost::spirit*
+*                              file: cwgrammar2.cpp                    *
+*                                               (0.04v/draft version ) *
+************************************************************************/
 #include "stdio.h"
 #include <iostream>
 #include <sstream>  // for std::ostringstream
