@@ -19,6 +19,7 @@
 
 #define NO_IMPLEMENT_CODE_STATE 256
 
+unsigned long long int getLastDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar);
 int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]);
 int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]);
 int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXEM_SIZE]);

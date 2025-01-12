@@ -9,8 +9,10 @@
 
 #include "../../../src/include/def.h"
 #include "../../../src/include/config.h"
-#include "../../../src/include/generator/generator.h"
 #include "../../../src/include/lexica/lexica.h"
+#include "../../../src/include/syntax/syntax.h"
+#include "../../../src/include/semantix/semantix.h"
+#include "../../../src/include/generator/generator.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -341,9 +343,36 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 
 void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	unsigned long long int nullStatementIndex = 0;
+	unsigned long long int passMakePrepareElementCount = getLastDataSectionLexemIndex(*lastLexemInfoInTable, &grammar);
+	if (passMakePrepareElementCount++ == ~0) {
+		printf("Error: bad section!\r\n");
+		exit(0);
+	}
+
+//	*lastLexemInfoInTable += lastDataSectionLexemIndex;
+//	while (lastDataSectionLexemIndex--) {
+//	
+//	}
+//
+//	for (; false && (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {
+//		if (passMakePrepareElementCount) {
+//			--passMakePrepareElementCount;
+//			++lexemInfoInTable;
+//			continue;
+//		}
+//		else {
+//			break;
+//		}
+//	}
 
 	lexemInfoTransformationTempStackSize = 0;
 	for (; (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {
+		if (passMakePrepareElementCount) {
+			--passMakePrepareElementCount;
+			++lexemInfoInTable;
+			continue;
+		}
+
 		for (struct LexemInfo* lastLexemInfoInTable_ = NULL; lastLexemInfoInTable_ != *lastLexemInfoInTable;) {
 
 			lastLexemInfoInTable_ = *lastLexemInfoInTable;

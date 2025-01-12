@@ -32,13 +32,13 @@ unsigned long long int getLastDataSectionLexemIndex(LexemInfo* lexemInfoTable, G
 		return lexemIndex;
 	}
 
-	printf("Error: No find code section strat index!\r\n");
+	printf("Error: No find data section end index!\r\n");
 	return ~0;
 }
 
 int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
 //	int returnState = SUCCESS_STATE;
-	unsigned int lastDataSectionLexemIndex = 0;
+	unsigned long long int lastDataSectionLexemIndex = 0;
 	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
 		return ~SUCCESS_STATE;
 	}
@@ -114,7 +114,7 @@ int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* 
 int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
 	int returnState = SUCCESS_STATE;
 
-	unsigned int lastDataSectionLexemIndex = 0;
+	unsigned long long int lastDataSectionLexemIndex = 0;
 	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
 		return ~SUCCESS_STATE;
 	}

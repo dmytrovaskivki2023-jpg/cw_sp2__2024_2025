@@ -20,6 +20,8 @@
 #include "../../../src/include/config.h"
 #include "../../../src/include/generator/generator.h"
 #include "../../../src/include/lexica/lexica.h"
+#include "../../../src/include/syntax/syntax.h"
+#include "../../../src/include/semantix/semantix.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -562,10 +564,15 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 //
 
 unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
+	//return currBytePtr;
+	unsigned long long int lastDataSectionLexemIndex = getLastDataSectionLexemIndex(*lastLexemInfoInTable, &grammar);
+	if(lastDataSectionLexemIndex == ~0) {
+		printf("Error: bad section!\r\n");
+		exit(0);
+	}
+
+	*lastLexemInfoInTable += lastDataSectionLexemIndex;
 	return currBytePtr;
-//	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, "BODY", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
-//	for (; (*lastLexemInfoInTable)->lexemStr[0] && strncmp((*lastLexemInfoInTable)->lexemStr, ";", MAX_LEXEM_SIZE); ++ * lastLexemInfoInTable);
-//	return currBytePtr;
 }
 
 unsigned char* makeSaveHWStack(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
