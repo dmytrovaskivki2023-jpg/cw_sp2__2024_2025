@@ -30,6 +30,7 @@ extern unsigned char generatorMode;
 
 //unsigned long long int codeOffset = 0x000004AF;
 //unsigned long long int baseOperationOffset = codeOffset + 49;// 0x00000031;
+#define baseOperationObjectOffset 0x0000018Bull
 #define baseOperationOffset 0x000004AFull
 #define putProcOffset 0x0000001Bull
 #define getProcOffset 0x00000044ull
@@ -44,7 +45,7 @@ extern unsigned long long int lexemInfoTransformationTempStackSize;
 unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragmentFirstBytePtr, unsigned long long int bytesCout);
 
 #if 1
+unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr);
 unsigned char* getCodeBytePtr(unsigned char* baseBytePtr);
 void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr);
-
 #endif

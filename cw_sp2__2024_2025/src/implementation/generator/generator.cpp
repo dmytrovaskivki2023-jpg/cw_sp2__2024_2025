@@ -625,6 +625,11 @@ unsigned char* createPattern() {
 	return NULL;
 }
 
+unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr) {
+
+	return baseBytePtr + baseOperationObjectOffset;
+}
+
 unsigned char* getCodeBytePtr(unsigned char* baseBytePtr) {
 
 	return baseBytePtr + baseOperationOffset;

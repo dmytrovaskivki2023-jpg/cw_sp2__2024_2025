@@ -132,6 +132,9 @@
     <ClCompile Include="src\implementation\syntax\syntax.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\implementation\generator\objectcodegen_pattern.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\cli\cli.h">

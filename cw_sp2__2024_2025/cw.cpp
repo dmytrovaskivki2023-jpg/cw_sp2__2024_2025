@@ -114,20 +114,35 @@ int main(int argc, char* argv[]) {
 	makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
 	printLexemes(lexemesInfoTableTemp, 0);
 
-	extern void reconstruct_file(const char* output_file);
+	extern unsigned long long int reconstruct_object(unsigned char* byteImage);
 	extern unsigned long long int reconstruct_image(unsigned char* byteImage);
 	extern void write_image_to_file(const char* output_file, unsigned char* byteImage, unsigned long long int imageSize);
-	unsigned long long int imageSize = reconstruct_image(new_code);
-	unsigned char* currBytePtr = getCodeBytePtr(new_code);
+	
+	unsigned long long int imageSize = 0;
+	unsigned char* currBytePtr = 0;
+	bool objectMode = false;
+	if (objectMode) {
+		imageSize = reconstruct_object(new_code);
+		currBytePtr = getObjectCodeBytePtr(new_code);
+	}
+	else {
+		imageSize = reconstruct_image(new_code);
+		currBytePtr = getCodeBytePtr(new_code);
+	}
 
 	lastLexemInfoInTableTemp = lexemesInfoTableTemp;
 //	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
-	makeCode(&lastLexemInfoInTableTemp, currBytePtr);
+	if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
 	//printf("\r\n;CODE:\r\n");
 	//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
 	//printf("\r\n;ENDCODE;\r\n");
 
-	write_image_to_file("out.exe", new_code, imageSize);
+	if (objectMode) {
+		write_image_to_file("out.obj", new_code, imageSize);
+	}
+	else {
+		write_image_to_file("out.exe", new_code, imageSize);
+	}
 
 	printf("Press Enter to exit . . .");
 	(void)getchar();

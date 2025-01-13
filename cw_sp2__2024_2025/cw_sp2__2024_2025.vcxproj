@@ -166,6 +166,7 @@
     <ClCompile Include="src\implementation\generator\not.cpp" />
     <ClCompile Include="src\implementation\generator\not_equal.cpp" />
     <ClCompile Include="src\implementation\generator\null_statement.cpp" />
+    <ClCompile Include="src\implementation\generator\objectcodegen_pattern.cpp" />
     <ClCompile Include="src\implementation\generator\operand.cpp" />
     <ClCompile Include="src\implementation\generator\or.cpp" />
     <ClCompile Include="src\implementation\generator\output.cpp" />
