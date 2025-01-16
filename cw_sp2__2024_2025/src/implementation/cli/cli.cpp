@@ -225,7 +225,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		if (*mode & INTERACTIVE_MODE) {
 			printf("Press Enter to next step");
 			(void)getchar();
-			(void)getchar();
+			//(void)getchar();
 		}
 	}
 

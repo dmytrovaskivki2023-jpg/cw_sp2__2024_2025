@@ -155,12 +155,25 @@ int main(int argc, char* argv[]) {
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & SYNTAX_ANALYZE_MODE) {
-		if (!mode) {
-			printf("Enter 'y' to save AST(to pass action process enter 'n' or others key): ");
-		}
-		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) { // add AST param
+//		if (!mode) { // !!!!!!!!!!!!!
+//			printf("Enter 'y' to save AST(to pass action process enter 'n' or others key): ");
+//		}
+		errorMessagesPtrToLastBytePtr[0] = '\0';
+		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
+		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char**)&errorMessagesPtrToLastBytePtr)) { // add AST param	
+			if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {			
+				writeBytesToFile(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));		
+			}
+			if (parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				writeBytesToFile(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"AST build failed.", strlen("AST build failed."));
+			}
 			return 0;
 		}
+
+		if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			writeBytesToFile(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"No error.", strlen("No error."));
+		}
+
 		if (mode & INTERACTIVE_MODE) {
 			printf("\r\nPress Enter to next step");
 			(void)getchar();

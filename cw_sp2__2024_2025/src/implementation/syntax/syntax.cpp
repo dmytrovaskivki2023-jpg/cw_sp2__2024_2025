@@ -435,6 +435,43 @@ Grammar originalGrammar = {
 
 #define DEBUG_STATES
 
+
+#define MAX_LEXEMS 256
+//#define MAX_RULES 128
+#define MAX_SYMBOLS 64
+
+typedef struct {
+    char symbols[MAX_SYMBOLS][MAX_TOKEN_SIZE];
+    int count;
+} SymbolSet;
+
+typedef SymbolSet ParseInfoTable[MAX_LEXEMS][MAX_LEXEMS];
+
+bool insertIntoSymbolSet(SymbolSet* set, const char* symbol) {
+    for (int i = 0; i < set->count; ++i) {
+        if (strcmp(set->symbols[i], symbol) == 0) {
+            // symbol already exists
+            return false;
+        }
+    }
+    strncpy(set->symbols[set->count], symbol, MAX_TOKEN_SIZE);
+    set->symbols[set->count][MAX_TOKEN_SIZE - 1] = '\0';
+    ++set->count;
+    return true;
+}
+
+bool containsSymbolSet(const SymbolSet* set, const char* symbol) {
+    for (int i = 0; i < set->count; ++i) {
+        if (strcmp(set->symbols[i], symbol) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// initialize with empty SymbolSets
+ParseInfoTable parseInfoTable = { {{0}} };
+
 struct ASTNode {
     std::string value;
     bool isTerminal;
@@ -481,7 +518,8 @@ ASTNode* buildASTByCPPMap(const std::map<int, std::map<int, std::set<std::string
     return nullptr;
 }
 
-ASTNode* buildAST(const std::map<int, std::map<int, std::set<std::string>>>& parseInfoTable,
+ASTNode* buildAST(//const std::map<int, std::map<int, std::set<std::string>>>& parseInfoTable,
+    ParseInfoTable& parseInfoTable,
     Grammar* grammar,
     int start,
     int end,
@@ -501,8 +539,8 @@ ASTNode* buildAST(const std::map<int, std::map<int, std::set<std::string>>>& par
         }
         else if (rule.rhs_count == 2) {
             for (int split = start; split < end; ++split) {
-                if (parseInfoTable.at(start).at(split).count(rule.rhs[0]) &&
-                    parseInfoTable.at(split + 1).at(end).count(rule.rhs[1])) {
+                if (containsSymbolSet(&parseInfoTable[start][split], rule.rhs[0]) && 
+                    containsSymbolSet(&parseInfoTable[split + 1][end], rule.rhs[1])) {
                     node->children.push_back(buildAST(parseInfoTable, grammar, start, split, rule.rhs[0]));
                     node->children.push_back(buildAST(parseInfoTable, grammar, split + 1, end, rule.rhs[1]));
                     return node;
@@ -676,42 +714,7 @@ void saveParseInfoTableToFile(const map<int, map<int, set<string>>>& parseInfoTa
     file.close();
 }
 
-#define MAX_LEXEMS 256
-//#define MAX_RULES 128
-#define MAX_SYMBOLS 64
-
-typedef struct {
-    char symbols[MAX_SYMBOLS][MAX_TOKEN_SIZE];
-    int count;
-} SymbolSet;
-
-typedef SymbolSet ParseInfoTable[MAX_LEXEMS][MAX_LEXEMS];
-
-bool insertIntoSymbolSet(SymbolSet* set, const char* symbol) {
-    for (int i = 0; i < set->count; ++i) {
-        if (strcmp(set->symbols[i], symbol) == 0) {
-            // symbol already exists
-            return false; 
-        }
-    }
-    strncpy(set->symbols[set->count], symbol, MAX_TOKEN_SIZE);
-    set->symbols[set->count][MAX_TOKEN_SIZE - 1] = '\0';
-    ++set->count;
-    return true;
-}
-
-bool containsSymbolSet(const SymbolSet* set, const char* symbol) {
-    for (int i = 0; i < set->count; ++i) {
-        if (strcmp(set->symbols[i], symbol) == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// initialize with empty SymbolSets
-ParseInfoTable parseInfoTable = { {{0}} };
-bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar) {
+bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar, char * astFileName) {
     if (lexemInfoTable == NULL || grammar == NULL) {
         return false;
     }
@@ -763,7 +766,27 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
 
     cout << "\r" << "cykParse complete........[     ok    ]\n";
 
-    return containsSymbolSet(&parseInfoTable[0][lexemIndex - 1], grammar->start_symbol);
+    if (!containsSymbolSet(&parseInfoTable[0][lexemIndex - 1], grammar->start_symbol)) {
+        return false;
+    }
+
+    ASTNode* astRoot = buildAST(parseInfoTable, grammar, 0, lexemIndex - 1, grammar->start_symbol);
+    if (astRoot) {
+        std::cout << "Abstract Syntax Tree:\n";
+        printAST(lexemInfoTable, astRoot);
+        if (astFileName && astFileName[0] != '\0') {
+            std::ofstream astOFStream(astFileName, std::ofstream::out);
+            printASTToFile(lexemInfoTable, astRoot, astOFStream);
+            astOFStream.close();
+        }
+        delete astRoot; // Не забуваємо звільняти пам'ять
+    }
+    else {
+        std::cout << "Failed to build AST.\n";
+    }
+
+    //return parseInfoTable[0][lexemIndex - 1].find(grammar->start_symbol) != parseInfoTable[0][lexemIndex - 1].end(); // return !!parseInfoTable[0][lexemIndex - 1].size();
+    return true;
 }
 
 #define MAX_STACK_DEPTH 256
@@ -860,14 +883,20 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
 
 //
 
-int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode) {
+int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char** errorMessagesPtrToLastBytePtr) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
-        cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar);
+        cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
         printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");  
         if (cykAlgorithmImplementationReturnValue) {
             return SUCCESS_STATE;
         }
+        else {
+            writeBytesToFile(astFileName, (unsigned char*)"Error of AST build", strlen("Error of AST build"));
+        }
+    }
+    else if (astFileName && astFileName[0] != '\0') {
+        writeBytesToFile(astFileName, (unsigned char*)"AST build no support.", strlen("AST build no support."));
     }
 
     if (cykAlgorithmImplementationReturnValue == false || syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_RECURSIVE_DESCENT) {
@@ -881,7 +910,8 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
                 return SUCCESS_STATE;
             }
             else {
-                printf("Parse failed: Extra tokens remain.\n");
+                printf("Parse failed: Extra tokens remain.\r\n");
+                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed: Extra tokens remain.\r\n");
                 return ~SUCCESS_STATE;
             }
         }
@@ -889,9 +919,12 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             if (unexpectedLexemfailedTerminal) {
                 printf("Parse failed.\r\n");
                 printf("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
+                *errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #\r\n    ..., but this is not certain.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
             }
             else {
                 printf("Parse failed: unexpected terminal.\r\n");
+                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed: unexpected terminal.\r\n");
             }
             return ~SUCCESS_STATE;
         }
@@ -900,12 +933,18 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
     return ~SUCCESS_STATE;
 }
 
-bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode) {
+bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char** errorMessagesPtrToLastBytePtr) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
-        bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar);
+        bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
 
         printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");
+    if(!cykAlgorithmImplementationReturnValue) {
+        writeBytesToFile(astFileName, (unsigned char*)"Error of AST build", strlen("Error of AST build"));
+    }
+    }
+    else if(astFileName && astFileName[0] != '\0') {
+        writeBytesToFile(astFileName, (unsigned char*)"AST build no support.", strlen("AST build no support."));
     }
 
     if (cykAlgorithmImplementationReturnValue && syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_RECURSIVE_DESCENT) {

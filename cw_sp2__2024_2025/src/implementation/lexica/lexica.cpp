@@ -90,7 +90,8 @@ void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 		printf("Lexemes table:\r\n");
 	}
 	printf("-------------------------------------------------------------------\r\n");
-	printf("index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
+	//printf("index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
+	printf("index           lexeme          id      type    ifvalue row     col\r\n");
 	printf("-------------------------------------------------------------------\r\n");
 	for (unsigned long long int index = 0; (!index || !printBadLexeme) && lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
 		printf("%5llu%17s%12llu%10llu%11llu%4lld%8lld\r\n", index, lexemInfoTable[index].lexemStr, lexemInfoTable[index].lexemId, lexemInfoTable[index].tokenType, lexemInfoTable[index].ifvalue, lexemInfoTable[index].row, lexemInfoTable[index].col);
@@ -101,7 +102,7 @@ void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 }
 
 void printLexemesToFile(struct LexemInfo* lexemInfoTable, char printBadLexeme, const char* filename) {
-	FILE* file = fopen(filename, "w");
+	FILE* file = fopen(filename, "wb");
 	if (!file) {
 		perror("Failed to open file");
 		return;
@@ -114,7 +115,8 @@ void printLexemesToFile(struct LexemInfo* lexemInfoTable, char printBadLexeme, c
 		fprintf(file, "Lexemes table:\r\n");
 	}
 	fprintf(file, "-------------------------------------------------------------------\r\n");
-	fprintf(file, "index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
+	//fprintf(file, "index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
+	fprintf(file, "index           lexeme          id      type    ifvalue row     col\r\n");
 	fprintf(file, "-------------------------------------------------------------------\r\n");
 
 	for (unsigned long long int index = 0; (!index || !printBadLexeme) && lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {

@@ -156,5 +156,5 @@ void writeBytesToFile(const char* output_file, unsigned char* byteImage, unsigne
     }
 
     fclose(outfile);
-    printf("File reconstructed as \"%s\".\n", output_file);
+    printf("File \"%s\" saved.\n", output_file);
 }
