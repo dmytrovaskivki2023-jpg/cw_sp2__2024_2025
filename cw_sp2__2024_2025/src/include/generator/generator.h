@@ -12,8 +12,7 @@
 #define DEBUG_MODE_BY_ASSEMBLY
 #define C_CODER_MODE                   0x01
 #define ASSEMBLY_X86_WIN32_CODER_MODE  0x02
-#define OBJECT_X86_WIN32_CODER_MODE    0x04
-#define MACHINE_CODER_MODE             0x08
+#define MACHINE_X86_WIN32_CODER_MODE   0x04
 
 extern unsigned char generatorMode;
 
@@ -47,7 +46,7 @@ unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragment
 #if 1
 unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr);
 unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr);
-unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr);
+unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr, unsigned char generatorMode);
 void viewCode(unsigned char* outCodePtr, unsigned long long int outCodePrintSize, unsigned char align);
 #endif
 

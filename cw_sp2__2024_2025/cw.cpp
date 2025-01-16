@@ -50,6 +50,8 @@ unsigned char new_code[8 * 1024 * 1024] = { '\0' }; //
 unsigned char tempCodeBuffer[8 * 1024 * 1024] = { '\0' };
 unsigned char outCodeBuffer[8 * 1024 * 1024] = { '\0' };
 
+unsigned char errorMessagesPtrToLastBytePtr[8 * 1024 * 1024] = { '\0' };
+
 int main(int argc, char* argv[]) {
 	PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 2, (UINT)LoadKeyboardLayoutA("00000409", KLF_ACTIVATE));
 
@@ -115,12 +117,21 @@ int main(int argc, char* argv[]) {
 			ifBadLexemeInfo.tokenType;
 			printf("Lexical analysis detected unexpected lexeme\r\n");
 			printLexemes(&ifBadLexemeInfo, 1);
+			if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				printLexemesToFile(lexemesInfoTable, 1, parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
+			}
 			printf("Press Enter to exit . . .");
 			(void)getchar();
 			return 0;
 		}
 		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
 			printLexemes(lexemesInfoTable, 0);
+			if (parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				printLexemesToFile(lexemesInfoTable, 0, parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
+			}
+			if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				writeBytesToFile(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"No error.", strlen("No error."));
+			}
 		}
 		else {
 			printf("Lexical analysis complete success\r\n");
@@ -172,9 +183,19 @@ int main(int argc, char* argv[]) {
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & SEMANTIX_ANALYZE_MODE) {
-		if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable)) {
+		errorMessagesPtrToLastBytePtr[0] = '\0';
+		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
+		if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable, (char **)&errorMessagesPtrToLastBytePtr)) {
+			if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				writeBytesToFile(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));
+			}
 			return 0;
 		}
+
+		if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			writeBytesToFile(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"No error.", strlen("No error."));
+		}
+
 		if (mode & INTERACTIVE_MODE) {
 			printf("\r\nPress Enter to next step");
 			(void)getchar();
@@ -206,6 +227,9 @@ int main(int argc, char* argv[]) {
 
 		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
 			printLexemes(lexemesInfoTableTemp, 0);
+			if (parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+				printLexemesToFile(lexemesInfoTableTemp, 0, parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
+			}
 		}
 		else {
 			printf("Make prepare(expressions separation + creating reverse Polish notation) complete success\r\n");
@@ -252,7 +276,7 @@ int main(int argc, char* argv[]) {
 		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
 		//		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
 				//	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
-		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
+		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr, C_CODER_MODE);
 		//printf("\r\n;CODE:\r\n");
 		//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
 		//printf("\r\n;ENDCODE;\r\n");
@@ -300,7 +324,7 @@ int main(int argc, char* argv[]) {
 
 		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
 		//	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
-		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
+		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr, ASSEMBLY_X86_WIN32_CODER_MODE);
 		//printf("\r\n;CODE:\r\n");
 		//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
 		//printf("\r\n;ENDCODE;\r\n");
@@ -333,7 +357,7 @@ int main(int argc, char* argv[]) {
 	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & MAKE_ASSEMBLY) {
 		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
 
-		byteCountWritedToTempCodeBuffer = makeCode(&lastLexemInfoInTableTemp, tempCodeBuffer) - tempCodeBuffer;
+		byteCountWritedToTempCodeBuffer = makeCode(&lastLexemInfoInTableTemp, tempCodeBuffer, MACHINE_X86_WIN32_CODER_MODE) - tempCodeBuffer;
 
 		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
 			viewCode(tempCodeBuffer, byteCountWritedToTempCodeBuffer, 16);

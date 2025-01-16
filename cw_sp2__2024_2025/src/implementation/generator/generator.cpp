@@ -94,7 +94,7 @@ struct GotoPositionInfo* lastGotoPositionInfoInTable = gotoPositionsInfoTable; /
 
 //#include "src/include/generator/generator.h"
 
-unsigned char generatorMode = MACHINE_CODER_MODE;
+//unsigned char generatorMode = MACHINE_CODER_MODE;
 
 char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT] = { NULL };
 
@@ -563,7 +563,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 
 unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr) {
 	//return currBytePtr;
-	unsigned long long int lastDataSectionLexemIndex = getLastDataSectionLexemIndex(*lastLexemInfoInTable, &grammar);
+	unsigned long long int lastDataSectionLexemIndex = getDataSectionLastLexemIndex(*lastLexemInfoInTable, &grammar);
 	if(lastDataSectionLexemIndex == ~0) {
 		printf("Error: bad section!\r\n");
 		exit(0);
@@ -633,7 +633,7 @@ unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr) {
 	return baseBytePtr + baseOperationOffset;
 }
 
-unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr) { // TODO:...
+unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr, unsigned char generatorMode) { // TODO:...
 	currBytePtr = makeTitle(lastLexemInfoInTable, currBytePtr);
 	currBytePtr = makeDependenciesDeclaration(lastLexemInfoInTable, currBytePtr);
 

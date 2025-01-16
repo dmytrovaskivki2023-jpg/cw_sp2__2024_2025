@@ -23,7 +23,7 @@
 //
 //#define NO_IMPLEMENT_CODE_STATE 256
 
-unsigned long long int getLastDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
+unsigned long long int getDataSectionLastLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
 	int lexemIndex = 0;
 	const struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
 
@@ -36,10 +36,11 @@ unsigned long long int getLastDataSectionLexemIndex(LexemInfo* lexemInfoTable, G
 	return ~0;
 }
 
-int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char ** errorMessagesPtrToLastBytePtr) {
 //	int returnState = SUCCESS_STATE;
 	unsigned long long int lastDataSectionLexemIndex = 0;
-	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+	if (~0 == (lastDataSectionLexemIndex = getDataSectionLastLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+		*errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Error get of data section last lexem index.\r\n");
 		return ~SUCCESS_STATE;
 	}
 	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
@@ -84,22 +85,27 @@ int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* 
 
 		if (isDeclaredIdentifierCollision) {
 			printf("Collision(identifier/identifier): %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Collision(identifier/identifier): #\r\n"), "Collision(identifier/identifier): %s\r\n", identifierIdsTable[index]);
 			return COLLISION_II_STATE;
 		}
 		if (isDeclaredLabelCollision) {
 			printf("Collision(label/label): %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Collision(label/label): #\r\n"), "Collision(label/label): %s\r\n", identifierIdsTable[index]);
 			return COLLISION_LL_STATE;
 		}
 		if (isDeclaredIdentifier && isLabel) {
 			printf("Collision(identifier/label): %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Collision(identifier/label): #\r\n"), "Collision(identifier/label): %s\r\n", identifierIdsTable[index]);
 			return COLLISION_IL_STATE;
 		}
 		else if (!isDeclaredIdentifier && !isLabel && !isDeclaredLabel) {
 			printf("Undeclared identifier: %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Undeclared identifier: #\r\n"), "Undeclared identifier: %s\r\n", identifierIdsTable[index]);
 			return COLLISION_I_STATE;
 		}
 		else if (isLabel && !isDeclaredLabel) {
 			printf("Undeclared label: %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Undeclared label: #\r\n"), "Undeclared label: %s\r\n", identifierIdsTable[index]);
 			return COLLISION_L_STATE;
 		}
 	}
@@ -111,11 +117,12 @@ int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* 
 	return SUCCESS_STATE;
 }
 
-int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr) {
 	int returnState = SUCCESS_STATE;
 
 	unsigned long long int lastDataSectionLexemIndex = 0;
-	if (~0 == (lastDataSectionLexemIndex = getLastDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+	if (~0 == (lastDataSectionLexemIndex = getDataSectionLastLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+		*errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Error get of data section last lexem index.\r\n");
 		return ~SUCCESS_STATE;
 	}
 
@@ -146,7 +153,8 @@ int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, 
 				break;					
 			}
 
-			printf("Uninitialized: %s\r\n", identifierIdsTable[index]);					
+			printf("Uninitialized: %s\r\n", identifierIdsTable[index]);			
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Uninitialized: #\r\n"), "Uninitialized: %s\r\n", identifierIdsTable[index]);
 			returnState = UNINITIALIZED_I_STATE;					
 			break;			
 		}
@@ -159,7 +167,7 @@ int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, 
 	return returnState;
 }
 
-int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXEM_SIZE]) {
+int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr) {
 	int returnState = SUCCESS_STATE;
 	
 	char keywords_re[] = KEYWORDS_RE;
@@ -169,6 +177,7 @@ int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXE
 	for (unsigned int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
 		if (std::regex_match(std::string(identifierIdsTable[index]), std::regex(keywords_re))) {
 			printf("Declaration matches keyword: %s\r\n", identifierIdsTable[index]);
+			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Declaration matches keyword: #\r\n"), "Declaration matches keyword: %s\r\n", identifierIdsTable[index]);
 			returnState = COLLISION_IK_STATE;
 		}
 	}
@@ -177,12 +186,12 @@ int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXE
 	return SUCCESS_STATE;
 }
 
-int semantixAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE]){
+int semantixAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr){
 	int returnState = SUCCESS_STATE;
 
-	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable))
-		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable))
-		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable))
+	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable, errorMessagesPtrToLastBytePtr))
+		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable, errorMessagesPtrToLastBytePtr))
+		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable, errorMessagesPtrToLastBytePtr))
 		) {
 		return returnState;
 	}

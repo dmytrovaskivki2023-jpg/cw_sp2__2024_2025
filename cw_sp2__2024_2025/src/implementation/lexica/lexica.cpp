@@ -100,6 +100,38 @@ void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 	return;
 }
 
+void printLexemesToFile(struct LexemInfo* lexemInfoTable, char printBadLexeme, const char* filename) {
+	FILE* file = fopen(filename, "w");
+	if (!file) {
+		perror("Failed to open file");
+		return;
+	}
+
+	if (printBadLexeme) {
+		fprintf(file, "Bad lexeme:\r\n");
+	}
+	else {
+		fprintf(file, "Lexemes table:\r\n");
+	}
+	fprintf(file, "-------------------------------------------------------------------\r\n");
+	fprintf(file, "index\t\tlexeme\t\tid\ttype\tifvalue\trow\tcol\r\n");
+	fprintf(file, "-------------------------------------------------------------------\r\n");
+
+	for (unsigned long long int index = 0; (!index || !printBadLexeme) && lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
+		fprintf(file, "%5llu%17s%12llu%10llu%11llu%4lld%8lld\r\n",
+			index,
+			lexemInfoTable[index].lexemStr,
+			lexemInfoTable[index].lexemId,
+			lexemInfoTable[index].tokenType,
+			lexemInfoTable[index].ifvalue,
+			lexemInfoTable[index].row,
+			lexemInfoTable[index].col);
+	}
+	fprintf(file, "-------------------------------------------------------------------\r\n\r\n");
+
+	fclose(file);
+}
+
 // get identifier id
 unsigned int getIdentifierId(char(*identifierIdsTable)[MAX_LEXEM_SIZE], char* str) {
 	unsigned int index = 0;
