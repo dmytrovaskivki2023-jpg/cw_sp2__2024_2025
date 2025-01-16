@@ -38,7 +38,7 @@
 #define MAX_TEXT_SIZE 8192
 #define MAX_GENERATED_TEXT_SIZE (MAX_TEXT_SIZE * 6)
 #define GENERATED_TEXT_SIZE_ 32768
-#define GENERATED_TEXT_SIZE (MAX_TEXT_SIZE % MAX_GENERATED_TEXT_SIZE)
+//#define GENERATED_TEXT_SIZE (MAX_TEXT_SIZE % MAX_GENERATED_TEXT_SIZE) // ?
 
 
 #define SUCCESS_STATE 0
@@ -274,9 +274,7 @@ unsigned long long int getVariableOffset(char* identifierStr) {
 
 	return OUT_DATA_OFFSET;
 }
-//
 
-	//0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 , 0x20 ,
 unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragmentFirstBytePtr, unsigned long long int bytesCout) {
 	for (; bytesCout--; *currBytePtr++ = *fragmentFirstBytePtr++);
 	return currBytePtr;
@@ -630,12 +628,12 @@ unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr) {
 	return baseBytePtr + baseOperationObjectOffset;
 }
 
-unsigned char* getCodeBytePtr(unsigned char* baseBytePtr) {
+unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr) {
 
 	return baseBytePtr + baseOperationOffset;
 }
 
-void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr) { // TODO:...
+unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr) { // TODO:...
 	currBytePtr = makeTitle(lastLexemInfoInTable, currBytePtr);
 	currBytePtr = makeDependenciesDeclaration(lastLexemInfoInTable, currBytePtr);
 
@@ -728,17 +726,19 @@ void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char
 
 	currBytePtr = makeResetHWStack(lastLexemInfoInTable, currBytePtr);
 	currBytePtr = makeEndProgramCode(lastLexemInfoInTable, currBytePtr);
+
+	return currBytePtr;
 }
 
-unsigned char outCode[GENERATED_TEXT_SIZE] = { '\0' };
-void viewCode(unsigned char* outCodePtr, size_t outCodePrintSize, unsigned char align) {
+//unsigned char outCode[GENERATED_TEXT_SIZE] = { '\0' };
+void viewCode(unsigned char* outCodePtr, unsigned long long int outCodePrintSize, unsigned char align) {
 	printf("\r\n;            +0x0 +0x1 +0x2 +0x3 +0x4 +0x5 +0x6 +0x7 +0x8 +0x9 +0xA +0xB +0xC +0xD +0xE +0xF ");
 	printf("\r\n;0x00000000: ");
-	size_t outCodePrintIndex = outCodePrintSize - 1;
-	for (size_t index = 0; index <= outCodePrintIndex;) {
+	unsigned long long int outCodePrintIndex = outCodePrintSize - 1;
+	for (unsigned long long int index = 0; index <= outCodePrintIndex;) {
 		printf("0x%02X ", outCodePtr[index]);
 		if (!(++index % align)) {
-			size_t indexMinus16 = index - align;
+			unsigned long long int indexMinus16 = index - align;
 			do {
 				//printf("0x%02X ", outCodePtr[index]);
 				if (outCodePtr[indexMinus16] >= 32 && outCodePtr[indexMinus16] <= 126) {

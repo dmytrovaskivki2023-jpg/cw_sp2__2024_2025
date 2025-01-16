@@ -46,6 +46,11 @@ unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragment
 
 #if 1
 unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr);
-unsigned char* getCodeBytePtr(unsigned char* baseBytePtr);
-void makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr);
+unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr);
+unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr);
+void viewCode(unsigned char* outCodePtr, unsigned long long int outCodePrintSize, unsigned char align);
 #endif
+
+unsigned long long int buildTemplateForCodeObject(unsigned char* byteImage);
+unsigned long long int buildTemplateForCodeImage(unsigned char* byteImage);
+void writeBytesToFile(const char* output_file, unsigned char* byteImage, unsigned long long int imageSize);

@@ -6,6 +6,24 @@
 
 #define SUCCESS_STATE 0
 
+#define LEXICAL_ANALYZE_MODE 1 // lexicalAnalyze
+#define SYNTAX_ANALYZE_MODE 2
+#define SEMANTIX_ANALYZE_MODE 4 // ADD MODE
+#define MAKE_PREPARE 8 // ADD MODE
+#define MAKE_C 16 // ADD MODE
+#define MAKE_ASSEMBLY 32 // ADD MODE
+#define MAKE_OBJECT 64 // ADD MODE
+#define MAKE_BINARY 128 // ADD MODE
+#define RUN_BINARY 256 // ADD MODE
+
+#define UNDEFINED_MODE 512
+
+#define INTERACTIVE_MODE 1024
+
+#define FULL_COMPILER_MODE 2048 // ?
+
+#define DEBUG_MODE 4096
+
 //#define DECLENUM(NAME, ...) typedef enum {__VA_ARGS__, size##NAME} NAME;
 #define DECLENUM(NAME, ...) enum NAME {__VA_ARGS__, size##NAME};
 #define GET_ENUM_SIZE(NAME) size##NAME

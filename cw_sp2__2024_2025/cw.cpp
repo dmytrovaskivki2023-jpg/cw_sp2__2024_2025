@@ -4,11 +4,23 @@
 *                         file: cw.cpp                      *
 *                                                           *
 *************************************************************/
-//#define USE_PREDEFINED_PARAMETERS // enable this define for use predefined value
 //#pragma comment(linker, "/STACK:516777216")
+
+#include <windows.h>
+//#include <winbase.h>
+//#include <winuser.h>
+//#include <shlobj.h>
+//#include <shlwapi.h>
+//#include <objbase.h>
+
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+//#include "conio.h"
+
+//#include "locale.h"
+
+#include <direct.h>
 
 #include <fstream>
 #include <iostream>
@@ -20,9 +32,9 @@
 #include "src/include/config.h"
 
 #include "src/include/cli/cli.h"
-bool reSetDefaultInputFileName_ = 
-strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file1.cwl")
-!= NULL;
+//bool reSetDefaultInputFileName_ = 
+//strcpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], "../test_programs/file1.cwl")
+//!= NULL;
 #include "src/include/lexica/lexica.h"
 
 #include "src/include/syntax/syntax.h"
@@ -33,123 +45,449 @@ strcpy(parameters[INPUT_FILENAME_PARAMETER], "../test_programs/file1.cwl")
 struct LexemInfo lexemesInfoTableTemp[MAX_WORD_COUNT]; // = { { "", 0, 0, 0 } };
 struct LexemInfo* lastLexemInfoInTableTemp = lexemesInfoTableTemp; // first for begin
 
-unsigned char new_code[8 * 1024 * 1024] = { '\0' };
+unsigned char new_code[8 * 1024 * 1024] = { '\0' }; //
+
+unsigned char tempCodeBuffer[8 * 1024 * 1024] = { '\0' };
+unsigned char outCodeBuffer[8 * 1024 * 1024] = { '\0' };
+
 int main(int argc, char* argv[]) {
+	PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 2, (UINT)LoadKeyboardLayoutA("00000409", KLF_ACTIVATE));
 
-#if defined(_DEBUG) || !defined(_WIN32) || !defined(_M_IX86)
-		printf("Please, switch to mode VS + x86 + Release.\r\n");
-		//(void)getchar();
-		//return 0;
-#endif
+	char path[PATH_NAME_LENGH];
+	char temp[2 * PATH_NAME_LENGH];
+	char productionOut[MAX_TEXT_SIZE] = { 0 };
 
-#ifdef	USE_PREDEFINED_PARAMETERS
-	mode = DEFAULT_MODE;
-	char text[MAX_TEXT_SIZE] = PREDEFINED_TEXT;
-#else
 	comandLineParser(argc, argv, &mode, parameters);
+
 	char* text;
-	size_t sourceSize = loadSource(&text, parameters[INPUT_FILENAME_PARAMETER]);
+	size_t sourceSize = loadSource(&text, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
 	if (!sourceSize) {
+		printf("Empty source . . .");
 		printf("Press Enter to exit . . .");
-		(void)getchar();
-		return 0;
-	}
-#endif
-
-	if (!(mode & LEXICAL_ANALISIS_MODE)) {
-		printf("NO SUPORTED MODE ...\r\n");
-		printf("Press Enter to exit . . .");
-		(void)getchar();
+		getchar();
 		return 0;
 	}
 
-	if (mode & DEBUG_MODE) {
-		printf("Original source:\r\n");
-		printf("-------------------------------------------------------------------\r\n");
-		printf("%s\r\n", text);
-		printf("-------------------------------------------------------------------\r\n\r\n");
-	}
-
-	int commentRemoverResult = commentRemover(text, "#*", "*#");
-	if (commentRemoverResult) {
-		printf("Comment remover return %d\r\n", commentRemoverResult);
+	if (!_getcwd(path, PATH_NAME_LENGH))
+	{
+		printf("getcwd error ...\r\n");
 		printf("Press Enter to exit . . .");
-		(void)getchar();
-		return 0;
-	}
-	if (mode & DEBUG_MODE) {
-		printf("Source after comment removing:\r\n");
-		printf("-------------------------------------------------------------------\r\n");
-		printf("%s\r\n", text);
-		printf("-------------------------------------------------------------------\r\n\r\n");
+		return -1;
 	}
 
-	struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
-
-	if (ifBadLexemeInfo.tokenType == UNEXPEXTED_LEXEME_TYPE) {
-		UNEXPEXTED_LEXEME_TYPE;
-		ifBadLexemeInfo.tokenType;
-		printf("Lexical analysis detected unexpected lexeme\r\n");
-		printLexemes(&ifBadLexemeInfo, 1);
-		printf("Press Enter to exit . . .");
-		(void)getchar();
-		return 0;
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
+		printf("Enter 'y' to lexical analyze action(to pass action process enter 'n' or others key): ");
 	}
-	if (mode & DEBUG_MODE) {
-		printLexemes(lexemesInfoTable, 0);
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & LEXICAL_ANALYZE_MODE) {
+
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printf("Original source:\r\n");
+			printf("-------------------------------------------------------------------\r\n");
+			printf("%s\r\n", text);
+			printf("-------------------------------------------------------------------\r\n\r\n");
+		}
+
+		int commentRemoverResult = commentRemover(text, "#*", "*#");
+		if (commentRemoverResult) {
+			printf("Comment remover return %d\r\n", commentRemoverResult);
+			printf("Press Enter to exit . . .");
+			(void)getchar();
+			return 0;
+		}
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printf("Source after comment removing:\r\n");
+			printf("-------------------------------------------------------------------\r\n");
+			printf("%s\r\n", text);
+			printf("-------------------------------------------------------------------\r\n\r\n");
+		}
+
+		struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
+
+		if (ifBadLexemeInfo.tokenType == UNEXPEXTED_LEXEME_TYPE) {
+			UNEXPEXTED_LEXEME_TYPE;
+			ifBadLexemeInfo.tokenType;
+			printf("Lexical analysis detected unexpected lexeme\r\n");
+			printLexemes(&ifBadLexemeInfo, 1);
+			printf("Press Enter to exit . . .");
+			(void)getchar();
+			return 0;
+		}
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printLexemes(lexemesInfoTable, 0);
+		}
+		else {
+			printf("Lexical analysis complete success\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
+		printf("Enter 'y' to syntax analyze action(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & SYNTAX_ANALYZE_MODE) {
+		if (!mode) {
+			printf("Enter 'y' to save AST(to pass action process enter 'n' or others key): ");
+		}
+		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) { // add AST param
+			return 0;
+		}
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
 	}
 	else {
-		printf("Lexical analysis complete success\r\n");
-	}
-
-	if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE)) {
+		printf("\r\ncw terminated.");
 		return 0;
 	}
 
-	if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable)) {
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
+		printf("Enter 'y' to semantix analyze action(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & SEMANTIX_ANALYZE_MODE) {
+		if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable)) {
+			return 0;
+		}
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+	else {
+		printf("\r\ncw terminated.");
 		return 0;
 	}
 
-	lastLexemInfoInTable = lexemesInfoTable;
-	makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
-	printLexemes(lexemesInfoTableTemp, 0);
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
+		printf("Enter 'y' for the action to prepare for the compilation process(to pass the action process, enter 'n' or another key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & MAKE_PREPARE) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printLexemes(lexemesInfoTable, 0);
+		}
 
-	extern unsigned long long int reconstruct_object(unsigned char* byteImage);
-	extern unsigned long long int reconstruct_image(unsigned char* byteImage);
-	extern void write_image_to_file(const char* output_file, unsigned char* byteImage, unsigned long long int imageSize);
-	
-	unsigned long long int imageSize = 0;
-	unsigned char* currBytePtr = 0;
-	bool objectMode = false;
-	if (objectMode) {
-		imageSize = reconstruct_object(new_code);
+		lastLexemInfoInTable = lexemesInfoTable;
+		makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
+
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printLexemes(lexemesInfoTableTemp, 0);
+		}
+		else {
+			printf("Make prepare(expressions separation + creating reverse Polish notation) complete success\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+	else {
+		printf("\r\ncw terminated.");
+		return 0;
+	}
+
+	if (false && mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to create C-code(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (false && (mode & MAKE_C || mode & INTERACTIVE_MODE && getchar() == 'y')) { // MAKE_ASSEMBLY_MODE
+
+		if (mode & DEBUG_MODE) {
+			printLexemes(lexemesInfoTable, 0);
+		}
+
+		unsigned long long int imageSize = 0;
+		unsigned char* currBytePtr = 0;
+		//		if (objectMode) {
+		imageSize = buildTemplateForCodeObject(new_code);
 		currBytePtr = getObjectCodeBytePtr(new_code);
+		//		}
+		//		else {
+		//			imageSize = buildTemplateForCodeImage(new_code);
+		//			currBytePtr = getImageCodeBytePtr(new_code);
+		//		}
+
+		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
+		//		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
+				//	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
+		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
+		//printf("\r\n;CODE:\r\n");
+		//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
+		//printf("\r\n;ENDCODE;\r\n");
+
+//		if (objectMode) {
+//			writeBytesToFile("out.obj", new_code, imageSize);
+//		}
+//		else {
+		writeBytesToFile("out.exe", new_code, imageSize);
+		//		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+
+	if (false && mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to create assembly(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (false && (mode & MAKE_ASSEMBLY || mode & INTERACTIVE_MODE && getchar() == 'y')) { // MAKE_ASSEMBLY_MODE
+
+		if (mode & DEBUG_MODE) {
+			printLexemes(lexemesInfoTable, 0);
+		}
+
+		unsigned long long int imageSize = 0;
+		unsigned char* currBytePtr = 0;
+		//		if (objectMode) {
+		imageSize = buildTemplateForCodeObject(new_code);
+		currBytePtr = getObjectCodeBytePtr(new_code);
+		//		}
+		//		else {
+		//			imageSize = buildTemplateForCodeImage(new_code);
+		//			currBytePtr = getImageCodeBytePtr(new_code);
+		//		}
+
+		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
+		//	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
+		if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
+		//printf("\r\n;CODE:\r\n");
+		//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
+		//printf("\r\n;ENDCODE;\r\n");
+
+//		if (objectMode) {
+//			writeBytesToFile("out.obj", new_code, imageSize);
+//		}
+//		else {
+		writeBytesToFile("out.exe", new_code, imageSize);
+		//		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+
+	unsigned long long int byteCountWritedToTempCodeBuffer = 0;
+	if (mode & INTERACTIVE_MODE) { // BUILD NATIVE CODE
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
+		printf("Enter 'y' to create native code(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & MAKE_ASSEMBLY) {
+		lastLexemInfoInTableTemp = lexemesInfoTableTemp;
+
+		byteCountWritedToTempCodeBuffer = makeCode(&lastLexemInfoInTableTemp, tempCodeBuffer) - tempCodeBuffer;
+
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			viewCode(tempCodeBuffer, byteCountWritedToTempCodeBuffer, 16);
+		}
+		else {
+			printf("Native code created complete successfully.\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
 	}
 	else {
-		imageSize = reconstruct_image(new_code);
-		currBytePtr = getCodeBytePtr(new_code);
+		printf("\r\ncw terminated.");
+		return 0;
 	}
 
-	lastLexemInfoInTableTemp = lexemesInfoTableTemp;
-//	struct LexemInfo* lastLexemInfoInTableTemp_ = lexemesInfoTableTemp; // first for begin
-	if (true)makeCode(&lastLexemInfoInTableTemp, currBytePtr);
-	//printf("\r\n;CODE:\r\n");
-	//viewCode(outCode, 160/*GENERATED_TEXT_SIZE*/, 16);
-	//printf("\r\n;ENDCODE;\r\n");
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to create obj-file(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & MAKE_OBJECT) {
+		unsigned long long int objectSize = buildTemplateForCodeObject(outCodeBuffer);
+		unsigned char* currBytePtr = getObjectCodeBytePtr(outCodeBuffer);
 
-	if (objectMode) {
-		write_image_to_file("out.obj", new_code, imageSize);
+		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
+
+		writeBytesToFile(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, objectSize);
+
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			viewCode(outCodeBuffer, objectSize, 16);
+		}
+		else {
+			printf("Object code created complete successfully.\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+	else if (mode & INTERACTIVE_MODE) {
+		(void)getchar();
+	}
+
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to create exe-file(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & MAKE_BINARY) {
+		unsigned long long int imageSize = buildTemplateForCodeImage(outCodeBuffer);
+		unsigned char* currBytePtr = getImageCodeBytePtr(outCodeBuffer);
+
+		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
+
+		//writeBytesToFile("out.exe", new_code, imageSize);
+		writeBytesToFile(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, imageSize);
+
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			viewCode(outCodeBuffer, imageSize, 16);
+		}
+		else {
+			printf("Object code created complete successfully.\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("\r\nPress Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
 	}
 	else {
-		write_image_to_file("out.exe", new_code, imageSize);
+		printf("\r\ncw terminated.");
+		return 0;
 	}
+#if 0
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to assembly program action(to pass action process enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & MAKE_ASSEMBLY || getchar() == 'y') { // MAKE_ASSEMBLY_MODE
 
-	printf("Press Enter to exit . . .");
-	(void)getchar();
+		if (mode & DEBUG_MODE) {
+			printLexemes(lexemesInfoTable, 0);
+		}
 
-#ifndef	USE_PREDEFINED_PARAMETERS
-	free(text);
+		lastLexemInfoInTable = lexemesInfoTable;
+		makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
+		//printLexemes(lexemesInfoTableTemp, 0);
+
+		if (mode & DEBUG_MODE) {
+			printLexemes(lexemesInfoTableTemp, 0);
+		}
+		else {
+			printf("Make prepare(expressions separation + creating reverse Polish notation) complete success\r\n");
+		}
+
+		if (mode & INTERACTIVE_MODE) {
+			printf("Press Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+	else {
+		printf("cw terminated.");
+		return 0;
+	}
 #endif
+
+	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
+		printf("\r\n");
+		printf("Enter 'y' to run program action(to pass action process Enter 'n' or others key): ");
+	}
+	fflush(stdin);
+	if (mode & INTERACTIVE_MODE && getchar() == 'y' || mode & RUN_BINARY) {
+		printf("\r\n");
+		//sprintf(temp, "START /b /wait \"\" /D \"%s\\masm32p\" %s.exe", path, parameters[OUT_BINARY_FILENAME_WITHOUT_EXTENSION_PARAMETER]);
+		snprintf(temp, MAX_PARAMETERS_SIZE, "START /b /wait \"\" %s", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+		fflush(stdin);
+		system((char*)temp);
+		fflush(stdin);
+	}
+	else if (mode ^ RUN_BINARY) {
+		printf("\r\n");
+	}
+
+	printf("\r\n\r\nPress Enter to exit . . .");
+	getchar();
 
 	return 0;
 }

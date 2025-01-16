@@ -6,13 +6,14 @@
 *************************************************************/
 
 #include "../include/def.h"
-#define LEXICAL_ANALISIS_MODE 1
-#define SEMANTIC_ANALISIS_MODE 2
-#define FULL_COMPILER_MODE 4
+//#define LEXICAL_ANALISIS_MODE 1
+//#define SEMANTIC_ANALISIS_MODE 2
+//#define FULL_COMPILER_MODE 4
 
-#define DEBUG_MODE 512
+//#define DEBUG_MODE 512
 
-#define DEFAULT_MODE (LEXICAL_ANALISIS_MODE | DEBUG_MODE)
+//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
+//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE | SYNTAX_ANALISIS_MODE | SEMANTIC_ANALISIS_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
 
 
 #define TOKENS_RE         ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
@@ -766,3 +767,9 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 },\
 176,\
 "program"
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
+#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)

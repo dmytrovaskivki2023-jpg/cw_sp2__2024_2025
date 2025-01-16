@@ -15,70 +15,179 @@
 #include "stdlib.h"
 #include "string.h"
 
-//#define DEFAULT_INPUT_FILENAME "file44.cwl"
-//
-//#define PREDEFINED_TEXT \
-//	"name MN\r\n" \
-//	"data\r\n" \
-//	"    #*argumentValue*#\r\n" \
-//	"    long int AV\r\n" \
-//	"    #*resultValue*#\r\n" \
-//	"    long int RV\r\n" \
-//	";\r\n" \
-//	"\r\n" \
-//	"body\r\n" \
-//	"    RV << 1; #*resultValue = 1; *#\r\n" \
-//	"\r\n" \
-//	"    #*input*#\r\n" \
-//	"	 get AV; #*scanf(\"%d\", &argumentValue); *#\r\n" \
-//	"\r\n" \
-//	"    #*compute*#\r\n" \
-//	"	 CL: #*label for cycle*#\r\n" \
-//	"    if AV == 0 goto EL #*for (; argumentValue; --argumentValue)*#\r\n" \
-//	"        RV << RV ** AV; #*resultValue *= argumentValue; *#\r\n" \
-//	"        AV << AV -- 1; \r\n" \
-//	"    goto CL\r\n" \
-//	"    EL: #*label for end cycle*#\r\n" \
-//	"\r\n" \
-//	"    #*output*#\r\n" \
-//	"    put RV; #*printf(\"%d\", resultValue); *#\r\n" \
-//	"end" \
-
-unsigned int mode = 0;
+unsigned long long int mode = 0;
 char parameters[PARAMETERS_COUNT][MAX_PARAMETERS_SIZE] = { "" };
 
-void comandLineParser(int argc, char* argv[], unsigned int* mode, char(*parameters)[MAX_PARAMETERS_SIZE]) {
-	char useDefaultModes = 1;
+void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char(*parameters)[MAX_PARAMETERS_SIZE]) {
+	char tempTemp[PATH_NAME_LENGH] = { '\0' }, * tempPtrPrev, * tempPtrNext, nameTemp[PATH_NAME_LENGH] = { '\0' };
+	char modesNotDefined = 1;
 	*mode = 0;
 	for (int index = 1; index < argc; ++index) {
 		if (!strcmp(argv[index], "-lex")) {
-			*mode |= LEXICAL_ANALISIS_MODE;
-			useDefaultModes = 0;
+			*mode |= LEXICAL_ANALYZE_MODE;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "-stx")) {
+			*mode |= SYNTAX_ANALYZE_MODE;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "-smt")) {
+			*mode |= SEMANTIX_ANALYZE_MODE;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "-gen")) {
+			*mode |= MAKE_ASSEMBLY | MAKE_BINARY;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "-run")) {
+			*mode |= RUN_BINARY;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "-all")) {
+			*mode |= LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY | RUN_BINARY;
+			modesNotDefined = 0;
 			continue;
 		}
 		else if (!strcmp(argv[index], "-d")) {
 			*mode |= DEBUG_MODE;
-			useDefaultModes = 0;
+			modesNotDefined = 0;
 			continue;
 		}
 
 		// other keys
 		// TODO:...
 
-		// input file name
-		strncpy(parameters[INPUT_FILENAME_PARAMETER], argv[index], MAX_PARAMETERS_SIZE);
-	}
-
-	// default input file name, if not entered manually
-	if (parameters[INPUT_FILENAME_PARAMETER][0] == '\0') {
-		strcpy(parameters[INPUT_FILENAME_PARAMETER], DEFAULT_INPUT_FILENAME);
-		printf("Input file name not setted. Used default input file name \"file1.cwl\"\r\n\r\n");
+		// input filename
+		strncpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], argv[index], MAX_PARAMETERS_SIZE);
 	}
 
 	// default mode, if not entered manually
-	if (useDefaultModes) {
-		*mode = DEFAULT_MODE;
-		printf("Used default mode\r\n\r\n");
+	if (modesNotDefined) {
+		if (parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			*mode = LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY;
+		}
+		else {
+			*mode = UNDEFINED_MODE;// | INTERACTIVE_MODE | ;
+			printf("Used interactive mode\r\n\r\n");
+		}
+	}
+
+	if (*mode & UNDEFINED_MODE) {
+		*mode |= INTERACTIVE_MODE;
+		//*mode |= DEFAULT_MODE;
+		*mode |= DEBUG_MODE;
+	}
+
+	// default input filename, if not entered manually
+	if (parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		strcpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], DEFAULT_INPUT_FILENAME);
+		//printf("Input filename not setted. Used defaule input filename \"%s\"\r\n\r\n", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
+		char choice[2] = { parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0], parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] };
+		//std::cout << "Enter file name(Enter \"" << choice[0] << "\" to use default \"" DEFAULT_INPUT_FILE "\"):\n";
+		printf("Input filename not setted. Enter file name(or enter '%c' to use default \"%s\"): ", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0], parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
+		//std::cin >> fileName;
+		(void)scanf("%s", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]/*, MAX_PARAMETERS_SIZE*/);
+		if (parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0] == choice[0] && parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] == '\0') {
+			parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] = choice[1];
+		}
+		printf("\r\n");
+	}
+
+
+	strncpy(nameTemp, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], PATH_NAME_LENGH);
+	nameTemp[PATH_NAME_LENGH - 1] = '\0';
+	tempPtrPrev = nameTemp;
+	tempPtrNext = NULL;
+	for (; tempPtrNext = strstr(tempPtrPrev + 1, "."); tempPtrPrev = tempPtrNext);
+	if (tempPtrPrev != nameTemp) {
+		*tempPtrPrev = '\0';
+	}
+#if 0
+	strncpy(tempTemp, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], PATH_NAME_LENGH);
+	tempPtrPrev = tempTemp;
+	tempPtrPrev[0] == '\"' ? ++tempPtrPrev : 0;
+	tempPtrNext = tempPtrPrev = strtok(tempPtrPrev, " .\\/:");
+	while (tempPtrNext != NULL) {
+		tempPtrNext = strtok(NULL, " .\\/:");
+		if (tempPtrPrev && tempPtrNext) {
+			strncpy(nameTemp, tempPtrPrev, PATH_NAME_LENGH);
+		}
+		tempPtrPrev = tempPtrNext;
+	}
+#endif
+
+	// default temp filename, if not entered manually
+	if (*mode & (MAKE_C | INTERACTIVE_MODE) && parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		if (*mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+		}
+		strncpy(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
+		strncat(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], ".c", PATH_NAME_LENGH - strlen(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]));
+		printf("Out C filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE) {
+			printf("Press Enter to next step");
+			(void)getchar();
+			(void)getchar();
+		}
+	}
+
+	// default temp filename, if not entered manually
+	if ((*mode & (MAKE_ASSEMBLY | INTERACTIVE_MODE)) && parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		if (*mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+		}
+		strncpy(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
+		strncat(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], ".asm", PATH_NAME_LENGH - strlen(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]));
+		printf("Out assembly filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE) {
+			printf("Press Enter to next step");
+			(void)getchar();
+		}
+	}
+
+	// default input filename, if not entered manually
+	if (*mode & (MAKE_OBJECT | INTERACTIVE_MODE) && parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		if (*mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+		}		
+		strncpy(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
+		strncat(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], ".obj", PATH_NAME_LENGH - strlen(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]));
+		printf("Out object filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE) {
+			printf("Press Enter to next step");
+			(void)getchar();
+		}
+	}
+
+	// default input filename, if not entered manually
+	if (*mode & (MAKE_BINARY | INTERACTIVE_MODE) && parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		if (*mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+		}
+		strncpy(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
+		strncat(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], ".exe", PATH_NAME_LENGH - strlen(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]));
+		printf("Out binary filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE) {
+			printf("Press Enter to next step");
+			(void)getchar();
+		}
 	}
 
 	return;
