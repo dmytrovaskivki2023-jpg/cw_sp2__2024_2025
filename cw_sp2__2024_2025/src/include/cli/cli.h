@@ -8,7 +8,7 @@
 #define PATH_NAME_LENGH 2048
 
 #define MAX_PARAMETERS_SIZE 4096
-#define PARAMETERS_COUNT 4
+#define PARAMETERS_COUNT 32
 //#define INPUT_FILENAME_PARAMETER 0
 #define INPUT_FILENAME_WITH_EXTENSION_PARAMETER 1
 #define OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER 2
@@ -61,9 +61,9 @@
 //	"    put RV; #*printf(\"%d\", resultValue); *#\r\n" \
 //	"end" \
 
-extern unsigned long long int mode;
+extern volatile unsigned long long int mode;
 extern char parameters[PARAMETERS_COUNT][MAX_PARAMETERS_SIZE];
 
-void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char(*parameters)[MAX_PARAMETERS_SIZE]);
+void comandLineParser(int argc, char* argv[], unsigned volatile long long int* mode, char(*parameters)[MAX_PARAMETERS_SIZE]);
 // after using this function use free(void *) function to release text buffer
 size_t loadSource(char** text, char* fileName);
