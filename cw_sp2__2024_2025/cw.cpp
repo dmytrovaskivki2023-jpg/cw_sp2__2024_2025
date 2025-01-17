@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
 //		}
 		errorMessagesPtrToLastBytePtr[0] = '\0';
 		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
-		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char**)&errorMessagesPtrToLastBytePtr)) { // add AST param	
+		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char*)errorMessagesPtrToLastBytePtr)) { // add AST param	
 			if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {			
 				writeBytesToFile(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));		
 			}

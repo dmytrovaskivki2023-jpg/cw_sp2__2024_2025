@@ -883,7 +883,7 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
 
 //
 
-int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char** errorMessagesPtrToLastBytePtr) {
+int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
         cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
@@ -911,7 +911,7 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             }
             else {
                 printf("Parse failed: Extra tokens remain.\r\n");
-                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed: Extra tokens remain.\r\n");
+                errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: Extra tokens remain.\r\n");
                 return ~SUCCESS_STATE;
             }
         }
@@ -919,12 +919,12 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             if (unexpectedLexemfailedTerminal) {
                 printf("Parse failed.\r\n");
                 printf("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
-                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
-                *errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #\r\n    ..., but this is not certain.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+                errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
+                errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #\r\n    ..., but this is not certain.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
             }
             else {
                 printf("Parse failed: unexpected terminal.\r\n");
-                *errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Parse failed: unexpected terminal.\r\n");
+                errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: unexpected terminal.\r\n");
             }
             return ~SUCCESS_STATE;
         }
