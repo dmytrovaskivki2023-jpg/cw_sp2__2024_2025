@@ -186,12 +186,12 @@ int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXE
 	return SUCCESS_STATE;
 }
 
-int semantixAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr){
+int semantixAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char* errorMessagesPtrToLastBytePtr){
 	int returnState = SUCCESS_STATE;
 
-	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable, errorMessagesPtrToLastBytePtr))
-		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable, errorMessagesPtrToLastBytePtr))
-		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable, errorMessagesPtrToLastBytePtr))
+	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable, &errorMessagesPtrToLastBytePtr))
 		) {
 		return returnState;
 	}
