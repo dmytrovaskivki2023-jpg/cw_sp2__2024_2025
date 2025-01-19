@@ -27,22 +27,36 @@ unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 		return currBytePtr;
 	}
 	if (multitokenSize++) {
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("\r\n");
-		printf("    ;ident \"%s\"(as label) previous \"%s\"\r\n", (*lastLexemInfoInTable)->lexemStr, tokenStruct[MULTI_TOKEN_COLON][0]);
-#endif
-		
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;ident \"%s\"(as label) previous \"%s\"\r\n", (*lastLexemInfoInTable)->lexemStr, tokenStruct[MULTI_TOKEN_COLON][0]);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //ident \"%s\"(as label) previous \"%s\"\r\n", (*lastLexemInfoInTable)->lexemStr, tokenStruct[MULTI_TOKEN_COLON][0]);
+		}
+
 		labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first = (unsigned long long int)currBytePtr;
 
-		while(!labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.empty()){
-			*(unsigned int*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() = (unsigned int)(currBytePtr - (unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() - 4);
+		while (!labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.empty()) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				*(unsigned int*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() = (unsigned int)(currBytePtr - (unsigned char*)labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.top() - 4);
+			}
 			labelInfoTable[(*lastLexemInfoInTable)->lexemStr].second.pop();
 		}
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-
-		printf("    LABEL@%016llX:\r\n", (unsigned long long int)&labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
+		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 	}
@@ -56,14 +70,19 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		if ((*lastLexemInfoInTable + 1)->tokenType != IDENTIFIER_LEXEME_TYPE) {
 			return currBytePtr;
 		}
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("\r\n");
-		printf("    ;\"%s\" previous ident \"%s\"(as label)\r\n", tokenStruct[MULTI_TOKEN_GOTO][0], (*lastLexemInfoInTable)[1].lexemStr);
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
 
-		const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
-
-		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\" previous ident \"%s\"(as label)\r\n", tokenStruct[MULTI_TOKEN_GOTO][0], (*lastLexemInfoInTable)[1].lexemStr);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\" previous ident \"%s\"(as label)\r\n", tokenStruct[MULTI_TOKEN_GOTO][0], (*lastLexemInfoInTable)[1].lexemStr);
+		}
 
 		if (labelInfoTable.find((*lastLexemInfoInTable)[1].lexemStr) == labelInfoTable.end()) {
 			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first = ~0;
@@ -72,13 +91,19 @@ unsigned char* makeGotoLabelCode(struct LexemInfo** lastLexemInfoInTable, unsign
 		if (labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first == ~0) {
 			labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].second.push((unsigned long long int)(currBytePtr - 4));
 		}
-		else {
+		else if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first - currBytePtr);
 		}
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    jmp LABEL@%016llX\r\n", (unsigned long long int)&labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first);
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@%016llX\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__%016llX;\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)[1].lexemStr].first);
+		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 	}

@@ -14,18 +14,25 @@
 unsigned char* makeWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_WHILE);
 	if (multitokenSize) {
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("\r\n");
-		printf("    ;\"%s\"\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif
-
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = **lastLexemInfoInTable;
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = **lastLexemInfoInTable;
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].ifvalue = (unsigned long long int)currBytePtr;
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    LABEL@WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\"\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			//
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\"\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			//
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 	}
@@ -44,16 +51,22 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 			) {
 			return currBytePtr;
 		}
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-			printf("\r\n");
-			printf("    ;after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };
+			const unsigned char code__jz_offset[] = { 0x0F, 0x84, 0x00, 0x00, 0x00, 0x00 };
 
-		const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };      
-		const unsigned char code__jz_offset[] = { 0x0F, 0x84, 0x00, 0x00, 0x00, 0x00 };
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cmp_eax_0, 3);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jz_offset, 6);
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+		}
 
-		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__cmp_eax_0, 3);			
-		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jz_offset, 6);			
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned long long int)(currBytePtr - 4);
 
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
@@ -61,10 +74,16 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("    cmp eax, 0\r\n");
-		printf("    jz LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "    cmp eax, 0\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    jz LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    if (opTemp == 0) goto LABEL__AFTER_WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 	}
@@ -83,21 +102,35 @@ unsigned char* makeContinueWhileCycleCode(struct LexemInfo** lastLexemInfoInTabl
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;continue while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;continue while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //continue while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
 
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
 			//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].ifvalue = (unsigned long long int)(currBytePtr - 4);
-			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].ifvalue - currBytePtr);
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].ifvalue - currBytePtr);
+			}
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_CONTINUE_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -107,23 +140,35 @@ unsigned char* makeContinueWhileCycleCode(struct LexemInfo** lastLexemInfoInTabl
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;continue while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;continue while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //continue while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
 
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
-
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
 			//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue = (unsigned long long int)(currBytePtr - 4);
-			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].ifvalue - currBytePtr);			
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].ifvalue - currBytePtr);
+			}
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_CONTINUE_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY	
-
-			printf("    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -131,22 +176,35 @@ unsigned char* makeContinueWhileCycleCode(struct LexemInfo** lastLexemInfoInTabl
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;continue while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;continue while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //continue while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
 
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
-
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
 			//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].ifvalue = (unsigned long long int)(currBytePtr - 4);
-			*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].ifvalue - currBytePtr);
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].ifvalue - currBytePtr);
+			}
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_CONTINUE_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr  += snprintf((char*)currBytePtr, 8192, "    goto LABEL__WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -165,21 +223,32 @@ unsigned char* makeExitWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, u
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 6].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;exit while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
-	
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
-	
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;exit while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //exit while (in \"then\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+
 			lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue = (unsigned long long int)(currBytePtr - 4);
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_EXIT_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr  += snprintf((char*)currBytePtr, 8192, "    goto LABEL__AFTER_WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -189,22 +258,32 @@ unsigned char* makeExitWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, u
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 5].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;exit while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;exit while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //exit while (in \"else\"-part of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
 
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
-
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
 			lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].ifvalue = (unsigned long long int)(currBytePtr - 4);
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_EXIT_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY	
-	
-			printf("    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__AFTER_WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -212,21 +291,32 @@ unsigned char* makeExitWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, u
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("\r\n");
-			printf("    ;exit while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
-#endif	
+				currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;exit while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    //exit while (in \"%s\")\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
+			}
 
-			const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 }; // jmp
-
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
 			lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned long long int)(currBytePtr - 4);
 			strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_EXIT_WHILE][0], MAX_LEXEM_SIZE);
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY		
-			printf("    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
-#endif
+			if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+				//
+			}
+			else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@AFTER_WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+			}
+			else if (generatorMode == C_CODER_MODE) {
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__AFTER_WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+			}
 
 			return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 		}
@@ -236,22 +326,41 @@ unsigned char* makeExitWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, u
 }
 
 unsigned char* makePostWhileCode_(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode, unsigned char depthOf—ontext) {
-	const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
-
 //	if (!strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_CONTINUE_WHILE][0], MAX_LEXEM_SIZE)) {
 //		*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].ifvalue = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].ifvalue - currBytePtr - 4);
 //	}
-	currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
-	*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].ifvalue - currBytePtr);
-	*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue - 4);
-	if (!strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_EXIT_WHILE][0], MAX_LEXEM_SIZE)) {
-		*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue - 4);
+
+	if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+		const unsigned char code__jmp_offset[] = { 0xE9, 0x00, 0x00, 0x00, 0x00 };
+
+		currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__jmp_offset, 5);
+	}
+	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+		//
+	}
+	else if (generatorMode == C_CODER_MODE) {
+		//
 	}
 
-#ifdef DEBUG_MODE_BY_ASSEMBLY	
-	printf("    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
-	printf("    LABEL@AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
-#endif
+	if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+		*(unsigned int*)(currBytePtr - 4) = (unsigned int)((unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].ifvalue - currBytePtr);
+		*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].ifvalue - 4);
+		if (!strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_EXIT_WHILE][0], MAX_LEXEM_SIZE)) {
+			*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue - 4);
+		}
+	}
+
+	if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+		//
+	}
+	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+	}
+	else if (generatorMode == C_CODER_MODE) {
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+	}
 
 	return currBytePtr;
 }
@@ -263,10 +372,17 @@ unsigned char* makeEndWhileAfterWhileCycleCode(struct LexemInfo** lastLexemInfoI
 		&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 		&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 		) {
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("\r\n");
-		printf("    ;end of while\r\n");
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;end of while\r\n");
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //end of while\r\n");
+		}
 
 		currBytePtr = makePostWhileCode_(lastLexemInfoInTable, currBytePtr, generatorMode, 0);
 

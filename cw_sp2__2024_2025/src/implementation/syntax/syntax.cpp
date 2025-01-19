@@ -933,7 +933,7 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
     return ~SUCCESS_STATE;
 }
 
-bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char** errorMessagesPtrToLastBytePtr) {
+bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
         bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);

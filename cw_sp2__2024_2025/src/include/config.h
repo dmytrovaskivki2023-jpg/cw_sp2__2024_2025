@@ -459,7 +459,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},\
         {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},\
         {"tokenWHILE__expression", 2, {"tokenWHILE","expression"}},\
-        {"tokenEND__tokenWHILE", 2, {"tokenEND","tokenWHILE"}},\
+        {"tokenEND__tokenWHILE", 2, {"tokenENDWHILE_END","tokenENDWHILE_WHILE"}},\
         {"tokenWHILE__expression__statement_in_while_body", 2, {"tokenWHILE__expression","statement_in_while_body"}},\
         {"tokenWHILE__expression__statement_in_while_body____iteration_after_two", 2, {"tokenWHILE__expression","statement_in_while_body____iteration_after_two"}},\
         {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
@@ -549,6 +549,8 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"tokenWHILE", 1, {T_WHILE_0}},\
         {"tokenCONTINUE", 1, {T_CONTINUE_WHILE_0}},\
         {"tokenEXIT", 1, {T_EXIT_WHILE_0}},\
+        {"tokenENDWHILE_END", 1, {T_END_WHILE_0}},\
+        {"tokenENDWHILE_WHILE", 1, {T_END_WHILE_1}},\
         {"tokenREPEAT", 1, {T_REPEAT_0}},\
         {"tokenUNTIL", 1, {T_UNTIL_0}},\
         {"tokenGET", 1, {T_INPUT_0}},\
@@ -565,7 +567,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 \
         {"", 2, {"",""}}\
 },\
-176,\
+178,\
 "program"
 
 #define ORIGINAL_GRAMMAR {\

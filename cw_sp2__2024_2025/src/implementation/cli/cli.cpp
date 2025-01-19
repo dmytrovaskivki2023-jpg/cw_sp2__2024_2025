@@ -73,7 +73,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		}
 		else {
 			*mode = UNDEFINED_MODE;// | INTERACTIVE_MODE | ;
-			printf("Used interactive mode\r\n\r\n");
+			//printf("No command line arguments. Go to step-by-step interactive mode(1) or start instant processing by default(2)?\r\n\r\n");
 		}
 	}
 
@@ -96,8 +96,29 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 			parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] = choice[1];
 		}
 		printf("\r\n");
+		(void)getchar();
 	}
 
+	// pass INTERACTIVE_MODE ?
+	if (*mode & INTERACTIVE_MODE) {
+//		if (*mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+//		}
+		printf("No command line arguments.\r\nGo to step-by-step interactive mode('y') or start instant processing by default('n' or other key): ");
+//		if (*mode & INTERACTIVE_MODE) {
+			if (getchar() == 'y') {
+				printf("Press Enter to next step");
+				(void)getchar();
+				(void)getchar();
+			}
+			else {
+				*mode |= SKIP_INTERACTIVE_IN_INTERACTIVE_MODE;
+			}
+//		}
+	}
 
 	strncpy(nameTemp, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], PATH_NAME_LENGH);
 	nameTemp[PATH_NAME_LENGH - 1] = '\0';
@@ -123,7 +144,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_LEXEMES_SEQUENSE | INTERACTIVE_MODE) && parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -132,16 +153,16 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], "_lexemes.txt", PATH_NAME_LENGH - strlen(parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
-			(void)getchar();
+			//(void)getchar();
 		}
 	}
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_LEXEMES_SEQUENSE | INTERACTIVE_MODE) && parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -149,8 +170,8 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		}
 		strncpy(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_lexeme_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
-		printf("Out lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		printf("Out error lexeme filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -159,7 +180,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_AST | INTERACTIVE_MODE) && parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -168,7 +189,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], ".ast", PATH_NAME_LENGH - strlen(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out AST filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -177,7 +198,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_AST | INTERACTIVE_MODE) && parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -185,8 +206,8 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		}
 		strncpy(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_syntax_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
-		printf("Out AST filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		printf("Out syntax error filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -195,7 +216,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & ((MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY) | INTERACTIVE_MODE) && parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -203,8 +224,8 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		}
 		strncpy(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_semantix_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
-		printf("Out AST filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		printf("Out semantix error filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -213,7 +234,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_LEXEMES_SEQUENSE | INTERACTIVE_MODE) && parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -221,8 +242,8 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		}
 		strncpy(parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], "_prepared_lexemes.txt", PATH_NAME_LENGH - strlen(parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]));
-		printf("Out lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		printf("Out prepared lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -231,7 +252,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if (*mode & (MAKE_C | INTERACTIVE_MODE) && parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -240,7 +261,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], ".c", PATH_NAME_LENGH - strlen(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out C filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 			//(void)getchar();
@@ -249,7 +270,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default temp filename, if not entered manually
 	if ((*mode & (MAKE_ASSEMBLY | INTERACTIVE_MODE)) && parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -258,7 +279,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], ".asm", PATH_NAME_LENGH - strlen(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out assembly filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 		}
@@ -266,7 +287,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default input filename, if not entered manually
 	if (*mode & (MAKE_OBJECT | INTERACTIVE_MODE) && parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -275,7 +296,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], ".obj", PATH_NAME_LENGH - strlen(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out object filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 		}
@@ -283,7 +304,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 
 	// default input filename, if not entered manually
 	if (*mode & (MAKE_BINARY | INTERACTIVE_MODE) && parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -292,7 +313,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncpy(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], nameTemp, PATH_NAME_LENGH);
 		strncat(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], ".exe", PATH_NAME_LENGH - strlen(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out binary filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
-		if (*mode & INTERACTIVE_MODE) {
+		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			printf("Press Enter to next step");
 			(void)getchar();
 		}

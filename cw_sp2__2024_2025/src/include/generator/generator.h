@@ -9,7 +9,6 @@
 #include "../../include/config.h"
 
 // TODO: CHANGE BY fRESET() TO END
-#define DEBUG_MODE_BY_ASSEMBLY
 #define C_CODER_MODE                   0x01
 #define ASSEMBLY_X86_WIN32_CODER_MODE  0x02
 #define MACHINE_X86_WIN32_CODER_MODE   0x04
@@ -44,8 +43,8 @@ extern unsigned long long int lexemInfoTransformationTempStackSize;
 unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragmentFirstBytePtr, unsigned long long int bytesCout);
 
 #if 1
-unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr);
-unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr);
+unsigned char* getObjectCodeBytePtr(unsigned char* baseBytePtr, unsigned char generatorMode);
+unsigned char* getImageCodeBytePtr(unsigned char* baseBytePtr, unsigned char generatorMode);
 unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, unsigned char* currBytePtr, unsigned char generatorMode);
 void viewCode(unsigned char* outCodePtr, unsigned long long int outCodePrintSize, unsigned char align);
 #endif

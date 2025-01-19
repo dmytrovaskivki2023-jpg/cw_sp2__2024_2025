@@ -13,10 +13,17 @@
 unsigned char* makeNullStatementAfterNonContextCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_NULL_STATEMENT);
 	if (multitokenSize) {
-#ifdef DEBUG_MODE_BY_ASSEMBLY
-		printf("\r\n");
-		printf("    ;null statement (non-context)\r\n");
-#endif
+		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
+			//
+		}
+		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    ;null statement (non-context)\r\n");
+		}
+		else if (generatorMode == C_CODER_MODE) {
+			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    //null statement (non-context)\r\n");
+		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
 	}
