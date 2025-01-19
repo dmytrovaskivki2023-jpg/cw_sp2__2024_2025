@@ -778,14 +778,14 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
             std::ofstream astOFStream(astFileName, std::ofstream::out);
             printASTToFile(lexemInfoTable, astRoot, astOFStream);
             astOFStream.close();
+            printf("File \"%s\" saved.\n", astFileName);
         }
-        delete astRoot; // Не забуваємо звільняти пам'ять
+        delete astRoot;
     }
     else {
         std::cout << "Failed to build AST.\n";
     }
 
-    //return parseInfoTable[0][lexemIndex - 1].find(grammar->start_symbol) != parseInfoTable[0][lexemIndex - 1].end(); // return !!parseInfoTable[0][lexemIndex - 1].size();
     return true;
 }
 
@@ -887,7 +887,7 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
         cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
-        printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");  
+        //printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");  
         if (cykAlgorithmImplementationReturnValue) {
             return SUCCESS_STATE;
         }

@@ -305,7 +305,7 @@ unsigned char* makeEndProgramCode(struct LexemInfo** lastLexemInfoInTable, unsig
 	}
 	else if (generatorMode == C_CODER_MODE) {
 		currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-		currBytePtr += sprintf((char*)currBytePtr, "return 0;\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "    return 0;\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "}");
 	}
 
