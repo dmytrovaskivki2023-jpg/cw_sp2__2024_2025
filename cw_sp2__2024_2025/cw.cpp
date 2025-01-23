@@ -24,7 +24,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <algorithm>//
+#include <algorithm> //
 #include <iterator>
 #include <regex>
 
@@ -45,7 +45,7 @@
 struct LexemInfo lexemesInfoTableTemp[MAX_WORD_COUNT]; // = { { "", 0, 0, 0 } };
 struct LexemInfo* lastLexemInfoInTableTemp = lexemesInfoTableTemp; // first for begin
 
-unsigned char new_code[8 * 1024 * 1024] = { '\0' }; //
+// unsigned char new_code[8 * 1024 * 1024] = { '\0' }; //
 
 unsigned char tempCodeBuffer[8 * 1024 * 1024] = { '\0' };
 unsigned char outCodeBuffer[8 * 1024 * 1024] = { '\0' };
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & SYNTAX_ANALYZE_MODE) {
 		errorMessagesPtrToLastBytePtr[0] = '\0';
 		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
-		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char*)&errorMessagesPtrToLastBytePtr)) { // TODO: add AST param	
+		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, DEFAULT_SYNTAX_ANAlYZE_MODE, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char*)&errorMessagesPtrToLastBytePtr, mode & (DEBUG_MODE | INTERACTIVE_MODE))) { // TODO: add AST param	
 			if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {			
 				writeBytesToFile(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));		
 			}
@@ -275,7 +275,12 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		makeCode(&lastLexemInfoInTableTemp, outCodeBuffer, C_CODER_MODE); /*The lexem info table will be changed and will need to be rebuilt. TODO: change the implementation!*/
 
-		printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
+		}
+		else {
+			printf("C-code created complete successfully.\r\n\r\n");
+		}
 		
 		if (parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 			writeBytesToFile(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, strlen((const char*)outCodeBuffer));
@@ -306,7 +311,12 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		makeCode(&lastLexemInfoInTableTemp, outCodeBuffer, ASSEMBLY_X86_WIN32_CODER_MODE);
 
-		printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+			printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
+		}
+		else {
+			printf("Assembly code created complete successfully.\r\n\r\n");
+		}
 
 		if (parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 			writeBytesToFile(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, strlen((const char*)outCodeBuffer));
@@ -330,7 +340,7 @@ int main(int argc, char* argv[]) {
 		printf("Enter 'y' to create native code(to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
-	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_ASSEMBLY) {
+	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & (MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY)) {
 		lastLexemInfoInTableTemp = lexemesInfoTableTemp;// 			printLexemes(lexemesInfoTableTemp, 0);
 		lastLexemInfoInTable = lexemesInfoTable;
 		makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp); /* Rerun preapare process after previous etap. TODO: change the implementation!*/
@@ -444,7 +454,7 @@ int main(int argc, char* argv[]) {
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (/*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || */getchar() == 'y') || mode & RUN_BINARY) {
-		printf("\r\n");
+		printf("\r\nRun \"%s\":\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
 		//sprintf(temp, "START /b /wait \"\" /D \"%s\\masm32p\" %s.exe", path, parameters[OUT_BINARY_FILENAME_WITHOUT_EXTENSION_PARAMETER]);
 		snprintf(temp, MAX_PARAMETERS_SIZE, "START /b /wait \"\" %s", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
 		fflush(stdin);

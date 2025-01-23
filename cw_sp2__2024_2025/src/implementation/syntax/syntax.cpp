@@ -714,7 +714,7 @@ void saveParseInfoTableToFile(const map<int, map<int, set<string>>>& parseInfoTa
     file.close();
 }
 
-bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar, char * astFileName) {
+bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar, char * astFileName, bool viewAST) {
     if (lexemInfoTable == NULL || grammar == NULL) {
         return false;
     }
@@ -772,8 +772,10 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
 
     ASTNode* astRoot = buildAST(parseInfoTable, grammar, 0, lexemIndex - 1, grammar->start_symbol);
     if (astRoot) {
-        std::cout << "Abstract Syntax Tree:\n";
-        printAST(lexemInfoTable, astRoot);
+        if (viewAST) {
+            std::cout << "Abstract Syntax Tree:\n";
+            printAST(lexemInfoTable, astRoot);
+        }
         if (astFileName && astFileName[0] != '\0') {
             std::ofstream astOFStream(astFileName, std::ofstream::out);
             printASTToFile(lexemInfoTable, astRoot, astOFStream);
@@ -883,10 +885,10 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
 
 //
 
-int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr) {
+int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
-        cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
+        cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName, viewAST);
         //printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");  
         if (cykAlgorithmImplementationReturnValue) {
             return SUCCESS_STATE;
@@ -933,10 +935,10 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
     return ~SUCCESS_STATE;
 }
 
-bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr) {
+bool syntaxlAnalyze_(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
-        bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName);
+        bool cykAlgorithmImplementationReturnValue = cykAlgorithmImplementation(lexemesInfoTable, grammar, astFileName, viewAST);
 
         printf("cykAlgorithmImplementation return \"%s\".\r\n", cykAlgorithmImplementationReturnValue ? "true" : "false");
     if(!cykAlgorithmImplementationReturnValue) {

@@ -23,47 +23,118 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 	char modesNotDefined = 1;
 	*mode = 0;
 	for (int index = 1; index < argc; ++index) {
-		if (!strcmp(argv[index], "-lex")) {
-			*mode |= LEXICAL_ANALYZE_MODE;
+		if (!strcmp(argv[index], "--input-file")) {
+			if (index + 1 < argc) {
+				// input filename
+				strncpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], argv[index + 1], MAX_PARAMETERS_SIZE);
+			}
+			else {
+				printf("Error: Add filename parameter after key --input-file.\r\n");
+				exit(0);
+			}
 			modesNotDefined = 0;
 			continue;
 		}
-		else if (!strcmp(argv[index], "-stx")) {
-			*mode |= SYNTAX_ANALYZE_MODE;
+//		if (!strcmp(argv[index], "--lex-file")) {
+//			*mode |= LEXICAL_ANALYZE_MODE;
+//			modesNotDefined = 0;
+//			continue;
+//		}
+//		else if (!strcmp(argv[index], "--stx-file")) {
+//			*mode |= SYNTAX_ANALYZE_MODE;
+//			modesNotDefined = 0;
+//			continue;
+//		}
+//		else if (!strcmp(argv[index], "--smt-file")) {
+//			*mode |= SEMANTIX_ANALYZE_MODE;
+//			modesNotDefined = 0;
+//			continue;
+//		}
+//		else if (!strcmp(argv[index], "-gen")) {
+//			*mode |= MAKE_ASSEMBLY | MAKE_BINARY;
+//			modesNotDefined = 0;
+//			continue;
+//		}
+		else if (!strcmp(argv[index], "--c-gen")) {
+			*mode |= MAKE_C;
 			modesNotDefined = 0;
 			continue;
 		}
-		else if (!strcmp(argv[index], "-smt")) {
-			*mode |= SEMANTIX_ANALYZE_MODE;
+		else if (!strcmp(argv[index], "--c-gen-file")) {
+			*mode |= MAKE_C;
+			if (index + 1 < argc) {
+				strncpy(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], argv[index + 1], MAX_PARAMETERS_SIZE);
+			}
+			else {
+				printf("Error: Add filename parameter after key --c-gen-file.\r\n");
+				exit(0);
+			}
 			modesNotDefined = 0;
 			continue;
 		}
-		else if (!strcmp(argv[index], "-gen")) {
-			*mode |= MAKE_ASSEMBLY | MAKE_BINARY;
+		else if (!strcmp(argv[index], "--obj-gen")) {
+			*mode |= MAKE_OBJECT;
 			modesNotDefined = 0;
 			continue;
 		}
-		else if (!strcmp(argv[index], "-run")) {
+		else if (!strcmp(argv[index], "--obj-gen-file")) {
+			*mode |= MAKE_OBJECT;
+			if (index + 1 < argc) {
+				strncpy(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], argv[index + 1], MAX_PARAMETERS_SIZE);
+			}
+			else {
+				printf("Error: Add filename parameter after key --obj-gen-file.\r\n");
+				exit(0);
+			}
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "--exe-gen")) {
+			*mode |= MAKE_BINARY;
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "--exe-gen-file")) {
+			*mode |= MAKE_BINARY;
+			if (index + 1 < argc) {
+				strncpy(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], argv[index + 1], MAX_PARAMETERS_SIZE);
+			}
+			else {
+				printf("Error: Add filename parameter after key --exe-gen-file.\r\n");
+				exit(0);
+			}
+			modesNotDefined = 0;
+			continue;
+		}
+		else if (!strcmp(argv[index], "--run")) {
 			*mode |= RUN_BINARY;
 			modesNotDefined = 0;
 			continue;
 		}
-		else if (!strcmp(argv[index], "-all")) {
-			*mode |= LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY | RUN_BINARY;
-			modesNotDefined = 0;
-			continue;
-		}
-		else if (!strcmp(argv[index], "-d")) {
+//		else if (!strcmp(argv[index], "--all")) {
+//			*mode |= LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY | RUN_BINARY;
+//			modesNotDefined = 0;
+//			continue;
+//		}
+		else if (!strcmp(argv[index], "-d") || !strcmp(argv[index], "--debug")) {
 			*mode |= DEBUG_MODE;
 			modesNotDefined = 0;
 			continue;
+		}
+		else if (!strcmp(argv[index], "-h") || !strcmp(argv[index], "--help")) {
+			printf("-h, --help               : help\r\n");
+			printf("--input-file <filename>  : set input finame\r\n");
+			printf("--c-gen-file <filename>  : set c-filename\r\n");
+			printf("--obj-gen-file <filename>: set obj-filename\r\n");
+			printf("--exe-gen-file <filename>: set exe-filename\r\n");
+			printf("-d, --debug              : debug mode\r\n");
+			exit(0);
 		}
 
 		// other keys
 		// TODO:...
 
-		// input filename
-		strncpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], argv[index], MAX_PARAMETERS_SIZE);
+
 	}
 
 	// default mode, if not entered manually
@@ -82,16 +153,29 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		//*mode |= DEFAULT_MODE;
 		*mode |= DEBUG_MODE;
 	}
+	else {
+	//strcpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], DEFAULT_INPUT_FILENAME);
+		*mode |= LEXICAL_ANALYZE_MODE
+              |  MAKE_LEXEMES_SEQUENSE
+              |  SYNTAX_ANALYZE_MODE
+              |  MAKE_AST
+              |  SEMANTIX_ANALYZE_MODE 
+              |  MAKE_PREPARE ;
+		//*mode |= MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY;
+		//*mode |= DEBUG_MODE;
+		//*mode |= RUN_BINARY;
+	}
 
 	// default input filename, if not entered manually
 	if (parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+		if (!(*mode & INTERACTIVE_MODE)) {
+			printf("Error: input filename not setted.\r\n\r\ncw terminated.");
+			exit(0);
+		}
 		strcpy(parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER], DEFAULT_INPUT_FILENAME);
-		//printf("Input filename not setted. Used defaule input filename \"%s\"\r\n\r\n", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
 		char choice[2] = { parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0], parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] };
-		//std::cout << "Enter file name(Enter \"" << choice[0] << "\" to use default \"" DEFAULT_INPUT_FILE "\"):\n";
 		printf("Input filename not setted. Enter file name(or enter '%c' to use default \"%s\"): ", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0], parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
-		//std::cin >> fileName;
-		(void)scanf("%s", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]/*, MAX_PARAMETERS_SIZE*/);
+		(void)scanf("%s", parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][0] == choice[0] && parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] == '\0') {
 			parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER][1] = choice[1];
 		}
@@ -215,7 +299,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 	}
 
 	// default temp filename, if not entered manually
-	if (*mode & ((MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY) | INTERACTIVE_MODE) && parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
+	if (*mode & (MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY | INTERACTIVE_MODE) && parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] == '\0') {
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 			system("CLS");
 			fflush(stdin);
