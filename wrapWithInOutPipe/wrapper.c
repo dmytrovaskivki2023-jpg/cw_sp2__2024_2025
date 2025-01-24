@@ -16,11 +16,20 @@ void ErrorExit(const char* msg) {
 }
 
 int main() {
-    //int param1 = "input_filename", param2 = "output_filename", param3 = "-d";
+    int param1 = "input_filename", param2 = "output_filename", param3 = "-d";
     int arg1 = 1, arg2 = 1, arg3 = 1;
     char cmdArgs[256];
-    //sprintf(cmdArgs, "%s %s %s %s", DEFAULT_INPUT_FILENAME, param1, param2, param3);
-    sprintf(cmdArgs, "%s", DEFAULT_INPUT_FILENAME);
+
+    printf("wrap: \"%s\"\r\n", DEFAULT_INPUT_FILENAME);
+    printf("args: \"%s\" \"%s\" \"%s\"\r\n", param1, param2, param3);
+    printf("commandline: \"%s\" \"%s\" \"%s\" \"%s\"\r\n", DEFAULT_INPUT_FILENAME, param1, param2, param3);
+    printf("input: %d; %d; %d;\r\n", arg1, arg2, arg3);
+    printf("output: computed result by formula\r\n", DEFAULT_INPUT_FILENAME, param1, param2, param3);
+    printf("\r\nPress Enter to run: ");
+    (void)getchar();
+
+    sprintf(cmdArgs, "%s %s %s %s", DEFAULT_INPUT_FILENAME, param1, param2, param3);
+    //sprintf(cmdArgs, "%s", DEFAULT_INPUT_FILENAME);
 
     HANDLE hChildStdOutRead, hChildStdOutWrite;
     HANDLE hChildStdInRead, hChildStdInWrite;
@@ -96,7 +105,7 @@ int main() {
     if (ReadFile(hChildStdOutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL)) {
         buffer[bytesRead] = '\0';
         printf("Output: %s", buffer);
-        MessageBoxA(NULL, buffer, "", 0);
+        //MessageBoxA(NULL, buffer, "", 0);
     }
     else {
         ErrorExit("Failed to read from child stdout");
