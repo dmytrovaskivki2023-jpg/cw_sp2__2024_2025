@@ -16,7 +16,7 @@ void ErrorExit(const char* msg) {
 }
 
 int main() {
-    int param1 = "input_filename", param2 = "output_filename", param3 = "-d";
+    char *param1 = "input_filename", *param2 = "output_filename", *param3 = "-d";
     int arg1 = 1, arg2 = 1, arg3 = 1;
     char cmdArgs[256];
 
@@ -24,7 +24,7 @@ int main() {
     printf("args: \"%s\" \"%s\" \"%s\"\r\n", param1, param2, param3);
     printf("commandline: \"%s\" \"%s\" \"%s\" \"%s\"\r\n", DEFAULT_INPUT_FILENAME, param1, param2, param3);
     printf("input: %d; %d; %d;\r\n", arg1, arg2, arg3);
-    printf("output: computed result by formula\r\n", DEFAULT_INPUT_FILENAME, param1, param2, param3);
+    printf("output: computed result by formula\r\n");
     printf("\r\nPress Enter to run: ");
     (void)getchar();
 
@@ -85,6 +85,7 @@ int main() {
         &siEx.StartupInfo, // Pointer to STARTUPINFOEX structure
         &pi))          // Pointer to PROCESS_INFORMATION structure
     {
+        printf("\r\nMaybe file \"%s\" does not exist.\r\n", DEFAULT_INPUT_FILENAME);
         ErrorExit("Failed to create process");
     }
 
