@@ -98,7 +98,7 @@ int main() {
     if (!WriteFile(hChildStdInWrite, inputBuffer, strlen(inputBuffer), &bytesWritten, NULL)) {
         ErrorExit("Failed to write to child stdin");
     }
-    Sleep(100);
+    Sleep(500);
     CloseHandle(hChildStdInWrite);
 
     char buffer[128];
