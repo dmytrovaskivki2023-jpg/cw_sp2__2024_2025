@@ -92,20 +92,23 @@ int main() {
     CloseHandle(hChildStdOutWrite);
     CloseHandle(hChildStdInRead);
 
-    char inputBuffer[128];
-    sprintf(inputBuffer, "%d\r\n%d\r\n%d\r\n", arg1, arg2, arg3);
+    char buffer[8192];
+
+    sprintf(buffer, "%d\r\n%d\r\n%d\r\n", arg1, arg2, arg3);
     DWORD bytesWritten;
-    if (!WriteFile(hChildStdInWrite, inputBuffer, strlen(inputBuffer), &bytesWritten, NULL)) {
+    if (!WriteFile(hChildStdInWrite, buffer, strlen(buffer), &bytesWritten, NULL)) {
         ErrorExit("Failed to write to child stdin");
     }
-    Sleep(500);
+    Sleep(100);
+    if (!FlushFileBuffers(hChildStdInWrite)) {
+        ErrorExit("Failed to flush stdin pipe");
+    }
     CloseHandle(hChildStdInWrite);
 
-    char buffer[128];
     DWORD bytesRead;
     if (ReadFile(hChildStdOutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL)) {
         buffer[bytesRead] = '\0';
-        printf("Output: %s", buffer);
+        printf("%s", buffer); // printf("Output: %s", buffer);
         //MessageBoxA(NULL, buffer, "", 0);
     }
     else {
