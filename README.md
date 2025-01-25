@@ -1,2 +1,2 @@
 # cw_sp2__2024_2025
-# ~99,5803% completed
+# ~99,582% completed
