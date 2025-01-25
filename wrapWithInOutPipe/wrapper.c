@@ -10,6 +10,33 @@
 
 #define DEFAULT_INPUT_FILENAME "../test_programs/file3.exe" // TODO: move!
 
+int getLastValue(char * buffer, int size) {
+    int returnValue = ~0;
+    char* lastAddr = buffer + size - 1, * currAddr = buffer;
+    while (currAddr <= lastAddr) {
+
+        char* entry = NULL;
+        for (char *entry_, digitCode = '0'; digitCode <= '9'; ++digitCode) {
+            if (((entry_ = strchr(currAddr, digitCode)) < entry || entry == NULL) && entry_ != NULL) {
+                entry = entry_;
+            }     
+        }
+
+        if (entry != NULL) {
+            returnValue = atoi(entry);
+            currAddr = entry;
+            while (currAddr[0] >= '0' && currAddr[0] <= '9') {
+                ++currAddr;
+            }
+        }
+        else {
+            ++currAddr;
+        }
+    }
+
+    return returnValue;
+}
+
 void ErrorExit(const char* msg) {
     fprintf(stderr, "%s. Error code: %lu\n", msg, GetLastError());
     ExitProcess(1);
@@ -18,18 +45,17 @@ void ErrorExit(const char* msg) {
 int main() {
     char *param1 = "input_filename", *param2 = "output_filename", *param3 = "-d";
     int arg1 = 1, arg2 = 1, arg3 = 1;
+    //int result = 0;
     char cmdArgs[256];
 
     printf("wrap: \"%s\"\r\n", DEFAULT_INPUT_FILENAME);
     printf("args: \"%s\" \"%s\" \"%s\"\r\n", param1, param2, param3);
-    printf("commandline: \"%s\" \"%s\" \"%s\" \"%s\"\r\n", DEFAULT_INPUT_FILENAME, param1, param2, param3);
     printf("input: %d; %d; %d;\r\n", arg1, arg2, arg3);
-    printf("output: computed result by formula\r\n");
-    printf("\r\nPress Enter to run: ");
+    printf("output: computed result by \"%s\"\r\n", DEFAULT_INPUT_FILENAME);
+    printf("\r\nPress Enter to run (commandline: \"%s\" \"%s\" \"%s\" \"%s\"): ", DEFAULT_INPUT_FILENAME, param1, param2, param3);
     (void)getchar();
 
     sprintf(cmdArgs, "%s %s %s %s", DEFAULT_INPUT_FILENAME, param1, param2, param3);
-    //sprintf(cmdArgs, "%s", DEFAULT_INPUT_FILENAME);
 
     HANDLE hChildStdOutRead, hChildStdOutWrite;
     HANDLE hChildStdInRead, hChildStdInWrite;
@@ -95,6 +121,7 @@ int main() {
     char buffer[8192];
 
     sprintf(buffer, "%d\r\n%d\r\n%d\r\n", arg1, arg2, arg3);
+    printf("Input1: %d\r\nInput2: %d\r\nInput2: %d\r\n", arg1, arg2, arg3);
     DWORD bytesWritten;
     if (!WriteFile(hChildStdInWrite, buffer, strlen(buffer), &bytesWritten, NULL)) {
         ErrorExit("Failed to write to child stdin");
@@ -106,23 +133,27 @@ int main() {
     CloseHandle(hChildStdInWrite);
 
     DWORD bytesRead;
+    ZeroMemory(buffer, sizeof(buffer));
     if (ReadFile(hChildStdOutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL)) {
-        buffer[bytesRead] = '\0';
-        printf("%s", buffer); // printf("Output: %s", buffer);
-        //MessageBoxA(NULL, buffer, "", 0);
+        // printf("%s", buffer); // printf("Output: %s", buffer);
+        printf("Output: %d", getLastValue(buffer, sizeof(buffer)));
     }
     else {
         ErrorExit("Failed to read from child stdout");
     }
 
+    //result getLastVAlue(char* buffer, int size);
+
+    //printf("Output: %d", getLastVAlue(buffer, sizeof(buffer)));
+
     WaitForSingleObject(pi.hProcess, INFINITE);
 
     DWORD exitCode;
     if (GetExitCodeProcess(pi.hProcess, &exitCode)) {
-        printf("\nChild process exited with code %lu\n", exitCode);
+        printf("\n\"%s\" exited with code %lu\n", DEFAULT_INPUT_FILENAME, exitCode);
     }
     else {
-        ErrorExit("Failed to get exit code");
+        ErrorExit("Failed to get exit code of \"%s\"", DEFAULT_INPUT_FILENAME);
     }
 
     CloseHandle(pi.hProcess);
