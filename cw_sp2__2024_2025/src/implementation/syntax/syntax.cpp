@@ -22,419 +22,15 @@ using namespace std;
 
 Grammar grammar = {
     CONFIGURABLE_GRAMMAR
-#if 0
-    {
-        {"labeled_point", 2, {"ident", "tokenCOLON"}}, // !!!!!
-        {"goto_label", 2, {"tokenGOTO","ident"}},      // !!!!!
-        {"program_name", 1, {"ident_terminal"}},
-        {"value_type", 1, {T_DATA_TYPE_0}},
-        {"other_declaration_ident", 2, {"tokenCOMMA", "ident"}},
-        {"other_declaration_ident____iteration_after_one", 2, {"other_declaration_ident","other_declaration_ident____iteration_after_one", }},
-        {"other_declaration_ident____iteration_after_one", 2, {"tokenCOMMA", "ident"}},
-        {"value_type__ident", 2, {"value_type", "ident"}},
-        {"declaration", 2, {"value_type__ident", "other_declaration_ident____iteration_after_one"}},
-        {"declaration", 2, {"value_type", "ident"}},
-        //
-        {"unary_operator", 1, {T_NOT_0}},
-        {"unary_operator", 1, {T_SUB_0}},
-        {"unary_operator", 1, {T_ADD_0}},
-        {"binary_operator", 1, {T_AND_0}},
-        {"binary_operator", 1, {T_OR_0}},
-        {"binary_operator", 1, {T_EQUAL_0}},
-        {"binary_operator", 1, {T_NOT_EQUAL_0}},
-        {"binary_operator", 1, {T_LESS_OR_EQUAL_0}},
-        {"binary_operator", 1, {T_GREATER_OR_EQUAL_0}},
-        {"binary_operator", 1, {T_ADD_0}},
-        {"binary_operator", 1, {T_SUB_0}},
-        {"binary_operator", 1, {T_MUL_0}},
-        {"binary_operator", 1, {T_DIV_0}},
-        {"binary_operator", 1, {T_MOD_0}},
-        {"binary_action", 2, {"binary_operator","expression"}},
-        //
-        {"left_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        {"left_expression", 2, {"unary_operator","expression"}},
-        {"left_expression", 1, {"ident_terminal"}},
-        {"left_expression", 1, {"value_terminal"}},
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action____iteration_after_two"}},
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action"}},
-        {"expression", 2, {"left_expression","binary_action____iteration_after_two"}},
-        {"expression", 2, {"left_expression","binary_action"}},
-        {"expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        {"expression", 2, {"unary_operator","expression"}},
-        {"expression", 1, {"ident_terminal"}},
-        {"expression", 1, {"value_terminal"}},
-        //
-        {"tokenGROUPEXPRESSIONBEGIN__expression", 2, {"tokenGROUPEXPRESSIONBEGIN","expression"}},
-        {"group_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        //
-        {"bind_right_to_left", 2, {"ident","rl_expression"}},
-        {"bind_left_to_right", 2, {"lr_expression","ident"}},
-        //
-        {"body_for_true", 2, {"statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},
-        {"body_for_true", 2, {"statement_in_while_body","tokenSEMICOLON"}},
-        {"body_for_true", 1, {T_SEMICOLON_0}},
-        {"tokenELSE__statement_in_while_body", 2, {"tokenELSE","statement_in_while_body"}},
-        {"tokenELSE__statement_in_while_body____iteration_after_two", 2, {"tokenELSE","statement_in_while_body____iteration_after_two"}},
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body","tokenSEMICOLON"}},
-        {"body_for_false", 2, {"tokenELSE","tokenSEMICOLON"}},
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN", 2, {"tokenIF","tokenGROUPEXPRESSIONBEGIN"}},
-        {"expression__tokenGROUPEXPRESSIONEND", 2, {"expression","tokenGROUPEXPRESSIONEND"}},
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN","expression__tokenGROUPEXPRESSIONEND"}},
-        {"body_for_true__body_for_false", 2, {"body_for_true","body_for_false"}},
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},
-        //
-        {"cycle_counter", 1, {"ident_terminal"}},
-        {"rl_expression", 2, {"tokenRLBIND","expression"}},
-        {"lr_expression", 2, {"expression","tokenLRBIND"}},
-        {"cycle_counter_init", 2, {"cycle_counter","rl_expression"}},
-        {"cycle_counter_init", 2, {"lr_expression","cycle_counter"}},
-        {"cycle_counter_last_value", 1, {"value_terminal"}},
-        {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},
-        {"cycle_body", 2, {"tokenDO","statement"}},
-        {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},
-        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","cycle_counter_last_value"}},
-        {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},
-        {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},
-        {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},
-        //
-        {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},
-        {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},
-        {"tokenWHILE__expression", 2, {"tokenWHILE","expression"}},
-        {"tokenEND__tokenWHILE", 2, {"tokenEND","tokenWHILE"}},
-        {"tokenWHILE__expression__statement_in_while_body", 2, {"tokenWHILE__expression","statement_in_while_body"}},
-        {"tokenWHILE__expression__statement_in_while_body____iteration_after_two", 2, {"tokenWHILE__expression","statement_in_while_body____iteration_after_two"}},
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE "}},
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},
-        {"while_cycle", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},
-        //
-        {"tokenUNTIL__expression", 2, {"tokenUNTIL","expression"}},
-        {"tokenREPEAT__statement____iteration_after_two", 2, {"tokenREPEAT","statement____iteration_after_two"}},
-        {"tokenREPEAT__statement", 2, {"tokenREPEAT","statement"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT","tokenUNTIL__expression"}},
-        //
-        {"input__first_part", 2, {"tokenGET","tokenGROUPEXPRESSIONBEGIN"}},
-        {"input__second_part", 2, {"ident","tokenGROUPEXPRESSIONEND"}},
-        {"input", 2, {"input__first_part","input__second_part"}},
-        //
-        {"output__first_part", 2, {"tokenPUT","tokenGROUPEXPRESSIONBEGIN"}},
-        {"output__second_part", 2, {"expression","tokenGROUPEXPRESSIONEND"}},
-        {"output", 2, {"output__first_part","output__second_part"}},
-        //
-        {"statement", 2, {"ident","rl_expression"}},
-        {"statement", 2, {"lr_expression","ident"}},
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},
-        {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},
-        {"statement", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},
-        {"statement", 2, {"tokenREPEAT","tokenUNTIL__expression"}},
-        {"statement", 2, {"ident","tokenCOLON"}},
-        {"statement", 2, {"tokenGOTO","ident"}},
-        {"statement", 2, {"input__first_part","input__second_part"}},
-        {"statement", 2, {"output__first_part","output__second_part"}},
-        {"statement____iteration_after_two", 2, {"statement","statement____iteration_after_two"}},
-        {"statement____iteration_after_two", 2, {"statement","statement"}},
-        //
-        { "statement_in_while_body", 2, {"ident","rl_expression"} },
-        { "statement_in_while_body", 2, {"lr_expression","ident"} },
-        { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"} },
-        { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"} },
-        { "statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"} },
-        { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"} },
-        { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"} },
-        { "statement_in_while_body", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"} },
-        { "statement_in_while_body", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"} },
-        { "statement_in_while_body", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"} },
-        { "statement_in_while_body", 2, {"tokenREPEAT","tokenUNTIL__expression"} },
-        { "statement_in_while_body", 2, {"ident","tokenCOLON"} },
-        { "statement_in_while_body", 2, {"tokenGOTO","ident"} },
-        { "statement_in_while_body", 2, {"input__first_part","input__second_part"} },
-        { "statement_in_while_body", 2, {"output__first_part","output__second_part"} },
-        { "statement_in_while_body", 2, {"tokenCONTINUE","tokenWHILE"} },
-        { "statement_in_while_body", 2, {"tokenEXIT","tokenWHILE"} },
-        { "statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body____iteration_after_two"} },
-        { "statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body"} },
-        //
-        {"tokenNAME__program_name", 2, {"tokenNAME","program_name"}},
-        {"tokenSEMICOLON__tokenBODY", 2, {"tokenSEMICOLON","tokenBODY"}},
-        {"tokenDATA__declaration", 2, {"tokenDATA","declaration"}},
-        {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY", 2, {"tokenNAME__program_name","tokenSEMICOLON__tokenBODY"}},
-        {"program____part1", 2, {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY","tokenDATA__declaration"}},
-        {"program____part1", 2, {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY","tokenDATA"}},
-        {"statement__tokenEND", 2, {"statement","tokenEND"}},
-        {"statement____iteration_after_two__tokenEND", 2, {"statement____iteration_after_two","tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","statement____iteration_after_two__tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","statement__tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","tokenEND"}},
-        {"program", 2, {"program____part1","program____part2"}},
-        //
-        {"tokenCOLON", 1, {T_COLON_0}},
-        {"tokenGOTO", 1, {T_GOTO_0}},
-        {"tokenINTEGER16", 1, {T_DATA_TYPE_0}},
-        {"tokenCOMMA", 1, {T_COMA_0}},
-        {"tokenNOT", 1, {T_NOT_0}},
-        {"tokenAND", 1, {T_AND_0}},
-        {"tokenOR", 1, {T_OR_0}},
-        {"tokenEQUAL", 1, {T_EQUAL_0}},
-        {"tokenNOTEQUAL", 1, {T_NOT_EQUAL_0}},
-        {"tokenLESSOREQUAL", 1, {T_LESS_OR_EQUAL_0}},
-        {"tokenGREATEROREQUAL", 1, {T_GREATER_OR_EQUAL_0}},
-        {"tokenPLUS", 1, {T_ADD_0}},
-        {"tokenMINUS", 1, {T_SUB_0}},
-        {"tokenMUL", 1, {T_MUL_0}},
-        {"tokenDIV", 1, {T_DIV_0}},
-        {"tokenMOD", 1, {T_MOD_0}},
-        {"tokenGROUPEXPRESSIONBEGIN", 1, {"("}},
-        {"tokenGROUPEXPRESSIONEND", 1, {")"}},
-        {"tokenRLBIND", 1, {T_RLBIND_0}},
-        {"tokenLRBIND", 1, {T_LRBIND_0}},
-        {"tokenELSE", 1, {T_ELSE_0}},
-        {"tokenIF", 1, {T_IF_0}},
-        {"tokenDO", 1, {T_DO_0}},
-        {"tokenFOR", 1, {T_FOR_0}},
-        {"tokenTO", 1, {T_TO_0}},
-        {"tokenWHILE", 1, {T_WHILE_0}},
-        {"tokenCONTINUE", 1, {T_CONTINUE_WHILE_0}},
-        {"tokenEXIT", 1, {T_EXIT_WHILE_0}},
-        {"tokenREPEAT", 1, {T_REPEAT_0}},
-        {"tokenUNTIL", 1, {T_UNTIL_0}},
-        {"tokenGET", 1, {T_INPUT_0}},
-        {"tokenPUT", 1, {T_OUTPUT_0}},
-        {"tokenNAME", 1, {T_NAME_0}},
-        {"tokenBODY", 1, {T_BODY_0}},
-        {"tokenDATA", 1, {T_DATA_0}},
-        {"tokenEND", 1, {T_END_0}},
-        {"tokenSEMICOLON", 1, {T_SEMICOLON_0}},
-        //
-        { "value", 1, {"value_terminal"} },
-        //
-        { "ident", 1, {"ident_terminal"} },
-        //
-//        { "label", 1, {"ident_terminal"} },
-        //
-        { "", 2, {"",""} }
-    },
-    176,
-    "program"
-#endif
 };
 
+#if 0
 Grammar originalGrammar = {
     ORIGINAL_GRAMMAR
-#if 0
-    {
-        {"labeled_point", 2, {"ident", "tokenCOLON"}}, // !!!!!
-        {"goto_label", 2, {"tokenGOTO","ident"}},      // !!!!!
-        {"program_name", 1, {"ident_terminal"}},
-        {"value_type", 1, {"INTEGER16"}},
-        {"other_declaration_ident", 2, {"tokenCOMMA", "ident"}},
-        {"other_declaration_ident____iteration_after_one", 2, {"other_declaration_ident","other_declaration_ident____iteration_after_one", }},
-        {"other_declaration_ident____iteration_after_one", 2, {"tokenCOMMA", "ident"}},
-        {"value_type__ident", 2, {"value_type", "ident"}},
-        {"declaration", 2, {"value_type__ident", "other_declaration_ident____iteration_after_one"}},
-        {"declaration", 2, {"value_type", "ident"}},
-        //
-        {"unary_operator", 1, {"NOT"}},
-        {"unary_operator", 1, {"-"}},
-        {"unary_operator", 1, {"+"}},
-        {"binary_operator", 1, {"AND"}},
-        {"binary_operator", 1, {"OR"}},
-        {"binary_operator", 1, {"=="}},
-        {"binary_operator", 1, {"!="}},
-        {"binary_operator", 1, {"<="}},
-        {"binary_operator", 1, {">="}},
-        {"binary_operator", 1, {"+"}},
-        {"binary_operator", 1, {"-"}},
-        {"binary_operator", 1, {"*"}},
-        {"binary_operator", 1, {"DIV"}},
-        {"binary_operator", 1, {"MOD"}},
-        {"binary_action", 2, {"binary_operator","expression"}},
-        //
-        {"left_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        {"left_expression", 2, {"unary_operator","expression"}},
-        {"left_expression", 1, {"ident_terminal"}},
-        {"left_expression", 1, {"value_terminal"}},
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action____iteration_after_two"}},
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action"}},
-        {"expression", 2, {"left_expression","binary_action____iteration_after_two"}},
-        {"expression", 2, {"left_expression","binary_action"}},
-        {"expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        {"expression", 2, {"unary_operator","expression"}},
-        {"expression", 1, {"ident_terminal"}},
-        {"expression", 1, {"value_terminal"}},
-        //
-        {"tokenGROUPEXPRESSIONBEGIN__expression", 2, {"tokenGROUPEXPRESSIONBEGIN","expression"}},
-        {"group_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},
-        //
-        {"bind_right_to_left", 2, {"ident","rl_expression"}},
-        {"bind_left_to_right", 2, {"lr_expression","ident"}},
-        //
-        {"body_for_true", 2, {"statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},
-        {"body_for_true", 2, {"statement_in_while_body","tokenSEMICOLON"}},
-        {"body_for_true", 1, {";"}},
-        {"tokenELSE__statement_in_while_body", 2, {"tokenELSE","statement_in_while_body"}},
-        {"tokenELSE__statement_in_while_body____iteration_after_two", 2, {"tokenELSE","statement_in_while_body____iteration_after_two"}},
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body","tokenSEMICOLON"}},
-        {"body_for_false", 2, {"tokenELSE","tokenSEMICOLON"}},
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN", 2, {"tokenIF","tokenGROUPEXPRESSIONBEGIN"}},
-        {"expression__tokenGROUPEXPRESSIONEND", 2, {"expression","tokenGROUPEXPRESSIONEND"}},
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN","expression__tokenGROUPEXPRESSIONEND"}},
-        {"body_for_true__body_for_false", 2, {"body_for_true","body_for_false"}},
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},
-        //
-        {"cycle_counter", 1, {"ident_terminal"}},
-        {"rl_expression", 2, {"tokenRLBIND","expression"}},
-        {"lr_expression", 2, {"expression","tokenLRBIND"}},
-        {"cycle_counter_init", 2, {"cycle_counter","rl_expression"}},
-        {"cycle_counter_init", 2, {"lr_expression","cycle_counter"}},
-        {"cycle_counter_last_value", 1, {"value_terminal"}},
-        {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},
-        {"cycle_body", 2, {"tokenDO","statement"}},
-        {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},
-        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","cycle_counter_last_value"}},
-        {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},
-        {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},
-        {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},
-        //
-        {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},
-        {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},
-        {"tokenWHILE__expression", 2, {"tokenWHILE","expression"}},
-        {"tokenEND__tokenWHILE", 2, {"tokenEND","tokenWHILE"}},
-        {"tokenWHILE__expression__statement_in_while_body", 2, {"tokenWHILE__expression","statement_in_while_body"}},
-        {"tokenWHILE__expression__statement_in_while_body____iteration_after_two", 2, {"tokenWHILE__expression","statement_in_while_body____iteration_after_two"}},
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE "}},
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},
-        {"while_cycle", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},
-        //
-        {"tokenUNTIL__expression", 2, {"tokenUNTIL","expression"}},
-        {"tokenREPEAT__statement____iteration_after_two", 2, {"tokenREPEAT","statement____iteration_after_two"}},
-        {"tokenREPEAT__statement", 2, {"tokenREPEAT","statement"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},
-        {"repeat_until_cycle", 2, {"tokenREPEAT","tokenUNTIL__expression"}},
-        //
-        {"input__first_part", 2, {"tokenGET","tokenGROUPEXPRESSIONBEGIN"}},
-        {"input__second_part", 2, {"ident","tokenGROUPEXPRESSIONEND"}},
-        {"input", 2, {"input__first_part","input__second_part"}},
-        //
-        {"output__first_part", 2, {"tokenPUT","tokenGROUPEXPRESSIONBEGIN"}},
-        {"output__second_part", 2, {"expression","tokenGROUPEXPRESSIONEND"}},
-        {"output", 2, {"output__first_part","output__second_part"}},
-        //
-        {"statement", 2, {"ident","rl_expression"}},
-        {"statement", 2, {"lr_expression","ident"}},
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},
-        {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},
-        {"statement", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},
-        {"statement", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},
-        {"statement", 2, {"tokenREPEAT","tokenUNTIL__expression"}},
-        {"statement", 2, {"ident","tokenCOLON"}},
-        {"statement", 2, {"tokenGOTO","ident"}},
-        {"statement", 2, {"input__first_part","input__second_part"}},
-        {"statement", 2, {"output__first_part","output__second_part"}},
-        {"statement____iteration_after_two", 2, {"statement","statement____iteration_after_two"}},
-        {"statement____iteration_after_two", 2, {"statement","statement"}},
-        //
-        {"statement_in_while_body", 2, {"ident","rl_expression"} },
-        {"statement_in_while_body", 2, {"lr_expression","ident"} },
-        {"statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"} },
-        {"statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"} },
-        {"statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"} },
-        {"statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"} },
-        {"statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"} },
-        {"statement_in_while_body", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"} },
-        {"statement_in_while_body", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"} },
-        {"statement_in_while_body", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"} },
-        {"statement_in_while_body", 2, {"tokenREPEAT","tokenUNTIL__expression"} },
-        {"statement_in_while_body", 2, {"ident","tokenCOLON"} },
-        {"statement_in_while_body", 2, {"tokenGOTO","ident"} },
-        {"statement_in_while_body", 2, {"input__first_part","input__second_part"} },
-        {"statement_in_while_body", 2, {"output__first_part","output__second_part"} },
-        {"statement_in_while_body", 2, {"tokenCONTINUE","tokenWHILE"} },
-        {"statement_in_while_body", 2, {"tokenEXIT","tokenWHILE"} },
-        {"statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body____iteration_after_two"} },
-        {"statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body"} },
-        //
-        {"tokenNAME__program_name", 2, {"tokenNAME","program_name"}},
-        {"tokenSEMICOLON__tokenBODY", 2, {"tokenSEMICOLON","tokenBODY"}},
-        {"tokenDATA__declaration", 2, {"tokenDATA","declaration"}},
-        {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY", 2, {"tokenNAME__program_name","tokenSEMICOLON__tokenBODY"}},
-        {"program____part1", 2, {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY","tokenDATA__declaration"}},
-        {"program____part1", 2, {"tokenNAME__program_name__tokenSEMICOLON__tokenBODY","tokenDATA"}},
-        {"statement__tokenEND", 2, {"statement","tokenEND"}},
-        {"statement____iteration_after_two__tokenEND", 2, {"statement____iteration_after_two","tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","statement____iteration_after_two__tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","statement__tokenEND"}},
-        {"program____part2", 2, {"tokenSEMICOLON","tokenEND"}},
-        {"program", 2, {"program____part1","program____part2"}},
-        //
-        {"tokenCOLON", 1, {":"}},
-        {"tokenGOTO", 1, {"GOTO"}},
-        {"tokenINTEGER16", 1, {"INTEGER16"}},
-        {"tokenCOMMA", 1, {","}},
-        {"tokenNOT", 1, {"NOT"}},
-        {"tokenAND", 1, {"AND"}},
-        {"tokenOR", 1, {"OR"}},
-        {"tokenEQUAL", 1, {"=="}},
-        {"tokenNOTEQUAL", 1, {"!="}},
-        {"tokenLESSOREQUAL", 1, {"<="}},
-        {"tokenGREATEROREQUAL", 1, {">="}},
-        {"tokenPLUS", 1, {"+"}},
-        {"tokenMINUS", 1, {"-"}},
-        {"tokenMUL", 1, {"*"}},
-        {"tokenDIV", 1, {"DIV"}},
-        {"tokenMOD", 1, {"MOD"}},
-        {"tokenGROUPEXPRESSIONBEGIN", 1, {"("}},
-        {"tokenGROUPEXPRESSIONEND", 1, {")"}},
-        {"tokenRLBIND", 1, {"<<"}},
-        {"tokenLRBIND", 1, {">>"}},
-        {"tokenELSE", 1, {"ELSE"}},
-        {"tokenIF", 1, {"IF"}},
-        {"tokenDO", 1, {"DO"}},
-        {"tokenFOR", 1, {"FOR"}},
-        {"tokenTO", 1, {"TO"}},
-        {"tokenWHILE", 1, {"WHILE"}},
-        {"tokenCONTINUE", 1, {"CONTINUE"}},
-        {"tokenEXIT", 1, {"EXIT"}},
-        {"tokenREPEAT", 1, {"REPEAT"}},
-        {"tokenUNTIL", 1, {"UNTIL"}},
-        {"tokenGET", 1, {"GET"}},
-        {"tokenPUT", 1, {"PUT"}},
-        {"tokenNAME", 1, {"NAME"}},
-        {"tokenBODY", 1, {"BODY"}},
-        {"tokenDATA", 1, {"DATA"}},
-        {"tokenEND", 1, {"END"}},
-        {"tokenSEMICOLON", 1, {";"}},
-        //
-        { "value", 1, {"value_terminal"} },
-        //
-        { "ident", 1, {"ident_terminal"} },
-        //
-//        { "label", 1, {"ident_terminal"} },
-        //
-        { "", 2, {"",""} }
-    },
-    176,
-    "program"
-#endif
 };
-
+#endif
 
 #define DEBUG_STATES
-
 
 #define MAX_LEXEMS 256
 //#define MAX_RULES 128
@@ -470,9 +66,11 @@ bool containsSymbolSet(const SymbolSet* set, const char* symbol) {
 }
 
 // initialize with empty SymbolSets
-ParseInfoTable parseInfoTable = { {{0}} };
+ParseInfoTable parseInfoTable = { { { 0 } } };
 
 struct ASTNode {
+    char isPartialSuccess;
+    //
     std::string value;
     bool isTerminal;
     std::vector<ASTNode*> children;
@@ -550,6 +148,51 @@ ASTNode* buildAST(//const std::map<int, std::map<int, std::set<std::string>>>& p
     }
 
     return nullptr;
+}
+
+int getSyntaxError(struct LexemInfo* lexemInfoTable, const ASTNode* node, char &toError, int depth = 0) {
+    static int lexemInfoTableIndexForPrintAST = 0; // ATTENTION: multithreading is not supported for this!
+
+    if (!node) {
+        return lexemInfoTableIndexForPrintAST;
+    }
+    if (!depth) {
+        lexemInfoTableIndexForPrintAST = 0;
+    }
+
+    if (!node->isTerminal) {
+        if (node->children.size() < 2) {
+            if (toError == 1) {
+                toError = 2;
+            }
+            else {
+                toError = 1;
+            }
+        }
+        else {
+            toError = 0;
+        }
+    }
+
+    if (node->isTerminal) {
+        ++lexemInfoTableIndexForPrintAST;
+        if (toError == 1) {
+            toError = 0;
+        }
+        else if (toError == 2) {
+            toError = 3;
+            return lexemInfoTableIndexForPrintAST;
+        }
+    }
+
+    for (const ASTNode* child : node->children) {
+        getSyntaxError(lexemInfoTable, child, toError, depth + 1);
+        if (toError == 3) {
+            return lexemInfoTableIndexForPrintAST;
+        }
+    }
+
+    return lexemInfoTableIndexForPrintAST;
 }
 
 void printAST(struct LexemInfo* lexemInfoTable, const ASTNode* node, int depth = 0) {
@@ -814,6 +457,10 @@ bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, 
                 return true;
             }
             else {
+                //if (unexpectedLexemfailedTerminal && *unexpectedLexemfailedTerminal && depth > (*unexpectedLexemfailedTerminal)->ifvalue) {
+                //    *unexpectedLexemfailedTerminal = lexemInfoTable + lexemIndex;
+                //    (*(LexemInfo**)unexpectedLexemfailedTerminal)->ifvalue = depth;
+                //}
                 *unexpectedLexemfailedTerminal = lexemInfoTable + lexemIndex;
                 if (0)printf("<< \"%s\" >>\n", rule.rhs[0]);
             }
@@ -885,6 +532,140 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
 
 //
 
+bool recursiveDescentParserRuleWithDebugWithBuildAST(const char* ruleName, int& lexemIndex, LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal) {
+    if (depth > MAX_STACK_DEPTH) {
+        printf("Error: Maximum recursion depth reached.\n");
+        return false;
+    }
+    char isError = false;
+    for (int i = 0; i < grammar->rule_count; ++i) {
+        Rule& rule = grammar->rules[i];
+        if (strcmp(rule.lhs, ruleName) != 0) continue;
+
+        int savedIndex = lexemIndex;
+        if (rule.rhs_count == 1) {
+            if (
+                lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
+                ) {
+                ++lexemIndex;
+                return true;
+            }
+            else {
+                //if (unexpectedLexemfailedTerminal && *unexpectedLexemfailedTerminal && depth > (*unexpectedLexemfailedTerminal)->ifvalue) {
+                //    *unexpectedLexemfailedTerminal = lexemInfoTable + lexemIndex;
+                //    (*(LexemInfo**)unexpectedLexemfailedTerminal)->ifvalue = depth;
+                //}
+                *unexpectedLexemfailedTerminal = lexemInfoTable + lexemIndex;
+                if (0)printf("<< \"%s\" >>\n", rule.rhs[0]);
+            }
+        }
+        else if (rule.rhs_count == 2) {
+            if (recursiveDescentParserRuleWithDebug(rule.rhs[0], lexemIndex, lexemInfoTable, grammar, depth + 1, unexpectedLexemfailedTerminal) &&
+                recursiveDescentParserRuleWithDebug(rule.rhs[1], lexemIndex, lexemInfoTable, grammar, depth + 1, unexpectedLexemfailedTerminal)) {
+                return true;
+            }
+        }
+        lexemIndex = savedIndex;
+    }
+
+    return false;
+}
+
+ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleName, int& lexemIndex, LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal) {
+    if (depth > MAX_STACK_DEPTH) {
+        //printf("Error: Maximum recursion depth reached.\n");
+        return nullptr;
+    }
+
+    ASTNode* node = new ASTNode(ruleName, false);
+    node->isPartialSuccess = 0;
+    for (int i = 0; i < grammar->rule_count; ++i) {
+        Rule& rule = grammar->rules[i];
+
+        if (strcmp(rule.lhs, ruleName) != 0) { 
+            continue; 
+        }
+
+        int savedIndex = lexemIndex;
+
+        if (rule.rhs_count == 1) {
+            if (
+                lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
+                ) {
+                node->children.push_back(new ASTNode(lexemInfoTable[lexemIndex].lexemStr, true));
+                ++lexemIndex;
+                node->isPartialSuccess = 0;
+                return node;
+            }
+            else {
+                *unexpectedLexemfailedTerminal = lexemInfoTable + lexemIndex;
+            }
+        }
+        else if (rule.rhs_count == 2) {
+            ASTNode* leftChild = recursiveDescentParserRuleWithDebugWithBuildErrorAST(rule.rhs[0], lexemIndex, lexemInfoTable, grammar, depth + 1, unexpectedLexemfailedTerminal);
+            ASTNode* rightChild = nullptr;
+            if (leftChild) {
+                rightChild = recursiveDescentParserRuleWithDebugWithBuildErrorAST(rule.rhs[1], lexemIndex, lexemInfoTable, grammar, depth + 1, unexpectedLexemfailedTerminal);
+            }
+            if (node->isPartialSuccess == 0 && leftChild != nullptr && rightChild != nullptr) {
+                node->children.push_back(leftChild);
+                node->children.push_back(rightChild);
+                node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
+                if (!node->isPartialSuccess) {
+                    return node;
+                }
+                node->isPartialSuccess = 2;
+            }
+            else if (node->isPartialSuccess == 1 && leftChild != nullptr && rightChild != nullptr) {
+                node->children.pop_back();
+                node->children.push_back(leftChild);
+                node->children.push_back(rightChild);
+                node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
+                if (!node->isPartialSuccess) {
+                    return node;
+                }
+                node->isPartialSuccess = 2;
+            }
+            else if (node->isPartialSuccess >= 2 && leftChild != nullptr && rightChild != nullptr) {
+                if (node->isPartialSuccess - 2 > leftChild->isPartialSuccess + rightChild->isPartialSuccess) {
+                    node->children.pop_back();
+                    node->children.pop_back();
+                    node->children.push_back(leftChild);
+                    node->children.push_back(rightChild);
+                    node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
+                    if (!node->isPartialSuccess) {
+                        return node;
+                    }
+                    node->isPartialSuccess = 2;
+                }
+            }
+            else if (node->isPartialSuccess == 0 && leftChild != nullptr) {
+                node->children.push_back(leftChild);
+                node->isPartialSuccess = 1;
+            }
+            else if (node->isPartialSuccess == 1 && leftChild != nullptr) { // NOP
+                //node->children.pop_back();
+                //node->children.push_back(leftChild);
+                //node->isPartialSuccess = 1;
+            }
+            else if (node->isPartialSuccess >= 2 && leftChild != nullptr) { } // NOP
+
+        }
+        lexemIndex = savedIndex;
+    }
+    if (node->isPartialSuccess) {
+        return node;
+    }
+    delete node;
+    return nullptr;
+}
+
+//
+
 int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST) {
     bool cykAlgorithmImplementationReturnValue = false;
     if (syntaxlAnalyzeMode == SYNTAX_ANALYZE_BY_CYK_ALGORITHM) {
@@ -905,33 +686,41 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
         int lexemIndex = 0;
         const struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
 
-        if (recursiveDescentParserRuleWithDebug(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal)) {
+        if (recursiveDescentParserRuleWithDebug(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal)) {           
             if (lexemInfoTable[lexemIndex].lexemStr[0] == '\0') {
                 printf("Parse successful.\n");
                 printf("%d.\n", lexemIndex);
+                exit(0);
                 return SUCCESS_STATE;
             }
             else {
                 printf("Parse failed: Extra tokens remain.\r\n");
                 errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: Extra tokens remain.\r\n");
+                exit(0);
                 return ~SUCCESS_STATE;
             }
         }
         else {
-            if (unexpectedLexemfailedTerminal) {
+            ASTNode* ast = recursiveDescentParserRuleWithDebugWithBuildErrorAST(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal);
+            std::cout << "Abstract Syntax Tree:\n";
+            char errorMark = 0;
+            int lexemInfoTableIndexForPrintAST = getSyntaxError(lexemInfoTable, ast, errorMark);
+            /*const struct LexemInfo* */unexpectedLexemfailedTerminal = lexemInfoTable + lexemInfoTableIndexForPrintAST;
+            if (unexpectedLexemfailedTerminal->lexemStr[0] != '\0') {
                 printf("Parse failed.\r\n");
-                printf("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+                printf("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
                 errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
-                errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #\r\n    ..., but this is not certain.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld\r\n    ..., but this is not certain.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+                errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
             }
             else {
                 printf("Parse failed: unexpected terminal.\r\n");
                 errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: unexpected terminal.\r\n");
             }
+            exit(0);
             return ~SUCCESS_STATE;
         }
     }
-
+    exit(0);
     return ~SUCCESS_STATE;
 }
 
