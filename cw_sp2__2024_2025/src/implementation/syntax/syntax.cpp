@@ -435,6 +435,7 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
 }
 
 #define MAX_STACK_DEPTH 256
+#define MAX_AST_NODE_COUNT 65536
 
 bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal) {
     if (depth > MAX_STACK_DEPTH) {
@@ -574,6 +575,8 @@ bool recursiveDescentParserRuleWithDebugWithBuildAST(const char* ruleName, int& 
 }
 
 ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleName, int& lexemIndex, LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal) {
+    static int astNodeCount = 0;
+    
     if (depth > MAX_STACK_DEPTH) {
         //printf("Error: Maximum recursion depth reached.\n");
         return nullptr;
@@ -598,6 +601,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
                 ) {
                 node->children.push_back(new ASTNode(lexemInfoTable[lexemIndex].lexemStr, true));
                 ++lexemIndex;
+                if (++astNodeCount >= MAX_AST_NODE_COUNT) {
+                    delete node;
+                    return nullptr;
+                }
                 node->isPartialSuccess = 0;
                 return node;
             }
@@ -616,6 +623,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
                 node->children.push_back(rightChild);
                 node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
                 if (!node->isPartialSuccess) {
+                    if (++astNodeCount >= MAX_AST_NODE_COUNT) {
+                        delete node;
+                        return nullptr;
+                    }
                     return node;
                 }
                 node->isPartialSuccess = 2;
@@ -626,6 +637,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
                 node->children.push_back(rightChild);
                 node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
                 if (!node->isPartialSuccess) {
+                    if (++astNodeCount >= MAX_AST_NODE_COUNT) {
+                        delete node;
+                        return nullptr;
+                    }
                     return node;
                 }
                 node->isPartialSuccess = 2;
@@ -638,6 +653,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
                     node->children.push_back(rightChild);
                     node->isPartialSuccess = leftChild->isPartialSuccess + rightChild->isPartialSuccess;
                     if (!node->isPartialSuccess) {
+                        if (++astNodeCount >= MAX_AST_NODE_COUNT) {
+                            delete node;
+                            return nullptr;
+                        }
                         return node;
                     }
                     node->isPartialSuccess = 2;
@@ -658,6 +677,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
         lexemIndex = savedIndex;
     }
     if (node->isPartialSuccess) {
+        if (++astNodeCount >= MAX_AST_NODE_COUNT) {
+            delete node;
+            return nullptr;
+        }
         return node;
     }
     delete node;
@@ -702,7 +725,6 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
         }
         else {
             ASTNode* ast = recursiveDescentParserRuleWithDebugWithBuildErrorAST(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal);
-            std::cout << "Abstract Syntax Tree:\n";
             char errorMark = 0;
             int lexemInfoTableIndexForPrintAST = getSyntaxError(lexemInfoTable, ast, errorMark);
             /*const struct LexemInfo* */unexpectedLexemfailedTerminal = lexemInfoTable + lexemInfoTableIndexForPrintAST;
