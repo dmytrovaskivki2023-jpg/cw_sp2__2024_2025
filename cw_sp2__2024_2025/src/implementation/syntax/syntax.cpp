@@ -727,6 +727,7 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             ASTNode* ast = recursiveDescentParserRuleWithDebugWithBuildErrorAST(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal);
             char errorMark = 0;
             int lexemInfoTableIndexForPrintAST = getSyntaxError(lexemInfoTable, ast, errorMark);
+            delete ast;
             /*const struct LexemInfo* */unexpectedLexemfailedTerminal = lexemInfoTable + lexemInfoTableIndexForPrintAST;
             if (unexpectedLexemfailedTerminal->lexemStr[0] != '\0') {
                 printf("Parse failed.\r\n");
