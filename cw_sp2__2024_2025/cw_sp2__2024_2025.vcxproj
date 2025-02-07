@@ -241,6 +241,8 @@
     <None Include="..\test_programs\file7_ki308.cwl" />
     <None Include="..\test_programs\file8.cwl" />
     <None Include="..\test_programs\file8_ki308.cwl" />
+    <None Include="..\test_programs\file9.cwl" />
+    <None Include="..\test_programs\file9_ki308.cwl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
