@@ -55,6 +55,7 @@ unsigned char errorMessagesPtrToLastBytePtr[8 * 1024 * 1024] = { '\0' };
 int main(int argc, char* argv[]) {
 	PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 2, (UINT)LoadKeyboardLayoutA("00000409", KLF_ACTIVATE));
 
+	char valueByGetChar = 'n';
 	char path[PATH_NAME_LENGH];
 	char temp[2 * PATH_NAME_LENGH];
 	char productionOut[MAX_TEXT_SIZE] = { 0 };
@@ -440,7 +441,7 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	if (mode & INTERACTIVE_MODE/* && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)*/) {
+	if (mode & INTERACTIVE_MODE || mode & RUN_BINARY) {
 		if (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE) {
 			(void)getchar();
 		}
@@ -448,22 +449,44 @@ int main(int argc, char* argv[]) {
 		fflush(stdin);
 		fflush(stdout);
 		fflush(stderr);
-		printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
-		printf("\r\n");
-		printf("Enter 'y' to run program action(to pass action process Enter 'n' or others key): ");
 	}
-	fflush(stdin);
-	if (mode & INTERACTIVE_MODE && (/*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || */getchar() == 'y') || mode & RUN_BINARY) {
-		printf("\r\nRun \"%s\":\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
-		//sprintf(temp, "START /b /wait \"\" /D \"%s\\masm32p\" %s.exe", path, parameters[OUT_BINARY_FILENAME_WITHOUT_EXTENSION_PARAMETER]);
-		snprintf(temp, MAX_PARAMETERS_SIZE, "START /b /wait \"\" %s", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+
+	bool firstRun = true;
+	while (mode & INTERACTIVE_MODE || mode & RUN_BINARY) {
+		if (mode & INTERACTIVE_MODE && firstRun) {
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\r\n");
+		}
+		if (firstRun) {
+			printf("Enter 'y' to run program action(to pass action process Enter 'n' or others key): ");
+			firstRun = false;
+		}
+		else{
+			printf("Enter 'y' to rerun program action(to pass action process Enter 'n' or others key): ");
+		}
+
 		fflush(stdin);
-		system((char*)temp);
-		fflush(stdin);
+
+		if (valueByGetChar = getchar(), valueByGetChar == 'y' || valueByGetChar == 'Y') {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			printf("Run \"%s\":\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+			//sprintf(temp, "START /b /wait \"\" /D \"%s\\masm32p\" %s.exe", path, parameters[OUT_BINARY_FILENAME_WITHOUT_EXTENSION_PARAMETER]);
+			snprintf(temp, MAX_PARAMETERS_SIZE, "START /b /wait \"\" %s", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+			fflush(stdin);
+			system((char*)temp);
+			fflush(stdin);
+			printf("\r\n\"%s\" terminated.\r\n\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
+			(void)getchar();
+		}
+		else {
+			printf("\r\n");
+			break;
+		}
 	}
-	else if (mode ^ RUN_BINARY) {
-		printf("\r\n");
-	}
+
 
 	printf("\r\n\r\nPress Enter to exit . . .");
 	(void)getchar();
