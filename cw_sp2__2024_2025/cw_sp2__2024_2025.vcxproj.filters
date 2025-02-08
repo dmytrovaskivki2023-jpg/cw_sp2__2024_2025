@@ -275,5 +275,7 @@
     <None Include="..\test_programs\file8_ki308.cwl" />
     <None Include="..\test_programs\file9.cwl" />
     <None Include="..\test_programs\file9_ki308.cwl" />
+    <None Include="..\test_programs\file10.cwl" />
+    <None Include="..\test_programs\file10_ki308.cwl" />
   </ItemGroup>
 </Project>

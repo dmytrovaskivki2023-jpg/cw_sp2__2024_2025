@@ -222,6 +222,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\test_programs\file1.cwl" />
+    <None Include="..\test_programs\file10.cwl" />
+    <None Include="..\test_programs\file10_ki308.cwl" />
     <None Include="..\test_programs\file1_ki308.cwl" />
     <None Include="..\test_programs\file2.cwl" />
     <None Include="..\test_programs\file2_ki308.cwl" />
