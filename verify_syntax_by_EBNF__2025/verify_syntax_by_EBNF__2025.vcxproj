@@ -141,6 +141,14 @@
   <ItemGroup>
     <ClCompile Include="one_file__x86_Debug.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\base_test_programs_2025\file1.k03" />
+    <None Include="..\base_test_programs_2025\file2.k03" />
+    <None Include="..\base_test_programs_2025\file3.k03" />
+    <None Include="..\other_test_programs_2025\file4.k03" />
+    <None Include="..\other_test_programs_2025\file5.k03" />
+    <None Include="..\other_test_programs_2025\file6.k03" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
