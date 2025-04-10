@@ -1,0 +1,19 @@
+NAME _PROGRAM ; 
+BODY DATA INTEGER16 _AAAAAAA ;
+  GET _AAAAAAA
+
+  WHILE  _AAAAAAA >= 1 {
+    _AAAAAAA := _AAAAAAA - 1
+
+    IF _AAAAAAA MOD 2 { 
+      CONTINUE;
+    }
+
+	IF _AAAAAAA >= 100 {
+      BREAK;
+    }
+
+    PUT _AAAAAAA
+  }
+
+END
