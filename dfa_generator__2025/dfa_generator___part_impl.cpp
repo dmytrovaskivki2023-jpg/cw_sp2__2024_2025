@@ -191,7 +191,7 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* lastFreeState
 char* process_term__NEW(char* inputStr, int startState, int* nextFreeState) {
     while ((inputStr[0] != ')' || inputStr[1] == ')')
         && (inputStr[0] != '|' || inputStr[1] == '|')
-        && (inputStr[0] != '|' || inputStr[1] != '|' || inputStr[2] != '|' || inputStr[3] != '|') // ! TODO
+        && (inputStr[-1] == '|' || inputStr[0] != '|' || inputStr[1] != '|' || inputStr[2] != '|') // ! functionally incomplete implementation
         && inputStr[0] != '\0') {
 
         if (inputStr[0] == '~' && inputStr[1] != '~' ||
@@ -221,7 +221,7 @@ char* process_term__NEW(char* inputStr, int startState, int* nextFreeState) {
     }
 
     if (inputStr[0] == '|' && inputStr[1] != '|' ||
-        inputStr[0] == '|' && inputStr[1] == '|' && inputStr[2] == '|' && inputStr[3] == '|' // ! TODO
+        inputStr[-1] != '|' && inputStr[0] == '|' && inputStr[1] == '|' && inputStr[2] == '|' // ! functionally incomplete implementation
         ) {
         ++inputStr;
     }
