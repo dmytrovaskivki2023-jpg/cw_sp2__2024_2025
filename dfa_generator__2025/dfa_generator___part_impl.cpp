@@ -4,7 +4,7 @@
 
 #include <stdlib.h>
 
-#define USE_DFA_OPTIMIZATION
+#define USE_DFA_MINIMIZATION
 
 #define FILE2_A "../built_src/file2.hpp"
 #define FILE2_B "../built_src/file2.txt"
@@ -297,8 +297,8 @@ char* process_alternation(char* inputStr, int baseState, int* nextFreeState) {
     return inputStr;
 }
 
-#ifdef USE_DFA_OPTIMIZATION
-void optimize_dfa(int* dead_state, int* nextFreeState) {
+#ifdef USE_DFA_MINIMIZATION
+void removing_unreachable_DFA_states(int* dead_state, int* nextFreeState) {
     int state_counter = *nextFreeState;
     int old2NewStates[MAX_STATES] = { 0 }; // always 0 -> 0
     int old2NewStateCount = 1;
@@ -576,8 +576,8 @@ void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { 
     printf(".\n");
     printf("  Dead state (%s): Q%03d .\n", tableName, dead_state);
 
-#ifdef USE_DFA_OPTIMIZATION
-    optimize_dfa(&dead_state, &nextFreeState);
+#ifdef USE_DFA_MINIMIZATION
+    removing_unreachable_DFA_states(&dead_state, &nextFreeState);
 #endif
 
     printf("NEW:\n\n");
