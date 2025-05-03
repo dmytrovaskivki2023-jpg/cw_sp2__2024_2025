@@ -4,8 +4,8 @@
 **************************************************************************/
 #include "stdio.h"
 
-#define SYMBOL_NUMBER 256
-#define MAX_STATES 1024
+#define SYMBOL_NUMBER 256 // dup
+#define MAX_STATES 1024   // dup
 
 typedef int INSTRUCTION;
 typedef INSTRUCTION PROGRAM[SYMBOL_NUMBER][MAX_STATES];
