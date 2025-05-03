@@ -37,8 +37,8 @@ struct Transition {
 Transition transitions[1024];
 int transition_count = 0;
 
-int finit_states__NEW[1024]; // MAX_STATES
-int finit_states_count__NEW = 0;
+int finit_states[1024]; // MAX_STATES
+int finit_states_count = 0;
 //int dead_state = 0;
 
 struct NFA {
@@ -178,17 +178,17 @@ void print_transition_table_to_file(char* fileName, char* tableName, int state_c
     fprintf(f, "\n");
 
     fprintf(f, "int %sFinitStates[MAX_FINIT_STATES] = { ", tableName);
-    for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count__NEW; ++finitStatesIndex) {
-        fprintf(f, "Q%03d%s", finit_states__NEW[finitStatesIndex], finitStatesIndex + 1 == finit_states_count__NEW ? " " : ", ");
+    for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count; ++finitStatesIndex) {
+        fprintf(f, "Q%03d%s", finit_states[finitStatesIndex], finitStatesIndex + 1 == finit_states_count ? " " : ", ");
     }
     fprintf(f, "};\n");
 
     fclose(f);
 }
 
-char* process_alternation__NEW(char* inputStr, int baseState, int* lastFreeState);
+char* process_alternation(char* inputStr, int baseState, int* lastFreeState);
 
-char* process_term__NEW(char* inputStr, int startState, int* nextFreeState) {
+char* process_term(char* inputStr, int startState, int* nextFreeState) {
     while ((inputStr[0] != ')' || inputStr[1] == ')')
         && (inputStr[0] != '|' || inputStr[1] == '|')
         && (inputStr[-1] == '|' || inputStr[0] != '|' || inputStr[1] != '|' || inputStr[2] != '|') // ! functionally incomplete implementation
@@ -201,7 +201,7 @@ char* process_term__NEW(char* inputStr, int startState, int* nextFreeState) {
         }
 
         if (inputStr[0] == '(' && inputStr[1] != '(') {
-            inputStr = process_alternation__NEW(++inputStr, startState, nextFreeState);
+            inputStr = process_alternation(++inputStr, startState, nextFreeState);
         }
         else {
             add_transition(startState, *nextFreeState, *inputStr);
@@ -229,7 +229,7 @@ char* process_term__NEW(char* inputStr, int startState, int* nextFreeState) {
     return inputStr;
 }
 
-char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState) {
+char* process_alternation(char* inputStr, int baseState, int* nextFreeState) {
     int alternation_outs_counter = 0;
     int alternation_outs[1024] = { 0 };
     int alternation_outs_pass_and_iteration_and_finit[1024] = { 0 };
@@ -241,12 +241,12 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState
             continue;
         }
         if (inputStr[0] == '^' && inputStr[1] == '|') {
-            finit_states__NEW[finit_states_count__NEW++] = baseState;
+            finit_states[finit_states_count++] = baseState;
             inputStr += 2;
             continue;
         }
 
-        inputStr = process_term__NEW(inputStr, baseState, nextFreeState);
+        inputStr = process_term(inputStr, baseState, nextFreeState);
 
         if (inputStr[0] != '\0' && inputStr[0] == ')' && inputStr[1] == '~' && inputStr[2] != '~') {
             alternation_outs_pass_and_iteration_and_finit[alternation_outs_counter] = 1;
@@ -257,8 +257,8 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState
     for (int index = 0; index < alternation_outs_counter; ++index) {
         int enclosedState = transitions[alternation_outs[index] % 1024].to;
         int notFinitEnclosedState = 1;
-        for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count__NEW; ++finitStatesIndex) {
-            if (finit_states__NEW[finitStatesIndex] == enclosedState) {
+        for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count; ++finitStatesIndex) {
+            if (finit_states[finitStatesIndex] == enclosedState) {
                 notFinitEnclosedState = 0;
                 break;
             }
@@ -289,7 +289,7 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState
 #endif
 
         if (alternation_outs_pass_and_iteration_and_finit[index] == 1) { // !!!!!!!!
-            finit_states__NEW[finit_states_count__NEW++] = *nextFreeState;
+            finit_states[finit_states_count++] = *nextFreeState;
         }
     }
 
@@ -513,66 +513,63 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState
 
 
 void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { // "C"
-    printf("NOT FULLY IMPLEMENTED!\n\n");
+    printf("\nNOT FULLY IMPLEMENTED!\n\n");
 
     int dead_state = -1;
     int baseState = 0;
     int nextFreeState = baseState + 1;
 
     if (*rn != '\0' && *rn == '(') {
-        rn = process_alternation__NEW(++rn, baseState, &nextFreeState);
-        finit_states__NEW[finit_states_count__NEW++] = nextFreeState - 1;
+        rn = process_alternation(++rn, baseState, &nextFreeState);
+        finit_states[finit_states_count++] = nextFreeState - 1;
         dead_state = nextFreeState++;
     }
 
+    printf("Transitions (%s):\n", tableName);
     for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
-        printf(" %d ---('%c')--> %d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
-    }
-
-    printf("Finit states: ");
-    for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count__NEW; ++finitStatesIndex) {
-        printf("Q%03d%s", finit_states__NEW[finitStatesIndex], finitStatesIndex + 1 == finit_states_count__NEW ? " " : ", ");
+        printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
     }
     printf(".\n");
-    printf("  Dead state: Q%03d .\n", dead_state);
+
+    printf("Finit states (%s): ", tableName);
+    for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count; ++finitStatesIndex) {
+        printf("Q%03d%s", finit_states[finitStatesIndex], finitStatesIndex + 1 == finit_states_count ? " " : ", ");
+    }
+    printf(".\n");
+    printf("  Dead state (%s): Q%03d .\n", tableName, dead_state);
 
     int state_counter = nextFreeState;
 
     generate_transition_table(state_counter);
 
-    if (state_counter <= 32) {
+    if (state_counter <= 28) {       
+        printf("Transition table (%s) of a quasi-deterministic finite state machine (QFA):\n", tableName);
         print_transition_table(state_counter, -1);
     }
     else {
-        printf("Print to file only. Display will take too long.\n");
+        printf("Transition table (%s) of a quasi-deterministic finite state machine (QFA) print to file only. Display will take too long.\n", tableName);
     }
-
     print_transition_table_to_file(fileNameB, tableName, state_counter, -1);
 
-    printf("\n");
-    if (state_counter <= 32) {
+    if (state_counter <= 28) {
+        printf("Transition table (%s) of a deterministic finite state machine (DFA):\n", tableName);
         print_transition_table(state_counter, dead_state);
     }
     else {
-        printf("Print to file only. Display will take too long.\n");
+        printf("Transition table (%s) of a deterministic finite state machine (DFA) print to file only. Display will take too long.\n", tableName);
     }
-
     print_transition_table_to_file(fileNameA, tableName, state_counter, dead_state);
-
-    if (true) for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
-        printf(" %d ---('%c')--> %d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
-    }
 }
 
 int main() {
     transition_count = 0;
-    finit_states_count__NEW = 0;
+    finit_states_count = 0;
     generatorB((char*)RN2, (char*)FILE2_A, (char*)FILE2_B, (char*)TABLE2);
     transition_count = 0;
-    finit_states_count__NEW = 0;
+    finit_states_count = 0;
     generatorB((char*)RN3, (char*)FILE3_A, (char*)FILE3_B, (char*)TABLE3);
     transition_count = 0;
-    finit_states_count__NEW = 0;
+    finit_states_count = 0;
     generatorB((char*)RN4, (char*)FILE4_A, (char*)FILE4_B, (char*)TABLE4);
 
     return 0;
