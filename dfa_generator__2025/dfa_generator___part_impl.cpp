@@ -4,6 +4,8 @@
 
 #include <stdlib.h>
 
+#define USE_DFA_OPTIMIZATION
+
 #define FILE2_A "../built_src/file2.hpp"
 #define FILE2_B "../built_src/file2.txt"
 #define TABLE2 "transitionTable2"
@@ -278,31 +280,10 @@ char* process_alternation(char* inputStr, int baseState, int* nextFreeState) {
             }
         }
 
-#if 0
-        for (int transitionIndex = 0; false && notFinitEnclosedState && transitionIndex < transition_count; ++transitionIndex) {
-            if (transitions[transitionIndex].to == enclosedState) {
-                if (alternation_outs_pass_and_iteration_and_finit[index] != 1) {
-                    add_transition(transitions[transitionIndex].to, transitions[transitionIndex].to, transitions[transitionIndex].symbolCode);
-                }
-            }
-        }
-#endif
-
         if (alternation_outs_pass_and_iteration_and_finit[index] == 1) { // !!!!!!!!
             finit_states[finit_states_count++] = *nextFreeState;
         }
     }
-
-    //    for (int index = 0; false && index < alternation_outs_counter; ++index) {
-    //        if (alternation_outs_pass_and_iteration_and_finit[index]) {
-    //            for (int transitionIndex = 0; alternation_outs_pass_and_iteration_and_finit[index] && transitionIndex < transition_count; ++transitionIndex) {
-    //                if (transitions[transitionIndex].to == transitions[alternation_outs[index] % 1024].to) {
-    //
-    //                    transitions[transitionIndex].to = *nextFreeState;                         
-    //                }
-    //            }
-    //        }
-    //    }
 
     ++* nextFreeState;
 
@@ -315,6 +296,63 @@ char* process_alternation(char* inputStr, int baseState, int* nextFreeState) {
 
     return inputStr;
 }
+
+#ifdef USE_DFA_OPTIMIZATION
+void optimize_dfa(int* dead_state, int* nextFreeState) {
+    int state_counter = *nextFreeState;
+    int old2NewStates[MAX_STATES] = { 0 }; // always 0 -> 0
+    int old2NewStateCount = 1;
+
+    int new_finit_states[MAX_STATES]; // MAX_STATES
+    int new_finit_states_count = 0;
+    int new_dead_state = 0;
+
+    for (int state = 1/*0 is start state*/; state < state_counter; ++state) {
+        int old2NewStateIndex = old2NewStateCount - 1;
+        while (--old2NewStateIndex >= 0) if (old2NewStates[old2NewStateIndex] == state) break;
+        for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
+            if (transitions[transitionIndex].to == state) {
+                if (old2NewStateIndex == -1) {
+                    old2NewStateIndex = old2NewStateCount++;
+                }
+                old2NewStates[old2NewStateIndex] = state;
+            }
+        }
+    }
+
+    // new dead state
+    old2NewStates[old2NewStateCount++] = *dead_state;
+    new_dead_state = old2NewStateCount - 1;
+
+
+    for (int old2NewStateIndex = 0; old2NewStateIndex < old2NewStateCount; ++old2NewStateIndex) {
+        // new finit states
+        for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count; ++finitStatesIndex) {
+            if (finit_states[finitStatesIndex] == old2NewStates[old2NewStateIndex]) {
+                new_finit_states[new_finit_states_count++] = old2NewStateIndex;
+            }
+        }
+    }
+
+    for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
+        for (int old2NewStateIndex = 0; old2NewStateIndex < old2NewStateCount; ++old2NewStateIndex) {
+            if (old2NewStates[old2NewStateIndex] == transitions[transitionIndex].from) {
+                transitions[transitionIndex].from = old2NewStateIndex;
+            }
+            if (old2NewStates[old2NewStateIndex] == transitions[transitionIndex].to) {
+                transitions[transitionIndex].to = old2NewStateIndex;
+            }
+        }
+    }
+
+    for (int newFinitStateIndex = 0; newFinitStateIndex < new_finit_states_count; ++newFinitStateIndex)
+        finit_states[newFinitStateIndex] = new_finit_states[newFinitStateIndex];
+    finit_states_count = new_finit_states_count;
+
+    *dead_state = new_dead_state;
+    *nextFreeState = old2NewStateCount;
+}
+#endif
 
 #define TOKENS_RE         ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
 #define KEYWORDS_RE       ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|NAME|DATA|BODY|END|BREAK|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
@@ -538,6 +576,25 @@ void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { 
     printf(".\n");
     printf("  Dead state (%s): Q%03d .\n", tableName, dead_state);
 
+#ifdef USE_DFA_OPTIMIZATION
+    optimize_dfa(&dead_state, &nextFreeState);
+#endif
+
+    printf("NEW:\n\n");
+
+    printf("Transitions (%s):\n", tableName);
+    for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
+        printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
+    }
+    printf(".\n");
+
+    printf("Finit states (%s): ", tableName);
+    for (int finitStatesIndex = 0; finitStatesIndex < finit_states_count; ++finitStatesIndex) {
+        printf("Q%03d%s", finit_states[finitStatesIndex], finitStatesIndex + 1 == finit_states_count ? " " : ", ");
+    }
+    printf(".\n");
+    printf("  Dead state (%s): Q%03d .\n", tableName, dead_state);
+    
     int state_counter = nextFreeState;
 
     generate_transition_table(state_counter);
