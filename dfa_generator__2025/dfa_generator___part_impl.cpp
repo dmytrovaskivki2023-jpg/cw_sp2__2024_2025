@@ -513,7 +513,7 @@ char* process_alternation__NEW(char* inputStr, int baseState, int* nextFreeState
 
 
 void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { // "C"
-    printf("NOT COMPLETE IMPLEMENTATION!\n");
+    printf("NOT FULLY IMPLEMENTED!\n\n");
 
     int dead_state = -1;
     int baseState = 0;
