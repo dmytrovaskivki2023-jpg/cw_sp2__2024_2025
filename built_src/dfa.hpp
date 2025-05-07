@@ -1,8 +1,10 @@
-/*************************************************************************
-* N.Kozak // Lviv'2020 // ACM // DFA for input string example (method 1) *
-*    file: acmhw1_m1.c                                                   *
-**************************************************************************/
+/***********************
+* N.Kozak // Lviv'2025 *
+*    file: dfa.hpp     *
+************************/
 #include "stdio.h"
+
+//#define DEBUG_DFA_STATE
 
 #define SYMBOL_NUMBER 256 // dup
 #define MAX_STATES 1024   // dup
@@ -27,13 +29,16 @@ char tryToAccept(PROGRAM * program, int * finitStates, char * data){
 	DFA dfa = { data, program, runner, 0/*Q000*/ };
 	dfa.run(&dfa);
 
-	for (; *finitStates; ++finitStates) {
+	if (finitStates) for (; *finitStates; ++finitStates) {
 		if (dfa.state == *finitStates) {
+#ifdef DEBUG_DFA_STATE
 			printf("DFA: finit state\r\n");
+#endif
 			return 1;
 		}
 	}
-
+#ifdef DEBUG_DFA_STATE
 	printf("DFA: no finit state\r\n");
+#endif
 	return 0;
 }
