@@ -1,10 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define WIN32_LEAN_AND_MEAN
+/************************************************************************
+* N.Kozak // Lviv'2025 //                                               *
+*                              file: dfa_generator___part_impl.cpp      *
+*                                                           (part impl) *
+*************************************************************************/
 #include <stdio.h>
 #include <string.h>
 
 #include <stdlib.h>
 
 #define USE_DFA_MINIMIZATION
+
+#define FILE1_A "../built_src/file1.hpp"
+#define FILE1_B "../built_src/file1.txt"
+#define TABLE1 "transitionTable1"
+#define RN1 TOKENS_RN
 
 #define FILE2_A "../built_src/file2.hpp"
 #define FILE2_B "../built_src/file2.txt"
@@ -206,7 +217,7 @@ char* process_term(char* inputStr, int startState, int* nextFreeState) {
             inputStr = process_alternation(++inputStr, startState, nextFreeState);
         }
         else {
-            add_transition(startState, *nextFreeState, *inputStr);
+            add_transition(startState, *nextFreeState, (unsigned char)*inputStr);
             if (inputStr[0] == '(' && inputStr[1] == '(' ||
                 inputStr[0] == ')' && inputStr[1] == ')' ||
                 inputStr[0] == '|' && inputStr[1] == '|' ||
@@ -276,11 +287,11 @@ char* process_alternation(char* inputStr, int baseState, int* nextFreeState) {
             }
 
             if (alternation_outs_pass_and_iteration_and_finit[alternation_outs_counter - 1] == 1) {
-                add_transition(*nextFreeState, *nextFreeState, transitions[alternation_outs[index] % 1024].symbolCode);
+                add_transition(*nextFreeState, *nextFreeState, (unsigned char)transitions[alternation_outs[index] % 1024].symbolCode);
             }
         }
 
-        if (alternation_outs_pass_and_iteration_and_finit[index] == 1) { // !!!!!!!!
+        if (alternation_outs_pass_and_iteration_and_finit[index] == 1) { // !
             finit_states[finit_states_count++] = *nextFreeState;
         }
     }
@@ -361,49 +372,27 @@ void removing_unreachable_DFA_states(int* dead_state, int* nextFreeState) {
 
 // RN_SPEC (, ), |, ~, ^
 
-#define KEYWORDS_RN___    "("\
+#define TOKENS_RN         "("\
                           ";"\
-                          "|:="\
-                          "|=:"\
-                          "|\\+"\
-                          "|-|"\
-                          "\\*"\
+                          "|:(^|=)"\
+                          "|=(:|=)"\
+                          "|+"\
+                          "|-"\
+                          "|*"\
                           "|,"\
-                          "|=="\
                           "|!="\
-                          "|:"\
-                          "|\\["\
-                          "|\\]"\
-                          "|\\("\
-                          "|\\)"\
-                          "|\\{"\
-                          "|\\}"\
-                          "|NAME"\
-                          "|DATA"\
-                          "|BODY"\
-                          "|END"\
-                          "|BREAK"\
-                          "|CONTINUE"\
-                          "|GET"\
-                          "|PUT"\
-                          "|IF"\
-                          "|ELSE"\
-                          "|FOR"\
-                          "|TO"\
-                          "|DOWNTO"\
-                          "|DO"\
-                          "|WHILE"\
-                          "|REPEAT"\
-                          "|UNTIL"\
-                          "|GOTO"\
-                          "|DIV"\
-                          "|MOD"\
+                          "|["\
+                          "|]"\
+                          "|(("\
+                          "|))"\
+                          "|{"\
+                          "|}"\
                           "|<="\
                           "|>="\
-                          "|NOT"\
-                          "|AND"\
-                          "|OR"\
-                          "|INTEGER16"\
+                          "|"\
+                          "(_|0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z)~"\
+                          "|"\
+                          "\x01|\x02|\x03|\x04|\x05|\x06|\x07|\x08|\x0E|\x0F|\x10|\x11|\x12|\x13|\x14|\x15|\x16|\x17|\x18|\x19|\x1A|\x1B|\x1C|\x1D|\x1E|\x1F|\"|#|$|%|&|\'|.|/|?|@|\\|^^|`||||~~|\x7F|\x80|\x81|\x82|\x83|\x84|\x85|\x86|\x87|\x88|\x89|\x8A|\x8B|\x8C|\x8D|\x8E|\x8F|\x90|\x91|\x92|\x93|\x94|\x95|\x96|\x97|\x98|\x99|\x9A|\x9B|\x9C|\x9D|\x9E|\x9F|\xA0|\xA1|\xA2|\xA3|\xA4|\xA5|\xA6|\xA7|\xA8|\xA9|\xAA|\xAB|\xAC|\xAD|\xAE|\xAF|\xB0|\xB1|\xB2|\xB3|\xB4|\xB5|\xB6|\xB7|\xB8|\xB9|\xBA|\xBB|\xBC|\xBD|\xBE|\xBF|\xC0|\xC1|\xC2|\xC3|\xC4|\xC5|\xC6|\xC7|\xC8|\xC9|\xCA|\xCB|\xCC|\xCD|\xCE|\xCF|\xD0|\xD1|\xD2|\xD3|\xD4|\xD5|\xD6|\xD7|\xD8|\xD9|\xDA|\xDB|\xDC|\xDD|\xDE|\xDF|\xE0|\xE1|\xE2|\xE3|\xE4|\xE5|\xE6|\xE7|\xE8|\xE9|\xEA|\xEB|\xEC|\xED|\xEE|\xEF|\xF0|\xF1|\xF2|\xF3|\xF4|\xF5|\xF6|\xF7|\xF8|\xF9|\xFA|\xFB|\xFC|\xFD|\xFE|\xFF"\
                           //\0
 
 #define KEYWORDS_RN__     "("\
@@ -565,7 +554,10 @@ void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { 
 
     printf("Transitions (%s):\n", tableName);
     for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
-        printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
+        if (transitions[transitionIndex].symbolCode >= 32 && transitions[transitionIndex].symbolCode <= 126)
+            printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
+        else
+            printf(" Q%03d ---(\\x%02X)--> Q%03d \n", transitions[transitionIndex].from, 0xFF & transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
     }
     printf(".\n");
 
@@ -584,7 +576,10 @@ void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { 
 
     printf("Transitions (%s):\n", tableName);
     for (int transitionIndex = 0; transitionIndex < transition_count; ++transitionIndex) {
-        printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
+        if (transitions[transitionIndex].symbolCode >= 32 && transitions[transitionIndex].symbolCode <= 126)
+            printf(" Q%03d ---('%c')--> Q%03d \n", transitions[transitionIndex].from, transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
+        else
+            printf(" Q%03d ---(\\x%02X)--> Q%03d \n", transitions[transitionIndex].from, 0xFF & transitions[transitionIndex].symbolCode, transitions[transitionIndex].to);
     }
     printf(".\n");
 
@@ -618,7 +613,54 @@ void generatorB(char* rn, char * fileNameA, char* fileNameB, char* tableName) { 
     print_transition_table_to_file(fileNameA, tableName, state_counter, dead_state);
 }
 
+void printAlternationSymbol(char * exludedSymbols) {
+    char printAlternationSeparator = 0;
+    for (unsigned int symbols = 1; symbols <= 255; ++symbols){
+        char* exludedSymbols_ = exludedSymbols;
+        for (; *exludedSymbols_; ++exludedSymbols_) {
+            if (*exludedSymbols_ == symbols) {
+                break;
+            }
+        }
+
+        if (!*exludedSymbols_) {
+            if (printAlternationSeparator) {
+                printf("|");
+            }
+            else {
+                printAlternationSeparator = 1;
+            }
+            if (symbols >= 32 && symbols <= 126) {
+                if (symbols == '\\' ||
+                    symbols == '\'' ||
+                    symbols == '\"') {
+                    printf("\\%c", symbols);
+                }
+                else if (symbols == '('  ||
+                    symbols == ')'  ||
+                    symbols == '|'  ||
+                    symbols == '~'  ||
+                    symbols == '^' ) {
+                    printf("%c%c", symbols, symbols);
+                }
+                else {
+                    printf("%c", symbols);
+                }
+            }
+            else {
+                printf("\\x%02X", symbols);
+            }
+
+        }
+    }
+}
+
+//#define PRINT_ALTERNATION_SYMBOL
 int main() {
+#ifndef PRINT_ALTERNATION_SYMBOL
+    transition_count = 0;
+    finit_states_count = 0;
+    generatorB((char*)RN1, (char*)FILE1_A, (char*)FILE1_B, (char*)TABLE1);
     transition_count = 0;
     finit_states_count = 0;
     generatorB((char*)RN2, (char*)FILE2_A, (char*)FILE2_B, (char*)TABLE2);
@@ -630,4 +672,17 @@ int main() {
     generatorB((char*)RN4, (char*)FILE4_A, (char*)FILE4_B, (char*)TABLE4);
 
     return 0;
+#else
+    //";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
+    //;|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]
+    ";:=+-*,!:[](){}<>"
+    "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    " \t\r\f\v\n";
+    printAlternationSymbol((char*)
+        ";:=+-*,!:[](){}<>"
+        "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        " \t\r\f\v\n"   
+    );
+    (void)getchar();
+#endif
 }
