@@ -4,6 +4,7 @@
 *                         file: lexicapart_dfa_one.cpp      *
 *                                                  (draft!) *
 *************************************************************/
+#define MAX_DFA_SCAN_LEXEM_SIZE_FOR_TOKEN_PARSING 16
 #define USE_DFA_FOR_TOKEN_PARSING
 #define USE_DFA_TO_ACCEPT_KEYWORD
 #define USE_DFA_TO_ACCEPT_IDENTIFIER
@@ -427,7 +428,7 @@ struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, c
 
 #ifdef USE_DFA_FOR_TOKEN_PARSING
 	for (char* text_ = text, *text__ = text; *text_ != '\0'; ++ * lastLexemInfoInTable, text__ = ++text_){
-		for (; *text_ != '\0' && !getFirstEntry(&transitionTable1, 16, transitionTable1FinitStates, &text_); ++text__, text_ = text__);
+		for (; *text_ != '\0' && !getFirstEntry(&transitionTable1, MAX_DFA_SCAN_LEXEM_SIZE_FOR_TOKEN_PARSING, transitionTable1FinitStates, &text_); ++text__, text_ = text__);
 		if (*text_ == '\0') break;
 		strncpy((*lastLexemInfoInTable)->lexemStr, text__, text_ - text__ + 1);
 		(*lastLexemInfoInTable)->lexemStr[text_ - text__ + 1] = '\0';
