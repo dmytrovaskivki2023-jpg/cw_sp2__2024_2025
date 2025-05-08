@@ -23,7 +23,6 @@
 
 #define DEFAULT_INPUT_FILE "../base_test_programs_2025/file1.k03"
 //#define DEFAULT_INPUT_FILE "../other_test_programs_2025/file4.k03"
-#define DEFAULT_INPUT_FILE "../other_test_programs_2025/file6.k03"
 
 #define SUCCESS_STATE 0
 
