@@ -23,6 +23,7 @@
 
 #define DEFAULT_INPUT_FILE "../base_test_programs_2025/file1.k03"
 //#define DEFAULT_INPUT_FILE "../other_test_programs_2025/file4.k03"
+#define DEFAULT_INPUT_FILE "../other_test_programs_2025/file6.k03"
 
 #define SUCCESS_STATE 0
 
@@ -428,7 +429,7 @@ struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, c
 #ifdef USE_DFA_FOR_TOKEN_PARSING
 	for (char* text_ = text, *text__ = text; *text_ != '\0'; ++ * lastLexemInfoInTable, text__ = ++text_){
 		for (; *text_ != '\0' && !getFirstEntry(&transitionTable1, 16, transitionTable1FinitStates, &text_); ++text__, text_ = text__);
-		if (*text == '\0') break;
+		if (*text__ == '\0') break;
 		strncpy((*lastLexemInfoInTable)->lexemStr, text__, text_ - text__ + 1);
 		(*lastLexemInfoInTable)->lexemStr[text_ - text__ + 1] = '\0';
 		if ((ifBadLexemeInfo = (*lexicalAnalyzeFunctionPtr)(*lastLexemInfoInTable, identifierIdsTable)).tokenType == UNEXPEXTED_LEXEME_TYPE) {
