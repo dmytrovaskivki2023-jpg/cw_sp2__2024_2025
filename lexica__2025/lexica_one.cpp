@@ -456,6 +456,7 @@ size_t loadSource(char** text, char* fileName) {
 	return fileSize;
 }
 
+#define RUN_SOME_SEMANTIX_CHECK
 int main(int argc, char* argv[]) {
 	char* text;
 	char fileName[128] = DEFAULT_INPUT_FILE;
@@ -510,6 +511,12 @@ int main(int argc, char* argv[]) {
 		printLexemes(lexemesInfoTable, 0);
 	}
 
+#ifdef RUN_SOME_SEMANTIX_CHECK
+	bool semantics—heck1(struct LexemInfo* lexemInfoTable);
+	bool semantics—heck2(struct LexemInfo* lexemInfoTable);
+	bool semantics—heckResult = semantics—heck1(lexemesInfoTable) && semantics—heck2(lexemesInfoTable);
+#endif
+
 	free(text);
 
 	(void)getchar();
@@ -522,4 +529,27 @@ int main(int argc, char* argv[]) {
 #endif
 
 	return 0;
+}
+
+bool semantics—heck1(struct LexemInfo* lexemInfoTable) {
+	for (unsigned long long int index = 0; lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
+		if (lexemInfoTable[index].tokenType == VALUE_LEXEME_TYPE) {
+			if (lexemInfoTable[index - 1].lexemStr[0] == '-') {
+				if (lexemInfoTable[index].ifvalue > 32767) {
+					printf("Bad lexem value (column: %lld, row: %lld): %s.\n", lexemInfoTable[index].row, lexemInfoTable[index].col, lexemInfoTable[index].lexemStr);
+					return true;
+				}
+			}
+			else if (lexemInfoTable[index].ifvalue > 32768) {
+				printf("Bad lexem value (column: %lld, row: %lld): %s.\n", lexemInfoTable[index].row, lexemInfoTable[index].col, lexemInfoTable[index].lexemStr);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool semantics—heck2(struct LexemInfo* lexemInfoTable) {
+	// TODO:...
+	return true;
 }
