@@ -20,7 +20,8 @@
 #define VALUE_LEXEME_TYPE 4
 #define UNEXPEXTED_LEXEME_TYPE 127
 
-
+extern char tempStrFor_123[MAX_TEXT_SIZE/*?TODO:... MAX_ACCESSORY_STACK_SIZE_123 * 64*/];
+extern unsigned long long int tempStrForCurrIndex;
 
 #ifndef LEXEM_INFO_
 #define LEXEM_INFO_
