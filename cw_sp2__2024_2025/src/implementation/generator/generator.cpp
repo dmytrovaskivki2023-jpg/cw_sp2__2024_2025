@@ -650,7 +650,18 @@ unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, uns
 	currBytePtr = makeDataSection(lastLexemInfoInTable, currBytePtr, generatorMode);
 
 	currBytePtr = makeBeginProgramCode(lastLexemInfoInTable, currBytePtr, generatorMode);
+	memset(tempStrFor_123, 0, sizeof(tempStrFor_123)); // not necessary
 	lexemInfoTransformationTempStackSize = 0;
+	tempStrForCurrIndex = 0;
+	for (int index = 0; true && index < MAX_ACCESSORY_STACK_SIZE; ++index) {
+		/* !TODO: WHILE! */(lexemInfoTransformationTempStack[index].lexemStr = tempStrFor_123 + tempStrForCurrIndex)[0] = '\0';
+		tempStrForCurrIndex += 32;// MAX_LEXEM_SIZE;
+		lexemInfoTransformationTempStack[index].lexemId = 0; // not necessary
+		lexemInfoTransformationTempStack[index].tokenType = 0; // not necessary
+		lexemInfoTransformationTempStack[index].ifvalue = 0; // not necessary
+		lexemInfoTransformationTempStack[index].row = ~0; // not necessary
+		lexemInfoTransformationTempStack[index].col = ~0; // not necessary
+	}
 	currBytePtr = makeInitCode(lastLexemInfoInTable, currBytePtr, generatorMode);
 	currBytePtr = initMake(lastLexemInfoInTable, currBytePtr, generatorMode);
 	currBytePtr = makeSaveHWStack(lastLexemInfoInTable, currBytePtr, generatorMode);
