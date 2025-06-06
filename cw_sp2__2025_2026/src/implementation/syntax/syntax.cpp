@@ -239,7 +239,7 @@ void scrollTapeOneStep(struct LexemInfo** currLexemInfoElement, struct LexemInfo
     *nextLexemInfoElement = *currLexemInfoElement + 1;
 }
 
-struct LexemInfo* syntax_prev__(Grammar* grammar, char * ruleName, struct LexemInfo* lexemInfoTable, ASTNode** baseASTNode, struct LexemInfo** badLexemInfo) {
+struct LexemInfo* syntaxLL2(Grammar* grammar, char * ruleName, struct LexemInfo* lexemInfoTable, ASTNode** baseASTNode, struct LexemInfo** badLexemInfo) {
     struct LexemInfo* currTapeElement, * nextTapeElement;
 
     if (grammar == NULL || ruleName == NULL || lexemInfoTable == NULL || baseASTNode == NULL) {
@@ -300,7 +300,7 @@ struct LexemInfo* syntax_prev__(Grammar* grammar, char * ruleName, struct LexemI
 //#define MAX_STACK_DEPTH 256
 //#define MAX_AST_NODE_COUNT 65536
 
-bool recursiveDescentParserRuleWithDebug(char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth/* not used */) {
+bool getIndexAfterFragmentSyntax(char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth/* not used */) {
     struct LexemInfo* unexpectedLexemfailedTerminal = NULL;
     if (ruleName == NULL) {
         printf("Error: no start rule.\r\n");
@@ -312,7 +312,7 @@ bool recursiveDescentParserRuleWithDebug(char* ruleName, int& lexemIndex, struct
         exit(0);
     }
     struct ASTNode* baseASTNode;
-    struct LexemInfo* lastLexemInfo = syntax_prev__(grammar, ruleName, lexemInfoTable, &baseASTNode, &unexpectedLexemfailedTerminal);
+    struct LexemInfo* lastLexemInfo = syntaxLL2(grammar, ruleName, lexemInfoTable, &baseASTNode, &unexpectedLexemfailedTerminal);
     delete baseASTNode;
     lexemIndex = lastLexemInfo - lexemInfoTable;
 
@@ -323,7 +323,7 @@ int syntaxAnalyze(struct LexemInfo* lexemInfoTable, Grammar* grammar, char synta
     struct ASTNode* astRoot = NULL;    
     struct LexemInfo* unexpectedLexemfailedTerminal = NULL; // TODO: ...
 
-    struct LexemInfo* lastLexemInfo = syntax_prev__(grammar, grammar->start_symbol, lexemInfoTable, &astRoot, &unexpectedLexemfailedTerminal);
+    struct LexemInfo* lastLexemInfo = syntaxLL2(grammar, grammar->start_symbol, lexemInfoTable, &astRoot, &unexpectedLexemfailedTerminal);
 
     if (lastLexemInfo->lexemStr[0] == '\0') {
         if (viewAST) {
