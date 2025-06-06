@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 	if (!sourceSize) {
 		printf("Empty source . . .");
 		printf("Press Enter to exit . . .");
-		getchar();
+		(void)getchar();
 		return 0;
 	}
 

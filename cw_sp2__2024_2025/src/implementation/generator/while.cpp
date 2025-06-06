@@ -70,9 +70,13 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned long long int)(currBytePtr - 4);
 
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
-		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
+		//OLD//strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
+		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, MAX_LEXEM_SIZE);
+		++lexemInfoTransformationTempStackSize;
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
-		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
+		//OLD//strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
+		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, MAX_LEXEM_SIZE);
+		++lexemInfoTransformationTempStackSize;
 
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			//

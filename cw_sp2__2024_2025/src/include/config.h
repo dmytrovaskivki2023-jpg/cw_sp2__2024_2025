@@ -16,8 +16,8 @@
 //#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE | SYNTAX_ANALISIS_MODE | SEMANTIC_ANALISIS_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
 
 
-#define TOKENS_RE         ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
-#define KEYWORDS_RE       ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\(|\\)|NAME|DATA|BODY|END|EXIT|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
+#define TOKENS_RE         ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
+#define KEYWORDS_RE       ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|NAME|DATA|BODY|END|EXIT|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
 #define IDENTIFIERS_RE    "_[A-Z][A-Z][A-Z][A-Z][A-Z][A-Z][A-Z]"
 #define UNSIGNEDVALUES_RE "0|[1-9][0-9]*"
 
@@ -204,11 +204,11 @@
 #define T_OUTPUT_2 ""
 #define T_OUTPUT_3 ""
 //
-#define T_RLBIND_0 ":="
+#define T_RLBIND_0 "<<"
 #define T_RLBIND_1 ""
 #define T_RLBIND_2 ""
 #define T_RLBIND_3 ""
-#define T_LRBIND_0 "=:"
+#define T_LRBIND_0 ">>"
 #define T_LRBIND_1 ""
 #define T_LRBIND_2 ""
 #define T_LRBIND_3 ""
