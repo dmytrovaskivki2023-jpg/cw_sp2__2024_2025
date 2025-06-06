@@ -329,9 +329,9 @@ int syntaxAnalyze(struct LexemInfo* lexemInfoTable, Grammar* grammar, char synta
         if (viewAST) {
             printAST(lexemInfoTable, astRoot);
         }
-        //std::ofstream astOFStream(astFileName, std::ofstream::out);
-        //printASTToFile(lexemInfoTable, astRoot, astOFStream);
-        //astOFStream.close();
+        std::ofstream astOFStream(astFileName, std::ofstream::out);
+        printASTToFile(lexemInfoTable, astRoot, astOFStream);
+        astOFStream.close();
         return SUCCESS_STATE;
     }
     else {
