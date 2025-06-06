@@ -50,7 +50,7 @@ extern Grammar grammar;
 #define DEBUG_STATES
 
 //bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal);
-bool recursiveDescentParserRuleWithDebug(char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth/* not used */);
+bool getIndexAfterFragmentSyntax(char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth/* not used */);
 
 //bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar);
 //int syntaxAnalyze(       LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST);
