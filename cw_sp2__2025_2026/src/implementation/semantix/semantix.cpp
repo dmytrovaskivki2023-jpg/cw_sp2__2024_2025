@@ -27,7 +27,7 @@ unsigned long long int getDataSectionLastLexemIndex(LexemInfo* lexemInfoTable, G
 	int lexemIndex = 0;
 	//struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
 
-	if (recursiveDescentParserRuleWithDebug((char*)"program____part1", lexemIndex, lexemInfoTable, grammar, 0/*, &unexpectedLexemfailedTerminal*/)
+	if (getIndexAfterFragmentSyntax((char*)"program____part1", lexemIndex, lexemInfoTable, grammar, 0/*, &unexpectedLexemfailedTerminal*/)
 		&& lexemInfoTable[lexemIndex].lexemStr[0] != '\0') {
 		return lexemIndex;
 	}
