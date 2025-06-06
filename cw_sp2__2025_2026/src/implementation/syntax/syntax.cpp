@@ -292,7 +292,7 @@ struct LexemInfo* syntax_prev__(Grammar* grammar, char * ruleName, struct LexemI
     isEmptyStack(); // TODO: ... finite state
 
     ASTNode::redirectLinks(terminalChildrens);
-    printAST(lexemInfoTable, *baseASTNode);
+    //printAST(lexemInfoTable, *baseASTNode);
 
     return currTapeElement;
 }
