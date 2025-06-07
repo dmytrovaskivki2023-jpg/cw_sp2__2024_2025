@@ -535,12 +535,12 @@ bool semanticsÑheck1(struct LexemInfo* lexemInfoTable) {
 	for (unsigned long long int index = 0; lexemInfoTable[index].lexemStr[0] != '\0'; ++index) {
 		if (lexemInfoTable[index].tokenType == VALUE_LEXEME_TYPE) {
 			if (lexemInfoTable[index - 1].lexemStr[0] == '-') {
-				if (lexemInfoTable[index].ifvalue > 32767) {
+				if (lexemInfoTable[index].ifvalue > 32768) {
 					printf("Bad lexem value (column: %lld, row: %lld): %s.\n", lexemInfoTable[index].row, lexemInfoTable[index].col, lexemInfoTable[index].lexemStr);
 					return true;
 				}
 			}
-			else if (lexemInfoTable[index].ifvalue > 32768) {
+			else if (lexemInfoTable[index].ifvalue > 32767) {
 				printf("Bad lexem value (column: %lld, row: %lld): %s.\n", lexemInfoTable[index].row, lexemInfoTable[index].col, lexemInfoTable[index].lexemStr);
 				return true;
 			}
