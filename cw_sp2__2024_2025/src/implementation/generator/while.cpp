@@ -46,8 +46,6 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 		if (lexemInfoTransformationTempStackSize < 2
 			|| strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			|| strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
-			|| lexemInfoTransformationTempStackSize >= 4 && !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
-			|| lexemInfoTransformationTempStackSize >= 3 && !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_WHILE][0], MAX_LEXEM_SIZE)
 			) {
 			return currBytePtr;
 		}
@@ -71,11 +69,11 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 		//OLD//strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
-		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, MAX_LEXEM_SIZE);
+		strcpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, "CE_WHILE");
 		++lexemInfoTransformationTempStackSize;
 		//lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1];
 		//OLD//strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++ - 1].lexemStr, MAX_LEXEM_SIZE);
-		strncpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, MAX_LEXEM_SIZE);
+		strcpy(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize].lexemStr, "CE_WHILE");
 		++lexemInfoTransformationTempStackSize;
 
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
