@@ -47,6 +47,7 @@ unsigned char* makeThenBlockCodeAfterIfCode(struct LexemInfo** lastLexemInfoInTa
 	if (multitokenSize
 		&& lexemInfoTransformationTempStackSize
 		&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_IF][0], MAX_LEXEM_SIZE)
+		&& (lexemInfoTransformationTempStackSize < 2 || strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_ELSE_IF][0], MAX_LEXEM_SIZE))
 		) { 
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };
@@ -114,6 +115,7 @@ unsigned char* makeEndBlockAfterThenCodeAfterIfCode(struct LexemInfo** lastLexem
 		lexemInfoTransformationTempStackSize >= 2
 		&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr, tokenStruct[MULTI_TOKEN_IF][0], MAX_LEXEM_SIZE)
 		&& !strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr, tokenStruct[MULTI_TOKEN_THEN_BLOCK][0], MAX_LEXEM_SIZE)
+		&& (lexemInfoTransformationTempStackSize < 3 || strncmp(lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr, tokenStruct[MULTI_TOKEN_ELSE_IF][0], MAX_LEXEM_SIZE))
 		) {
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			//

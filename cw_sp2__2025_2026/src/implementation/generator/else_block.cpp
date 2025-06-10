@@ -12,7 +12,11 @@
 #include "string.h"
 
 unsigned char* makeElseCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
-	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_ELSE_BLOCK);
+	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_ELSE_IF);
+	if (multitokenSize) {
+		return currBytePtr;
+	}
+	multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_ELSE_BLOCK);
 	if (multitokenSize) {
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			const unsigned char code__cmp_eax_0[] = { 0x83, 0xF8, 0x00 };
