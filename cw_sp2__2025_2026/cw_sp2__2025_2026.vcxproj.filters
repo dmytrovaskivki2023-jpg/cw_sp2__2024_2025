@@ -39,9 +39,6 @@
     <ClCompile Include="src\implementation\generator\div.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\generator\else.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\implementation\generator\equal.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -58,9 +55,6 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\generator\greater_or_equal.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="src\implementation\generator\if_then.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\generator\input.cpp">
@@ -135,6 +129,15 @@
     <ClCompile Include="src\implementation\syntax\syntax.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\implementation\generator\else_block.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\generator\else_if_then_block.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\generator\if_then_block.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\base_test_programs_2025\file1.k03" />
@@ -172,9 +175,6 @@
     <ClInclude Include="src\include\generator\div.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\generator\else.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="src\include\generator\equal.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -191,9 +191,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\generator\greater_or_equal.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="src\include\generator\if_then.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\generator\input.h">
@@ -257,6 +254,15 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\syntax\syntax.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\generator\else_block.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\generator\else_if_then_block.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\generator\if_then_block.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
