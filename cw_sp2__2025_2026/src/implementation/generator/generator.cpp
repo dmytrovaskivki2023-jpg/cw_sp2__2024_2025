@@ -529,8 +529,9 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 #include "../../../src/include/generator/rlbind.h"
 #include "../../../src/include/generator/lrbind.h"
 #include "../../../src/include/generator/goto_label.h"
-#include "../../../src/include/generator/if_then.h"
-#include "../../../src/include/generator/else.h"
+#include "../../../src/include/generator/if_then_block.h"
+#include "../../../src/include/generator/else_if_then_block.h"
+#include "../../../src/include/generator/else_block.h"
 #include "../../../src/include/generator/for.h"
 #include "../../../src/include/generator/while.h"
 #include "../../../src/include/generator/repeat_until.h"
@@ -670,8 +671,9 @@ unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, uns
 		LABEL_GOTO_LABELE_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 
 		//
-		IF_THEN_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
-		ELSE_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+		IF_THEN_BLOCK_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+		ELSE_IF_THEN_BLOCK_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+		ELSE_BLOCK_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 		//
 
 		//currBytePtr = makeForCycleCode(lastLexemInfoInTable, currBytePtr);

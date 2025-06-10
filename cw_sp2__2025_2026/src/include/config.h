@@ -21,7 +21,7 @@
 #define IDENTIFIERS_RE    "_[A-Z][A-Z][A-Z][A-Z][A-Z][A-Z][A-Z]"
 #define UNSIGNEDVALUES_RE "0|[1-9][0-9]*"
 
-
+// OLD
 // first column of the cw term paper option
 #define PROGRAM_FORMAT \
 {"tokenNAME__program_name", 2, {"tokenNAME","program_name"}},\
@@ -37,7 +37,15 @@
 {"program____part2", 2, {"tokenSEMICOLON","tokenEND"}},\
 {"program", 2, {"program____part1","program____part2"}}, 
 
-
+#define T_BEGIN_BLOCK_0 "{"
+#define T_BEGIN_BLOCK_1 ""
+#define T_BEGIN_BLOCK_2 ""
+#define T_BEGIN_BLOCK_3 ""
+#define T_END_BLOCK_0 "}"
+#define T_END_BLOCK_1 ""
+#define T_END_BLOCK_2 ""
+#define T_END_BLOCK_3 ""
+//
 #define T_NAME_0 "NAME"
 #define T_NAME_1 ""
 #define T_NAME_2 ""
@@ -140,17 +148,21 @@
 #define T_GOTO_3 ""
 //
 #define T_IF_0 "IF"
-#define T_IF_1 "("
+#define T_IF_1 ""
 #define T_IF_2 ""
 #define T_IF_3 ""
-#define T_THEN_0 ")"
-#define T_THEN_1 ""
-#define T_THEN_2 ""
-#define T_THEN_3 ""
-#define T_ELSE_0 "ELSE"
-#define T_ELSE_1 ""
-#define T_ELSE_2 ""
-#define T_ELSE_3 ""
+#define T_ELSE_IF_0 "ELSE"
+#define T_ELSE_IF_1 "IF"
+#define T_ELSE_IF_2 ""
+#define T_ELSE_IF_3 ""
+#define T_THEN_BLOCK_0 "{"
+#define T_THEN_BLOCK_1 ""
+#define T_THEN_BLOCK_2 ""
+#define T_THEN_BLOCK_3 ""
+#define T_ELSE_BLOCK_0 "ELSE"
+#define T_ELSE_BLOCK_1 "{"
+#define T_ELSE_BLOCK_2 ""
+#define T_ELSE_BLOCK_3 ""
 //
 #define T_FOR_0 "FOR"
 #define T_FOR_1 ""
@@ -236,6 +248,9 @@
 #ifndef TOKEN_STRUCT_NAME_
 #define TOKEN_STRUCT_NAME_
 DECLENUM(TokenStructName,
+    MULTI_TOKEN_BEGIN_BLOCK,
+    MULTI_TOKEN_END_BLOCK,
+
 	MULTI_TOKEN_BITWISE_NOT,
 	MULTI_TOKEN_BITWISE_AND,
 	MULTI_TOKEN_BITWISE_OR,
@@ -260,8 +275,9 @@ DECLENUM(TokenStructName,
 	MULTI_TOKEN_GOTO,
 
 	MULTI_TOKEN_IF,
-	MULTI_TOKEN_THEN,
-	MULTI_TOKEN_ELSE,
+    MULTI_TOKEN_ELSE_IF,
+	MULTI_TOKEN_THEN_BLOCK,
+	MULTI_TOKEN_ELSE_BLOCK,
 
 	MULTI_TOKEN_FOR,
 	MULTI_TOKEN_TO,
@@ -301,6 +317,9 @@ DECLENUM(TokenStructName,
 );
 
 #define INIT_TOKEN_STRUCT_NAME() static void intitTokenStruct(){\
+SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, BEGIN_BLOCK)\
+SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, END_BLOCK)\
+\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, BITWISE_NOT)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, BITWISE_AND)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, BITWISE_OR)\
@@ -325,8 +344,9 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, COLON)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, GOTO)\
 \
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, IF)\
-SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, THEN)\
-SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, ELSE)\
+SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, ELSE_IF)\
+SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, THEN_BLOCK)\
+SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, ELSE_BLOCK)\
 \
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, FOR)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, TO)\
