@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
-		printf("Enter 'y' to lexical analyze action(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to lexical analyze action (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & LEXICAL_ANALYZE_MODE) {
@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
-		printf("Enter 'y' to syntax analyze action(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to syntax analyze action (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & SYNTAX_ANALYZE_MODE) {
@@ -191,7 +191,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
-		printf("Enter 'y' to semantix analyze action(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to semantix analyze action (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & SEMANTIX_ANALYZE_MODE) {
@@ -226,7 +226,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
-		printf("Enter 'y' for the action to prepare for the compilation process(to pass the action process, enter 'n' or another key): ");
+		printf("Enter 'y' for the action to prepare for the compilation process (to pass the action process, enter 'n' or another key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_PREPARE) {
@@ -268,7 +268,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("\r\n");
-		printf("Enter 'y' to create C-code(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to create C-code (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_C) { // MAKE_ASSEMBLY_MODE
@@ -301,7 +301,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("\r\n");
-		printf("Enter 'y' to create assembly(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to create assembly (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_ASSEMBLY) { // MAKE_ASSEMBLY_MODE
@@ -338,7 +338,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("ATTENTIOON: The next step is critical, if it is skipped the compilation process will be terminated!\r\n");
-		printf("Enter 'y' to create native code(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to create native code (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & (MAKE_C | MAKE_ASSEMBLY | MAKE_OBJECT | MAKE_BINARY)) {
@@ -375,7 +375,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("\r\n");
-		printf("Enter 'y' to create obj-file(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to create obj-file (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_OBJECT) {
@@ -411,7 +411,7 @@ int main(int argc, char* argv[]) {
 		fflush(stderr);
 		printf("No command line arguments are entered, so you are working in step-by-step interactive mode.\r\n");
 		printf("\r\n");
-		printf("Enter 'y' to create exe-file(to pass action process enter 'n' or others key): ");
+		printf("Enter 'y' to create exe-file (to pass action process enter 'n' or others key): ");
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_BINARY) {
@@ -458,11 +458,11 @@ int main(int argc, char* argv[]) {
 			printf("\r\n");
 		}
 		if (firstRun) {
-			printf("Enter 'y' to run program action(to pass action process Enter 'n' or others key): ");
+			printf("Enter 'y' to run program action (to pass action process Enter 'n' or others key): ");
 			firstRun = false;
 		}
 		else{
-			printf("Enter 'y' to rerun program action(to pass action process Enter 'n' or others key): ");
+			printf("Enter 'y' to rerun program action (to pass action process Enter 'n' or others key): ");
 		}
 
 		fflush(stdin);
@@ -489,6 +489,12 @@ int main(int argc, char* argv[]) {
 
 #ifdef RERUN_MODE
 	if (mode & INTERACTIVE_MODE) {
+		system("CLS");
+		fflush(stdin);
+		fflush(stdout);
+		fflush(stderr);
+		(void)getchar();
+		printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
 		printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
 		char valueByGetChar = getchar();
 		if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
@@ -497,8 +503,8 @@ int main(int argc, char* argv[]) {
 	}
 #endif
 
-	printf("\r\n\r\nPress Enter to exit . . .");
-	(void)getchar();
+//	printf("\r\n\r\nPress Enter to exit . . .");
+//	(void)getchar();
 
 	return 0;
 }
