@@ -114,7 +114,7 @@
     <ClCompile Include="src\implementation\generator\sub.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\generator\while.cpp">
+    <ClCompile Include="src\implementation\generator\while_block.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\lexica\lexica.cpp">
@@ -241,7 +241,7 @@
     <ClInclude Include="src\include\generator\sub.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\generator\while.h">
+    <ClInclude Include="src\include\generator\while_block.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\lexica\lexica.h">

@@ -186,17 +186,13 @@
 #define T_WHILE_2 ""
 #define T_WHILE_3 ""
 #define T_CONTINUE_WHILE_0 "CONTINUE"
-#define T_CONTINUE_WHILE_1 "WHILE"
+#define T_CONTINUE_WHILE_1 ""
 #define T_CONTINUE_WHILE_2 ""
 #define T_CONTINUE_WHILE_3 ""
-#define T_EXIT_WHILE_0 "EXIT"
-#define T_EXIT_WHILE_1 "WHILE" 
+#define T_EXIT_WHILE_0 "BREAK"
+#define T_EXIT_WHILE_1 "" 
 #define T_EXIT_WHILE_2 "" 
 #define T_EXIT_WHILE_3 ""
-#define T_END_WHILE_0 "END"
-#define T_END_WHILE_1 "WHILE"
-#define T_END_WHILE_2 ""
-#define T_END_WHILE_3 ""
 //
 #define T_REPEAT_0 "REPEAT"
 #define T_REPEAT_1 ""
@@ -288,7 +284,6 @@ DECLENUM(TokenStructName,
 	MULTI_TOKEN_WHILE,
 	/*while special statement*/MULTI_TOKEN_CONTINUE_WHILE,
 	/*while special statement*/MULTI_TOKEN_EXIT_WHILE,
-	MULTI_TOKEN_END_WHILE,
 	//
 
 	//
@@ -356,7 +351,6 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, DO)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, WHILE)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, CONTINUE_WHILE)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, EXIT_WHILE)\
-SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, END_WHILE)\
 \
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, REPEAT)\
 SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, UNTIL)\
@@ -896,6 +890,8 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
+
+#define RERUN_MODE
 
 //#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
 #define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)

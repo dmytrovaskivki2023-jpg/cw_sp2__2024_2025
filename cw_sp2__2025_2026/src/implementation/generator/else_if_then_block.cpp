@@ -29,11 +29,11 @@ unsigned char* makeElseIfCode(struct LexemInfo** lastLexemInfoInTable, unsigned 
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s (part of else-if)\"\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\" (part of \"%s%s\")\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s (part of else-if)\"\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\" (part of \"%s%s\")\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = (*lastLexemInfoInTable)[0];
@@ -90,11 +90,11 @@ unsigned char* makeThenBlockCodeAfterElseIfCode(struct LexemInfo** lastLexemInfo
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;after cond expresion (after \"%s%s\")\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //after cond expresion (after \"%s\")\r\n", tokenStruct[MULTI_TOKEN_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //after cond expresion (after \"%s%s\")\r\n", tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 
 		lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize++] = **lastLexemInfoInTable;
@@ -156,11 +156,11 @@ unsigned char* makeEndBlockAfterThenCodeAfterElseIfCode(struct LexemInfo** lastL
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\" (after \"then\"-part (else-if) of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_SEMICOLON][0], tokenStruct[MULTI_TOKEN_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\" (after \"then\"-part of %s%s-operator)\r\n", tokenStruct[MULTI_TOKEN_END_BLOCK][0], tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\" (after \"then\"-part (else-if) of %s-operator)\r\n", tokenStruct[MULTI_TOKEN_SEMICOLON][0], tokenStruct[MULTI_TOKEN_IF][0]);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\" (after \"then\"-part of %s%s-operator)\r\n", tokenStruct[MULTI_TOKEN_END_BLOCK][0], tokenStruct[MULTI_TOKEN_ELSE_IF][0], tokenStruct[MULTI_TOKEN_ELSE_IF][1]);
 		}
 
 		currBytePtr = makePostThenCodeAfterElseIfCode_(lastLexemInfoInTable, currBytePtr, generatorMode);

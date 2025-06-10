@@ -533,7 +533,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 #include "../../../src/include/generator/else_if_then_block.h"
 #include "../../../src/include/generator/else_block.h"
 #include "../../../src/include/generator/for.h"
-#include "../../../src/include/generator/while.h"
+#include "../../../src/include/generator/while_block.h"
 #include "../../../src/include/generator/repeat_until.h"
 //		  
 #include "../../../src/include/generator/semicolon.h"

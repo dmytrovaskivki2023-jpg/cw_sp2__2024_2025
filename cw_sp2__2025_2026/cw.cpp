@@ -498,6 +498,10 @@ int main(int argc, char* argv[]) {
 		printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
 		char valueByGetChar = getchar();
 		if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
 			system((std::string("\"") + argv[0] + "\"").c_str());
 		}
 	}
