@@ -487,6 +487,15 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+#ifdef RERUN_MODE
+	if (mode & INTERACTIVE_MODE) {
+		printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+		char valueByGetChar = getchar();
+		if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+			system((std::string("\"") + argv[0] + "\"").c_str());
+		}
+	}
+#endif
 
 	printf("\r\n\r\nPress Enter to exit . . .");
 	(void)getchar();
