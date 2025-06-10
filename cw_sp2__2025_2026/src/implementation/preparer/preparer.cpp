@@ -17,60 +17,61 @@
 #include "stdlib.h"
 #include "string.h"
 
+#define PRECEDENCE_MAX_LEVEL 100
 int precedenceLevel(char* lexemStr) {
 	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_NOT][0], MAX_LEXEM_SIZE)) {		
-		return 6;
+		return PRECEDENCE_MAX_LEVEL - 3;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT][0], MAX_LEXEM_SIZE)) {		
-		return 6;
+		return PRECEDENCE_MAX_LEVEL - 3;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_AND][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 10;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_AND][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 13;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_MUL][0], MAX_LEXEM_SIZE)) {	
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_DIV][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_MOD][0], MAX_LEXEM_SIZE)) {	
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_OR][0], MAX_LEXEM_SIZE)) {	
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 12;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_OR][0], MAX_LEXEM_SIZE)) {	
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 14;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_ADD][0], MAX_LEXEM_SIZE)) {
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 6;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_SUB][0], MAX_LEXEM_SIZE)) {
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 6;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 9;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 9;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)) {
