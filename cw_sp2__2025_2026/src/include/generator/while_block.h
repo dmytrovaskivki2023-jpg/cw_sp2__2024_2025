@@ -5,7 +5,7 @@
 *                                                  (draft!) *
 *************************************************************/
 
-#define WHILE_CODER(A, B, C, M, R)\
+#define WHILE_BLOCK_CODER(A, B, C, M, R)\
 if (A ==* B) C = makeWhileCycleCode(B, C, M);\
 if (A ==* B) C = makeBlockBeginWhileCycleCode(B, C, M);\
 if (A ==* B) C = make0LevelContinueOr1LevelIfContinueWhileCycleCode(B, C, M);\

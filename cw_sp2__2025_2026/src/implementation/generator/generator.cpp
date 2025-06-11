@@ -538,6 +538,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 //		  
 #include "../../../src/include/generator/semicolon.h"
 //
+#include "../../../src/include/generator/block.h"
 
 unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	//return currBytePtr;
@@ -683,7 +684,7 @@ unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, uns
 		FOR_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 
 		//
-		WHILE_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+		WHILE_BLOCK_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 		//
 
 		//
@@ -732,8 +733,8 @@ unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, uns
 
 		///* (1) Ignore phase*/if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = makeSemicolonAfterNonContextCode(lastLexemInfoInTable, currBytePtr);
 		///* (2) Ignore phase*/if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = makeSemicolonIgnoreContextCode(lastLexemInfoInTable, currBytePtr);
-		NON_CONTEXT_SEMICOLON_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
-
+		NON_CONTEXT_SEMICOLON_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);		
+		NON_CONTEXT_BLOCK_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 		NON_CONTEXT_NULL_STATEMENT(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 
 		if (lastLexemInfoInTable_ == *lastLexemInfoInTable) {
