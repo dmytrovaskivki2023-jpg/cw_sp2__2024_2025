@@ -206,12 +206,12 @@ unsigned char* makeDoCycleCode(struct LexemInfo** lastLexemInfoInTable, unsigned
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			if (toMode) {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    if (opStack[contextStack[contextStackIndex]] >= opTemp) goto LABEL__EXIT_FOR_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
-				currBytePtr += sprintf((char*)currBytePtr, "    ++opStack[contextStack[contextStackIndex]];\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    if (data/*OLD: opStack*/[contextStack[contextStackIndex]] >= opTemp) goto LABEL__EXIT_FOR_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+				currBytePtr += sprintf((char*)currBytePtr, "    ++data/*OLD: opStack*/[contextStack[contextStackIndex]];\r\n");
 			}
 			else {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    if (opStack[contextStack[contextStackIndex]] <= opTemp) goto LABEL__EXIT_FOR_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
-				currBytePtr += sprintf((char*)currBytePtr, "    --opStack[contextStack[contextStackIndex]];\r\n");
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "    if (data/*OLD: opStack*/[contextStack[contextStackIndex]] <= opTemp) goto LABEL__EXIT_FOR_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+				currBytePtr += sprintf((char*)currBytePtr, "    --data/*OLD: opStack*/[contextStack[contextStackIndex]];\r\n");
 			}
 		}
 
