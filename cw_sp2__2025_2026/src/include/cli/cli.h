@@ -33,7 +33,6 @@
 #define DEFAULT_INPUT_FILENAME "../base_test_programs_2025/file1.k03" // TODO: move!
 //#define DEFAULT_INPUT_FILENAME "../other_test_programs_2025/file4.k03"
 //#define DEFAULT_INPUT_FILENAME "../test_programs/file1.cwl"
-#define DEFAULT_INPUT_FILENAME "../base_test_programs_2025/file123.k03"
 
 extern unsigned long long int mode;
 extern char parameters[PARAMETERS_COUNT][MAX_PARAMETERS_SIZE];
