@@ -146,6 +146,7 @@
     <ClCompile Include="src\implementation\generator\bitwise_and.cpp" />
     <ClCompile Include="src\implementation\generator\bitwise_not.cpp" />
     <ClCompile Include="src\implementation\generator\bitwise_or.cpp" />
+    <ClCompile Include="src\implementation\generator\block.cpp" />
     <ClCompile Include="src\implementation\generator\div.cpp" />
     <ClCompile Include="src\implementation\generator\else_block.cpp" />
     <ClCompile Include="src\implementation\generator\else_if_then_block.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\include\generator\bitwise_and.h" />
     <ClInclude Include="src\include\generator\bitwise_not.h" />
     <ClInclude Include="src\include\generator\bitwise_or.h" />
+    <ClInclude Include="src\include\generator\block.h" />
     <ClInclude Include="src\include\generator\div.h" />
     <ClInclude Include="src\include\generator\else_block.h" />
     <ClInclude Include="src\include\generator\else_if_then_block.h" />
