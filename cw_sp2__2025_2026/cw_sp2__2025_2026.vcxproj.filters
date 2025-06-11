@@ -42,7 +42,7 @@
     <ClCompile Include="src\implementation\generator\equal.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\generator\for.cpp">
+    <ClCompile Include="src\implementation\generator\for_nonblockandblock.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\generator\generator.cpp">
@@ -178,7 +178,7 @@
     <ClInclude Include="src\include\generator\equal.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\generator\for.h">
+    <ClInclude Include="src\include\generator\for_nonblockandblock.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\generator\generator.h">
