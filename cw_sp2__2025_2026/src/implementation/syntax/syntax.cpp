@@ -341,6 +341,7 @@ int syntaxAnalyze(struct LexemInfo* lexemInfoTable, Grammar* grammar, char synta
         errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
         errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
         //exit(0);
-        return ~SUCCESS_STATE;
+        extern int td;
+        return ~SUCCESS_STATE & td;
     }
 }

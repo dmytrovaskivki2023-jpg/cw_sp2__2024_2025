@@ -374,199 +374,331 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, NULL_STATEMENT)\
 
 extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT];
 
-#define CONFIGURABLE_GRAMMAR {\
-        {"labeled_point", 2, {"ident", "tokenCOLON"}},\
-        {"goto_label", 2, {"tokenGOTO","ident"}},\
-        {"program_name", 1, {"ident_terminal"}},\
-        {"value_type", 1, {T_DATA_TYPE_0}},\
-        {"other_declaration_ident", 2, {"tokenCOMMA", "ident"}},\
-        {"other_declaration_ident____iteration_after_one", 2, {"other_declaration_ident","other_declaration_ident____iteration_after_one"}},\
-        {"other_declaration_ident____iteration_after_one", 2, {"tokenCOMMA", "ident"}},\
-        {"value_type__ident", 2, {"value_type", "ident"}},\
-        {"declaration", 2, {"value_type__ident", "other_declaration_ident____iteration_after_one"}},\
-        {"declaration", 2, {"value_type", "ident"}},\
-\
-        {"unary_operator", 1, {T_NOT_0}},\
-        {"unary_operator", 1, {T_SUB_0}},\
-        {"unary_operator", 1, {T_ADD_0}},\
-        {"binary_operator", 1, {T_AND_0}},\
-        {"binary_operator", 1, {T_OR_0}},\
-        {"binary_operator", 1, {T_EQUAL_0}},\
-        {"binary_operator", 1, {T_NOT_EQUAL_0}},\
-        {"binary_operator", 1, {T_LESS_OR_EQUAL_0}},\
-        {"binary_operator", 1, {T_GREATER_OR_EQUAL_0}},\
-        {"binary_operator", 1, {T_ADD_0}},\
-        {"binary_operator", 1, {T_SUB_0}},\
-        {"binary_operator", 1, {T_MUL_0}},\
-        {"binary_operator", 1, {T_DIV_0}},\
-        {"binary_operator", 1, {T_MOD_0}},\
-        {"binary_action", 2, {"binary_operator","expression"}},\
-\
-        {"left_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
-        {"left_expression", 2, {"unary_operator","expression"}},\
-        {"left_expression", 1, {"ident_terminal"}},\
-        {"left_expression", 1, {"value_terminal"}},\
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action____iteration_after_two"}},\
-        {"binary_action____iteration_after_two", 2, {"binary_action","binary_action"}},\
-        {"expression", 2, {"left_expression","binary_action____iteration_after_two"}},\
-        {"expression", 2, {"left_expression","binary_action"}},\
-        {"expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
-        {"expression", 2, {"unary_operator","expression"}},\
-        {"expression", 1, {"ident_terminal"}},\
-        {"expression", 1, {"value_terminal"}},\
-\
-        {"tokenGROUPEXPRESSIONBEGIN__expression", 2, {"tokenGROUPEXPRESSIONBEGIN","expression"}},\
-        {"group_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
-\
-        {"bind_right_to_left", 2, {"ident","rl_expression"}},\
-        {"bind_left_to_right", 2, {"lr_expression","ident"}},\
-\
-        {"body_for_true", 2, {"statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},\
-        {"body_for_true", 2, {"statement_in_while_body","tokenSEMICOLON"}},\
-        {"body_for_true", 1, {T_SEMICOLON_0}},\
-        {"tokenELSE__statement_in_while_body", 2, {"tokenELSE","statement_in_while_body"}},\
-        {"tokenELSE__statement_in_while_body____iteration_after_two", 2, {"tokenELSE","statement_in_while_body____iteration_after_two"}},\
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body____iteration_after_two","tokenSEMICOLON"}},\
-        {"body_for_false", 2, {"tokenELSE__statement_in_while_body","tokenSEMICOLON"}},\
-        {"body_for_false", 2, {"tokenELSE","tokenSEMICOLON"}},\
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN", 2, {"tokenIF","tokenGROUPEXPRESSIONBEGIN"}},\
-        {"expression__tokenGROUPEXPRESSIONEND", 2, {"expression","tokenGROUPEXPRESSIONEND"}},\
-        {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN","expression__tokenGROUPEXPRESSIONEND"}},\
-        {"body_for_true__body_for_false", 2, {"body_for_true","body_for_false"}},\
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
-        {"cond_block", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-\
-        {"cycle_counter", 1, {"ident_terminal"}},\
-        {"rl_expression", 2, {"tokenRLBIND","expression"}},\
-        {"lr_expression", 2, {"expression","tokenLRBIND"}},\
-        {"cycle_counter_init", 2, {"cycle_counter","rl_expression"}},\
-        {"cycle_counter_init", 2, {"lr_expression","cycle_counter"}},\
-        {"cycle_counter_last_value", 1, {"value_terminal"}},\
-        {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
-        {"cycle_body", 2, {"tokenDO","statement"}},\
-        {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
-        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","cycle_counter_last_value"}},\
-        {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},\
-        {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},\
-        {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
-\
-        {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},\
-        {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},\
-        {"tokenWHILE__expression", 2, {"tokenWHILE","expression"}},\
-        {"tokenEND__tokenWHILE", 2, {"tokenENDWHILE_END","tokenENDWHILE_WHILE"}},\
-        {"tokenWHILE__expression__statement_in_while_body", 2, {"tokenWHILE__expression","statement_in_while_body"}},\
-        {"tokenWHILE__expression__statement_in_while_body____iteration_after_two", 2, {"tokenWHILE__expression","statement_in_while_body____iteration_after_two"}},\
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
-        {"while_cycle", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
-        {"while_cycle", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
-\
-        {"tokenUNTIL__expression", 2, {"tokenUNTIL","expression"}},\
-        {"tokenREPEAT__statement____iteration_after_two", 2, {"tokenREPEAT","statement____iteration_after_two"}},\
-        {"tokenREPEAT__statement", 2, {"tokenREPEAT","statement"}},\
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},\
-        {"repeat_until_cycle", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},\
-        {"repeat_until_cycle", 2, {"tokenREPEAT","tokenUNTIL__expression"}},\
-\
-        {"input__first_part", 2, {"tokenGET","tokenGROUPEXPRESSIONBEGIN"}},\
-        {"input__second_part", 2, {"ident","tokenGROUPEXPRESSIONEND"}},\
-        {"input", 2, {"input__first_part","input__second_part"}},\
-\
-        {"output__first_part", 2, {"tokenPUT","tokenGROUPEXPRESSIONBEGIN"}},\
-        {"output__second_part", 2, {"expression","tokenGROUPEXPRESSIONEND"}},\
-        {"output", 2, {"output__first_part","output__second_part"}},\
-\
-        {"statement", 2, {"ident","rl_expression"}},\
-        {"statement", 2, {"lr_expression","ident"}},\
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
-        {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-        {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
-        {"statement", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
-        {"statement", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
-        {"statement", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},\
-        {"statement", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},\
-        {"statement", 2, {"tokenREPEAT","tokenUNTIL__expression"}},\
-        {"statement", 2, {"ident","tokenCOLON"}},\
-        {"statement", 2, {"tokenGOTO","ident"}},\
-        {"statement", 2, {"input__first_part","input__second_part"}},\
-        {"statement", 2, {"output__first_part","output__second_part"}},\
-        {"statement____iteration_after_two", 2, {"statement","statement____iteration_after_two"}},\
-        {"statement____iteration_after_two", 2, {"statement","statement"}},\
-\
-        { "statement_in_while_body", 2, {"ident","rl_expression"}},\
-        { "statement_in_while_body", 2, {"lr_expression","ident"}},\
-        { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
-        { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-        { "statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
-        { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
-        { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
-        { "statement_in_while_body", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
-        { "statement_in_while_body", 2, {"tokenREPEAT__statement____iteration_after_two","tokenUNTIL__expression"}},\
-        { "statement_in_while_body", 2, {"tokenREPEAT__statement","tokenUNTIL__expression"}},\
-        { "statement_in_while_body", 2, {"tokenREPEAT","tokenUNTIL__expression"}},\
-        { "statement_in_while_body", 2, {"ident","tokenCOLON"}},\
-        { "statement_in_while_body", 2, {"tokenGOTO","ident"}},\
-        { "statement_in_while_body", 2, {"input__first_part","input__second_part"}},\
-        { "statement_in_while_body", 2, {"output__first_part","output__second_part"}},\
-        { "statement_in_while_body", 2, {"tokenCONTINUE","tokenWHILE"}},\
-        { "statement_in_while_body", 2, {"tokenEXIT","tokenWHILE"}},\
-        { "statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body____iteration_after_two"}},\
-        { "statement_in_while_body____iteration_after_two", 2, {"statement_in_while_body","statement_in_while_body"}},\
-\
-        PROGRAM_FORMAT\
-\
-        {"tokenCOLON", 1, {T_COLON_0}},\
-        {"tokenGOTO", 1, {T_GOTO_0}},\
-        {"tokenINTEGER16", 1, {T_DATA_TYPE_0}},\
-        {"tokenCOMMA", 1, {T_COMA_0}},\
-        {"tokenNOT", 1, {T_NOT_0}},\
-        {"tokenAND", 1, {T_AND_0}},\
-        {"tokenOR", 1, {T_OR_0}},\
-        {"tokenEQUAL", 1, {T_EQUAL_0}},\
-        {"tokenNOTEQUAL", 1, {T_NOT_EQUAL_0}},\
-        {"tokenLESSOREQUAL", 1, {T_LESS_OR_EQUAL_0}},\
-        {"tokenGREATEROREQUAL", 1, {T_GREATER_OR_EQUAL_0}},\
-        {"tokenPLUS", 1, {T_ADD_0}},\
-        {"tokenMINUS", 1, {T_SUB_0}},\
-        {"tokenMUL", 1, {T_MUL_0}},\
-        {"tokenDIV", 1, {T_DIV_0}},\
-        {"tokenMOD", 1, {T_MOD_0}},\
-        {"tokenGROUPEXPRESSIONBEGIN", 1, {"("}},\
-        {"tokenGROUPEXPRESSIONEND", 1, {")"}},\
-        {"tokenRLBIND", 1, {T_RLBIND_0}},\
-        {"tokenLRBIND", 1, {T_LRBIND_0}},\
-        {"tokenELSE", 1, {T_ELSE_0}},\
-        {"tokenIF", 1, {T_IF_0}},\
-        {"tokenDO", 1, {T_DO_0}},\
-        {"tokenFOR", 1, {T_FOR_0}},\
-        {"tokenTO", 1, {T_TO_0}},\
-        {"tokenWHILE", 1, {T_WHILE_0}},\
-        {"tokenCONTINUE", 1, {T_CONTINUE_WHILE_0}},\
-        {"tokenEXIT", 1, {T_EXIT_WHILE_0}},\
-        {"tokenENDWHILE_END", 1, {T_END_WHILE_0}},\
-        {"tokenENDWHILE_WHILE", 1, {T_END_WHILE_1}},\
-        {"tokenREPEAT", 1, {T_REPEAT_0}},\
-        {"tokenUNTIL", 1, {T_UNTIL_0}},\
-        {"tokenGET", 1, {T_INPUT_0}},\
-        {"tokenPUT", 1, {T_OUTPUT_0}},\
-        {"tokenNAME", 1, {T_NAME_0}},\
-        {"tokenBODY", 1, {T_BODY_0}},\
-        {"tokenDATA", 1, {T_DATA_0}},\
-        {"tokenEND", 1, {T_END_0}},\
-        {"tokenSEMICOLON", 1, {T_SEMICOLON_0}},\
-\
-        {"value", 1, {"value_terminal"}},\
-\
-        {"ident", 1, {"ident_terminal"}},\
-\
-        {"", 2, {"",""}}\
-},\
-178,\
-"program"
-
 #define LA_IS  2
 #define LA_NOT 4 
 
+#define GRAMMAR_LL2__2025_ {\
+{ LA_IS, {"ident_terminal"}, { "labeled_point",{\
+    { LA_IS, {""}, 2, {"ident", T_COLON_0}}\
+}}},\
+{ LA_IS, {T_GOTO_0}, { "goto_label",{\
+    { LA_IS, {""}, 2, {T_GOTO_0, "ident"}}\
+}}},\
+{ LA_IS, {"ident_terminal"}, { "program_name",{\
+    { LA_IS, {""}, 1, {"ident"}}\
+}}},\
+{ LA_IS, {T_DATA_TYPE_0}, { "value_type",{\
+    { LA_IS, {""}, 1, {T_DATA_TYPE_0}}\
+}}},\
+{ LA_IS, {"["}, { "array_specify",{\
+    { LA_IS, {""}, 3, {"[", "unsigned_value", "]"}}\
+}}},\
+{ LA_IS, {"ident_terminal"}, { "declaration_element",{\
+    { LA_IS, {""}, 2, {"ident", "array_specify_optional"}}\
+}}},\
+{ LA_IS, {"["}, { "array_specify_optional",{\
+    { LA_IS, {""}, 1, {"array_specify"}}\
+}}},\
+{ LA_NOT, {"["}, { "array_specify_optional",{\
+    { LA_IS, {""}, 0, {""}}\
+}}},\
+{ LA_IS, {T_COMA_0}, { "other_declaration_ident",{\
+    { LA_IS, {""}, 2, {T_COMA_0, "declaration_element"}}\
+}}},\
+{ LA_IS, {T_DATA_TYPE_0}, { "declaration",{\
+    { LA_IS, {""}, 3, {"value_type", "declaration_element", "other_declaration_ident__iteration"}}\
+}}},\
+{ LA_IS, { T_COMA_0 }, { "other_declaration_ident__iteration",{\
+    { LA_IS, {""}, 2, { "other_declaration_ident", "other_declaration_ident__iteration" }}\
+}}},\
+{ LA_NOT, { T_COMA_0 }, { "other_declaration_ident__iteration",{\
+    { LA_IS, {""}, 0, { "" }}\
+}}},\
+{ LA_IS, { "[" }, { "index_action",{\
+    { LA_IS, {""}, 3, { "[", "expression", "]" }}\
+}}},\
+{ LA_IS, { T_NOT_0 }, { "unary_operator",{\
+    { LA_IS, {""}, 1, { T_NOT_0 }}\
+}}},\
+{ LA_IS, { T_SUB_0 }, { "unary_operator",{\
+    { LA_IS, {""}, 1, { T_SUB_0 }}\
+}}},\
+{ LA_IS, { T_ADD_0 }, { "unary_operator",{\
+    { LA_IS, {""}, 1, { T_ADD_0 }}\
+}}},\
+{ LA_IS, { T_NOT_0, T_ADD_0, T_SUB_0 }, { "unary_operation",{\
+    { LA_IS, {""}, 2, { "unary_operator", "expression" }}\
+}}},\
+{ LA_IS, { T_AND_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_AND_0 }}\
+}}},\
+{ LA_IS, { T_OR_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_OR_0 }}\
+}}},\
+{ LA_IS, { T_EQUAL_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_EQUAL_0 }}\
+}}},\
+{ LA_IS, { T_NOT_EQUAL_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_NOT_EQUAL_0 }}\
+}}},\
+{ LA_IS, { T_LESS_OR_EQUAL_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_LESS_OR_EQUAL_0 }}\
+}}},\
+{ LA_IS, { T_GREATER_OR_EQUAL_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_GREATER_OR_EQUAL_0 }}\
+}}},\
+{ LA_IS, { T_ADD_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_ADD_0 }}\
+}}},\
+{ LA_IS, { T_SUB_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_SUB_0 }}\
+}}},\
+{ LA_IS, { T_MUL_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_MUL_0 }}\
+}}},\
+{ LA_IS, { T_DIV_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_DIV_0 }}\
+}}},\
+{ LA_IS, { T_MOD_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_MOD_0 }}\
+}}},\
+{ LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action",{\
+    { LA_IS, {""}, 2, { "binary_operator", "expression" }}\
+}}},\
+{LA_IS, { "(" }, { "left_expression",{\
+    {LA_IS, { "" }, 1, { "group_expression" }}\
+}}},\
+{LA_IS, { T_NOT_0 }, { "left_expression",{\
+    {LA_IS, { "" }, 1, { "unary_operation" }}\
+}}},\
+{LA_IS, { T_ADD_0, T_SUB_0 }, { "left_expression",{\
+    {LA_IS,  { "unsigned_value_terminal"}, 1, { "value" }},\
+    {LA_NOT, { "unsigned_value_terminal" }, 1, { "unary_operation" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "left_expression",{\
+    {LA_IS, {""}, 2, { "ident", "index_action_optional" }}\
+}}},\
+{LA_IS, { "unsigned_value_terminal" }, { "left_expression",{\
+    {LA_IS, {""}, 1, { "value" }}\
+}}},\
+{LA_IS, { "[" }, { "index_action_optional",{\
+    {LA_IS, {""}, 1, { "index_action" }}\
+}}},\
+{LA_NOT, { "[" }, { "index_action_optional",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "expression",{\
+    {LA_IS, {""}, 2, { "left_expression", "binary_action__iteration" }}\
+}}},\
+{LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
+    {LA_IS, {""}, 2, { "binary_action", "binary_action__iteration" }}\
+}}},\
+{LA_NOT, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { "(" }, { "group_expression",{\
+    {LA_IS, {""}, 3, { "(", "expression", ")" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "bind_right_to_left",{\
+    {LA_IS, {""}, 4, { "ident", "index_action_optional", T_RLBIND_0, "expression" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "bind_left_to_right",{\
+    {LA_IS, {""}, 4, { "expression", T_LRBIND_0, "ident", "index_action_optional" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "if_expression",{\
+    {LA_IS, {""}, 1, { "expression" }}\
+}}},\
+{LA_IS, { T_BEGIN_BLOCK_0 }, { "body_for_true",{\
+    {LA_IS, {""}, 1, { "block_statements_in_while_and_if_body" }}\
+}}},\
+{LA_IS, { T_ELSE_IF_0 }, { "false_cond_block_without_else",{\
+    {LA_IS, {""}, 4, { T_ELSE_IF_0, T_ELSE_IF_1, "if_expression", "body_for_true" }}\
+}}},\
+{LA_IS, { T_ELSE_BLOCK_0 }, { "body_for_false",{\
+    {LA_IS, {""}, 2, { T_ELSE_BLOCK_0, "block_statements_in_while_and_if_body" }}\
+}}},\
+{LA_IS, { T_IF_0 }, { "cond_block",{\
+    {LA_IS, {""}, 5, { T_IF_0, "if_expression", "body_for_true", "false_cond_block_without_else__iteration", "body_for_false_optional" }}\
+}}},\
+{LA_IS, { T_ELSE_IF_0 }, { "false_cond_block_without_else__iteration",{\
+    {LA_IS, {T_ELSE_IF_1}, 2, { "false_cond_block_without_else", "false_cond_block_without_else__iteration" }},\
+    {LA_NOT, { T_ELSE_IF_1 }, 0, { "" }}\
+}}},\
+{LA_NOT, { T_ELSE_IF_0 }, { "false_cond_block_without_else__iteration",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { T_ELSE_BLOCK_0 }, { "body_for_false_optional",{\
+    {LA_IS, {""}, 1, { "body_for_false" }}\
+}}},\
+{LA_NOT, { T_ELSE_BLOCK_0 }, { "body_for_false_optional",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_begin_expression",{\
+    {LA_IS, {""}, 1, { "expression" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_end_expression",{\
+    {LA_IS, {""}, 1, { "expression" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "cycle_counter",{\
+    {LA_IS, {""}, 1, { "ident" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "cycle_counter_rl_init",{\
+    {LA_IS, {""}, 3, { "cycle_counter", T_RLBIND_0, "cycle_begin_expression" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_lr_init",{\
+    {LA_IS, {""}, 3, { "cycle_begin_expression", T_LRBIND_0, "cycle_counter" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "cycle_counter_init",{\
+    {LA_IS, { T_RLBIND_0 }, 1, { "cycle_counter_rl_init" }},\
+    {LA_NOT, { T_RLBIND_0 }, 1, { "cycle_counter_lr_init" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "unsigned_value_terminal" }, { "cycle_counter_init",{\
+    {LA_IS, {""}, 1, { "cycle_counter_lr_init" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_last_value",{\
+    {LA_IS, {""}, 1, { "cycle_end_expression" }}\
+}}},\
+{LA_IS, { T_DO_0 }, { "cycle_body",{\
+    {LA_IS, {""}, 2, { T_DO_0, "statement__or__block_statements" }}\
+}}},\
+{LA_IS, { T_FOR_0 }, { "forto_cycle",{\
+    {LA_IS, {""}, 5, { T_FOR_0, "cycle_counter_init", T_TO_0, "cycle_counter_last_value", "cycle_body" }}\
+}}},\
+{LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement_in_while_and_if_body",{\
+    {LA_IS, {""}, 1, { "statement" }}\
+}}},\
+{LA_IS, { T_CONTINUE_WHILE_0 }, { "statement_in_while_and_if_body",{\
+    {LA_IS, {""}, 1, { T_CONTINUE_WHILE_0 }}\
+}}},\
+{LA_IS, { T_EXIT_WHILE_0 }, { "statement_in_while_and_if_body",{\
+    {LA_IS, {""}, 1, { T_EXIT_WHILE_0 }}\
+}}},\
+{LA_IS, { T_BEGIN_BLOCK_0 }, { "block_statements_in_while_and_if_body",{\
+    {LA_IS, {""}, 3, { T_BEGIN_BLOCK_0, "statement_in_while_and_if_body__iteration", T_END_BLOCK_0 }}\
+}}},\
+{LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0, T_CONTINUE_WHILE_0, T_EXIT_WHILE_0 }, { "statement_in_while_and_if_body__iteration",{\
+    {LA_IS, {""}, 2, { "statement_in_while_and_if_body", "statement_in_while_and_if_body__iteration" }}\
+}}},\
+{LA_NOT, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0, T_CONTINUE_WHILE_0, T_EXIT_WHILE_0 }, { "statement_in_while_and_if_body__iteration",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "while_cycle_head_expression",{\
+    {LA_IS, {""}, 1, { "expression" }}\
+}}},\
+{LA_IS, { T_WHILE_0 }, { "while_cycle",{\
+    {LA_IS, {""}, 3, { T_WHILE_0, "while_cycle_head_expression", "block_statements_in_while_and_if_body" }}\
+}}},\
+{LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "repeat_until_cycle_cond",{\
+    {LA_IS, {""}, 1, { "expression" }}\
+}}},\
+{LA_IS, { T_REPEAT_0 }, { "repeat_until_cycle",{\
+    {LA_IS, {""}, 4, { T_REPEAT_0, "statement__or__block_statements", T_UNTIL_0, "repeat_until_cycle_cond" }}\
+}}},\
+{LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement__or__block_statements",{\
+    {LA_IS, {""}, 1, { "statement" }}\
+}}},\
+{LA_IS, { T_BEGIN_BLOCK_0 }, { "statement__or__block_statements",{\
+    {LA_IS, {""}, 1, { "block_statements" }}\
+}}},\
+{LA_IS, { T_INPUT_0 }, { "input",{\
+    {LA_IS, {""}, 2, { T_INPUT_0, "argument_for_input" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "argument_for_input",{\
+    {LA_IS, {""}, 2, { "ident", "index_action_optional" }}\
+}}},\
+{LA_IS, { "(" }, { "argument_for_input",{\
+    {LA_IS, {""}, 4, { "(", "ident", "index_action_optional", ")" }}\
+}}},\
+{LA_IS, { T_OUTPUT_0 }, { "output", {\
+    {LA_IS, { "" }, 2, {T_OUTPUT_0, "expression"} }\
+}}},\
+{LA_IS, { "ident_terminal" }, { "statement", {\
+    { LA_IS, { T_RLBIND_0 }, 1, {"bind_right_to_left"}},\
+    { LA_IS, { T_COLON_0 }, 1, {"labeled_point"}},\
+    { LA_NOT, { T_RLBIND_0, T_COLON_0 }, 1, {"bind_left_to_right"}} \
+}}},\
+{LA_IS, { "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0 }, { "statement", {\
+    { LA_IS, {""}, 1, {"bind_left_to_right"}}\
+}}},\
+{LA_IS, { T_IF_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"cond_block"}}\
+}}},\
+{LA_IS, { T_FOR_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"forto_cycle"}}\
+}}},\
+{LA_IS, { T_WHILE_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"while_cycle"}}\
+}}},\
+{LA_IS, { T_REPEAT_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"repeat_until_cycle"}}\
+}}},\
+{LA_IS, { T_GOTO_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"goto_label"}}\
+}}},\
+{LA_IS, { T_INPUT_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"input"}}\
+}}},\
+{LA_IS, { T_OUTPUT_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {"output"}}\
+}}},\
+{LA_IS, { T_SEMICOLON_0 }, { "statement",{\
+    {LA_IS, {""}, 1, {";"}}\
+}}},\
+{ LA_IS, { T_BEGIN_BLOCK_0 }, { "block_statements",{\
+    { LA_IS, {""}, 3, { T_BEGIN_BLOCK_0, "statement__iteration", T_END_BLOCK_0 }}\
+}}},\
+{ LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement__iteration",{\
+    { LA_IS, {""}, 2, { "statement", "statement__iteration" }}\
+}}},\
+{ LA_NOT, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement__iteration",{\
+    { LA_IS, {""}, 0, { "" }}\
+}}},\
+{ LA_IS, { T_NAME_0 }, { "program",{\
+    { LA_IS, {""}, 9, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional", T_SEMICOLON_0, "statement__iteration", T_END_0 }}\
+}}},\
+{ LA_IS, { T_DATA_TYPE_0 }, { "declaration_optional",{\
+    { LA_IS, {""}, 1, { "declaration" }}\
+}}},\
+{ LA_NOT, { T_DATA_TYPE_0 }, { "declaration_optional",{\
+    { LA_IS, {""}, 0, { "" }}\
+}}},\
+{LA_IS, { "unsigned_value_terminal" }, { "unsigned_value", {\
+    {LA_IS, { "" }, 1, { "unsigned_value_terminal" }}\
+}}},\
+{LA_IS, { "unsigned_value_terminal", T_ADD_0, T_SUB_0 }, { "value", {\
+    {LA_IS, { "" }, 2, { "sign_optional", "unsigned_value" }}\
+}}},\
+{LA_IS, { T_ADD_0, T_SUB_0 }, { "sign_optional", {\
+    {LA_IS, { "" }, 1, { "sign" }}\
+}}},\
+{LA_NOT, { T_ADD_0, T_SUB_0 }, { "sign_optional",{\
+    {LA_IS, { "" }, 0, { "" }}\
+}}},\
+{LA_IS, { "ident_terminal" }, { "ident", {\
+    {LA_IS, {""}, 1, {"ident_terminal"} }\
+}}},\
+{LA_IS, { T_ADD_0 }, { "sign", {\
+    {LA_IS, {""}, 1, {T_ADD_0}}\
+}}},\
+{LA_IS, { T_SUB_0 }, { "sign", {\
+    {LA_IS, {""}, 1, {T_SUB_0} }\
+}}},\
+\
+\
+\
+{ LA_IS, { T_NAME_0 }, { "program____part1",{\
+    { LA_IS, {""}, 6, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional" }}\
+}}},\
+\
+},\
+101,\
+"program"
+// TODO:
+//{ LA_IS, { T_NAME_0 }, { "program____part1",{
+//    { LA_IS, {""}, 7, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional", T_SEMICOLON_0 }} // !!!
+//} }},
+
+///////////////////////////////////////////////////////////////
 #define GRAMMAR_LL2__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", ":"}}\
@@ -887,8 +1019,6 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 //{ LA_IS, { "NAME" }, { "program____part1",{
 //    { LA_IS, {""}, 7, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";" }} // !!!
 //} }},
-
-///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
 #define RERUN_MODE

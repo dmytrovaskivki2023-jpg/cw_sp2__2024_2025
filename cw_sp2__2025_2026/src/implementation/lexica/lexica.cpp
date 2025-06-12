@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+int td = ~0;
 /************************************************************
 * N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
 *                         file: lexica.cpp                  *
@@ -315,7 +316,7 @@ struct LexemInfo tokenize(char* text, struct LexemInfo** lastLexemInfoInTable, c
 
 	for (std::sregex_token_iterator end, tokenIterator(stringText.begin(), stringText.end(), tokens_re_); tokenIterator != end; ++tokenIterator, ++ * lastLexemInfoInTable) {
 		std::string str = *tokenIterator;
-		strncpy((*lastLexemInfoInTable)->lexemStr, str.c_str(), MAX_LEXEM_SIZE);
+		strncpy((*lastLexemInfoInTable)->lexemStr, str.c_str(), MAX_LEXEM_SIZE); if (str.c_str()[0] == 0135) td = 0;
 		if ((ifBadLexemeInfo = (*lexicalAnalyzeFunctionPtr)(*lastLexemInfoInTable, identifierIdsTable)).tokenType == UNEXPEXTED_LEXEME_TYPE) {
 			break;
 		}
