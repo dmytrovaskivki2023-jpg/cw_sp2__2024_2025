@@ -157,6 +157,8 @@
     <ClCompile Include="src\implementation\generator\greater.cpp" />
     <ClCompile Include="src\implementation\generator\greater_or_equal.cpp" />
     <ClCompile Include="src\implementation\generator\if_then_block.cpp" />
+    <ClCompile Include="src\implementation\generator\index.cpp" />
+    <ClCompile Include="src\implementation\generator\index_to_value.cpp" />
     <ClCompile Include="src\implementation\generator\input.cpp" />
     <ClCompile Include="src\implementation\generator\less.cpp" />
     <ClCompile Include="src\implementation\generator\less_or_equal.cpp" />
@@ -210,6 +212,8 @@
     <ClInclude Include="src\include\generator\greater.h" />
     <ClInclude Include="src\include\generator\greater_or_equal.h" />
     <ClInclude Include="src\include\generator\if_then_block.h" />
+    <ClInclude Include="src\include\generator\index.h" />
+    <ClInclude Include="src\include\generator\index_to_value.h" />
     <ClInclude Include="src\include\generator\input.h" />
     <ClInclude Include="src\include\generator\less.h" />
     <ClInclude Include="src\include\generator\less_or_equal.h" />

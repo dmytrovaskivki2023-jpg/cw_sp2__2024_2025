@@ -141,6 +141,12 @@
     <ClCompile Include="src\implementation\generator\block.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\implementation\generator\index.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\generator\index_to_value.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\base_test_programs_2025\file1.k03" />
@@ -269,6 +275,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\generator\block.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\generator\index.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\generator\index_to_value.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
