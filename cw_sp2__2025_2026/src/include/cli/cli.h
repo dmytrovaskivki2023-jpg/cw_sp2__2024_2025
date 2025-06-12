@@ -30,7 +30,7 @@
 //#include "stdlib.h"
 //#include "string.h"
 
-#define DEFAULT_INPUT_FILENAME "../base_test_programs_2025/file3.k03" // TODO: move!
+#define DEFAULT_INPUT_FILENAME "../base_test_programs_2025/file1.k03" // TODO: move!
 
 extern unsigned long long int mode;
 extern char parameters[PARAMETERS_COUNT][MAX_PARAMETERS_SIZE];
