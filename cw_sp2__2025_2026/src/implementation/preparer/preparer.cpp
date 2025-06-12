@@ -19,7 +19,14 @@
 
 #define PRECEDENCE_MAX_LEVEL 100
 int precedenceLevel(char* lexemStr) {
-	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_NOT][0], MAX_LEXEM_SIZE)) {		
+	if (!strncmp(lexemStr, "INDEX", MAX_LEXEM_SIZE)) {
+		return PRECEDENCE_MAX_LEVEL - 2;
+	}
+	else if (!strncmp(lexemStr, "INDEX_TO_VALUE", MAX_LEXEM_SIZE)) {
+		return PRECEDENCE_MAX_LEVEL - 2;
+	}
+
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_NOT][0], MAX_LEXEM_SIZE)) {		
 		return PRECEDENCE_MAX_LEVEL - 3;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT][0], MAX_LEXEM_SIZE)) {		
@@ -93,7 +100,14 @@ int precedenceLevel(char* lexemStr) {
 }
 
 bool isLeftAssociative(char* lexemStr) {
-	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_AND][0], MAX_LEXEM_SIZE)) {	
+	if (!strncmp(lexemStr, "INDEX", MAX_LEXEM_SIZE)) {
+		return false;
+	}
+	else if (!strncmp(lexemStr, "INDEX_TO_VALUE", MAX_LEXEM_SIZE)) {
+		return false;
+	}
+
+	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_AND][0], MAX_LEXEM_SIZE)) {	
 		return true;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_AND][0], MAX_LEXEM_SIZE)) {	
@@ -342,6 +356,90 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 	return ~0;
 }
 
+void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLexemInfoInTable) {
+
+	if (lexemInfoInTable == NULL || tempLexemInfoInTable == NULL) {
+		printf("Error: no data for makePrePrepare.\n");
+		exit(0);
+	}
+
+	struct LexemInfo* firstLexemInfoInTable = lexemInfoInTable;
+	struct LexemInfo* firstTempLexemInfoInTable = tempLexemInfoInTable;
+	
+	for (/*lexemInfoInTable = firstLexemInfoInTable*/; lexemInfoInTable->lexemStr[0] != '\0'; ++lexemInfoInTable, ++tempLexemInfoInTable) {
+		*tempLexemInfoInTable = *lexemInfoInTable;
+		memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
+	}
+	*tempLexemInfoInTable = *lexemInfoInTable;
+	memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
+
+	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
+		//printf("%s = %s\n", lexemInfoInTable->lexemStr, tempLexemInfoInTable->lexemStr);
+		//printf("", );
+		//strncpy(lexemInfoInTable->lexemStr, tempLexemInfoInTable->lexemStr, MAX_LEXEM_SIZE);
+		//*lexemInfoInTable++ = *tempLexemInfoInTable;
+
+		//strncpy(this->lexemStr, lexemStr, MAX_LEXEM_SIZE);
+		//this->lexemId = lexemId;
+		//this->tokenType = tokenType;
+		//this->ifvalue = ifvalue;
+		//this->row = row;
+		//this->col = col;
+
+		//continue;
+		if (!strncmp(tempLexemInfoInTable->lexemStr, "]"/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+			*lexemInfoInTable = *tempLexemInfoInTable;
+			strcpy(lexemInfoInTable->lexemStr, ")"/*TODO: add to config.h*/);
+			++lexemInfoInTable;
+			continue;
+		}
+		if (!strncmp(tempLexemInfoInTable->lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+			bool bindDetect = false;
+			if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)) {
+				bindDetect = true;
+			}
+			else {
+				int openBracketCount = 1;
+				for (int tempLexemInfoInTableAddonScanIndex = 1; tempLexemInfoInTable[tempLexemInfoInTableAddonScanIndex].lexemStr[0] != '\0'; ++tempLexemInfoInTableAddonScanIndex) {
+					if (!strncmp(tempLexemInfoInTable[tempLexemInfoInTableAddonScanIndex].lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+						++openBracketCount;
+						continue;
+					}
+
+					if (!strncmp(tempLexemInfoInTable[tempLexemInfoInTableAddonScanIndex].lexemStr, "]"/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+						if (!--openBracketCount) {
+							if (!strncmp(tempLexemInfoInTable[tempLexemInfoInTableAddonScanIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)) {
+								bindDetect = true;
+							}
+							break;
+						}
+					}
+
+				}
+			}
+			*lexemInfoInTable = *tempLexemInfoInTable;
+			if (bindDetect) {
+				strcpy(lexemInfoInTable->lexemStr, "INDEX"/*TODO: add to config.h*/);
+				lexemInfoInTable->tokenType = KEYWORD_LEXEME_TYPE; //
+			}
+			else {
+				strcpy(lexemInfoInTable->lexemStr, "INDEX_TO_VALUE"/*TODO: add to config.h*/);
+				lexemInfoInTable->tokenType = KEYWORD_LEXEME_TYPE; //
+			}
+			++lexemInfoInTable;
+			
+			*lexemInfoInTable = *tempLexemInfoInTable;
+			strcpy(lexemInfoInTable->lexemStr, "("/*TODO: add to config.h*/);
+			++lexemInfoInTable;
+		}
+		else *lexemInfoInTable++ = *tempLexemInfoInTable;
+	}
+
+	for (tempLexemInfoInTable = firstTempLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
+		memset(tempLexemInfoInTable, '\0', sizeof(*tempLexemInfoInTable));
+	}
+}
+
 void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	unsigned long long int nullStatementIndex = 0;
 	unsigned long long int passMakePrepareElementCount = getDataSectionLastLexemIndex(*lastLexemInfoInTable, &grammar);
@@ -349,6 +447,8 @@ void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexe
 		printf("Error: bad section!\r\n");
 		exit(0);
 	}
+
+	makePrePrepare(*lastLexemInfoInTable + passMakePrepareElementCount, *lastTempLexemInfoInTable);
 
 //	*lastLexemInfoInTable += lastDataSectionLexemIndex;
 //	while (lastDataSectionLexemIndex--) {

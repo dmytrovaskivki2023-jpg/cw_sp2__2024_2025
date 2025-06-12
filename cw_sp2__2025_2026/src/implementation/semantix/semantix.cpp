@@ -152,6 +152,29 @@ int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, 
 				){						
 				break;					
 			}
+			else if (!strncmp(lexemesInfoTable[lexemIndex + 1].lexemStr, "[", MAX_LEXEM_SIZE)) {
+				bool bindDetect = false;
+				int openBracketCount = 1;
+				for (int tempLexemInfoInTableAddonScanIndex = lexemIndex + 2; lexemesInfoTable[tempLexemInfoInTableAddonScanIndex].lexemStr[0] != '\0'; ++tempLexemInfoInTableAddonScanIndex) {
+					if (!strncmp(lexemesInfoTable[tempLexemInfoInTableAddonScanIndex].lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+						++openBracketCount;
+						continue;
+					}
+
+					if (!strncmp(lexemesInfoTable[tempLexemInfoInTableAddonScanIndex].lexemStr, "]"/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+						if (!--openBracketCount) {
+							if (!strncmp(lexemesInfoTable[tempLexemInfoInTableAddonScanIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)) {
+								bindDetect = true;
+							}
+							break;
+						}
+					}
+
+				}
+				if (bindDetect) {
+					break;
+				}
+			}
 
 			printf("Uninitialized: %s\r\n", identifierIdsTable[index]);			
 			*errorMessagesPtrToLastBytePtr += snprintf(*errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + strlen("Uninitialized: #\r\n"), "Uninitialized: %s\r\n", identifierIdsTable[index]);

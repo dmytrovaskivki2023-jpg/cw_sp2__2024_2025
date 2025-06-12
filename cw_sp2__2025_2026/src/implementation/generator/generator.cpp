@@ -528,6 +528,8 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 #include "../../../src/include/generator/greater_or_equal.h"
 #include "../../../src/include/generator/rlbind.h"
 #include "../../../src/include/generator/lrbind.h"
+#include "../../../src/include/generator/index.h"
+#include "../../../src/include/generator/index_to_value.h"
 #include "../../../src/include/generator/goto_label.h"
 #include "../../../src/include/generator/if_then_block.h"
 #include "../../../src/include/generator/else_if_then_block.h"
@@ -730,6 +732,9 @@ unsigned char* makeCode(struct LexemInfo** lastLexemInfoInTable/*TODO:...*/, uns
 		//if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = makePutCode(lastLexemInfoInTable, currBytePtr);
 		RLBIND_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 		LRBIND_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+
+		INDEX_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
+		INDEX_TO_VALUE_CODER(lastLexemInfoInTable_, lastLexemInfoInTable, currBytePtr, generatorMode, NULL);
 
 		///* (1) Ignore phase*/if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = makeSemicolonAfterNonContextCode(lastLexemInfoInTable, currBytePtr);
 		///* (2) Ignore phase*/if (lastLexemInfoInTable_ == *lastLexemInfoInTable) currBytePtr = makeSemicolonIgnoreContextCode(lastLexemInfoInTable, currBytePtr);
