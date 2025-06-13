@@ -229,7 +229,7 @@
 #define LA_IS  2
 #define LA_NOT 4 
 
-#define GRAMMAR_LL2__2025_ {\
+#define GRAMMAR_LL2__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", T_COLON_0}}\
 }}},\
@@ -685,7 +685,7 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, NULL_STATEMENT)\
 extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT];
 
 ///////////////////////////////////////////////////////////////
-#define GRAMMAR_LL2__2025 {\
+#define GRAMMAR_LL2_ORIGINAL__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", ":"}}\
 }}},\
