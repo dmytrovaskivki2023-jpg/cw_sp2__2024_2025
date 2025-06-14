@@ -229,6 +229,21 @@
 #define LA_IS  2
 #define LA_NOT 4 
 
+//#define USE_REVERSE_ASSIGNMENT
+//
+//#ifdef USE_REVERSE_ASSIGNMENT
+#ifdef USE_REVERSE_ASSIGNMENT
+#define IF_USE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
+#define IF_NONUSE_REVERSE_ASSIGNMENT(...)
+#else
+#define IF_USE_REVERSE_ASSIGNMENT(...)
+#define IF_NONUSE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
+#endif
+
+//#define IS_REVERSE_ASSIGNMENT 1
+//#else
+//#define IS_REVERSE_ASSIGNMENT 0
+//#endif
 #define GRAMMAR_LL2__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", T_COLON_0}}\
@@ -351,12 +366,16 @@
 {LA_IS, { "(" }, { "group_expression",{\
     {LA_IS, {""}, 3, { "(", "expression", ")" }}\
 }}},\
+IF_NONUSE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "bind_right_to_left",{\
     {LA_IS, {""}, 4, { "ident", "index_action_optional", T_RLBIND_0, "expression" }}\
 }}},\
+)\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "bind_left_to_right",{\
     {LA_IS, {""}, 4, { "expression", T_LRBIND_0, "ident", "index_action_optional" }}\
 }}},\
+)\
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "if_expression",{\
     {LA_IS, {""}, 1, { "expression" }}\
 }}},\
@@ -465,13 +484,15 @@
     {LA_IS, { "" }, 2, {T_OUTPUT_0, "expression"} }\
 }}},\
 {LA_IS, { "ident_terminal" }, { "statement", {\
-    { LA_IS, { T_RLBIND_0 }, 1, {"bind_right_to_left"}},\
+    IF_NONUSE_REVERSE_ASSIGNMENT({ LA_IS, { T_RLBIND_0, "[" }, 1, {"bind_right_to_left"}},)\
     { LA_IS, { T_COLON_0 }, 1, {"labeled_point"}},\
-    { LA_NOT, { T_RLBIND_0, T_COLON_0 }, 1, {"bind_left_to_right"}} \
+    IF_USE_REVERSE_ASSIGNMENT({ LA_NOT, { T_RLBIND_0, T_COLON_0 }, 1, {"bind_left_to_right"}})\
 }}},\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0 }, { "statement", {\
     { LA_IS, {""}, 1, {"bind_left_to_right"}}\
 }}},\
+)\
 {LA_IS, { T_IF_0 }, { "statement",{\
     {LA_IS, {""}, 1, {"cond_block"}}\
 }}},\
@@ -683,6 +704,11 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, NULL_STATEMENT)\
 #endif
 
 extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT];
+
+#define RERUN_MODE
+
+//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
+#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
 
 ///////////////////////////////////////////////////////////////
 #define GRAMMAR_LL2_ORIGINAL__2025 {\
@@ -1006,8 +1032,3 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 //    { LA_IS, {""}, 7, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";" }} // !!!
 //} }},
 ///////////////////////////////////////////////////////////////
-
-#define RERUN_MODE
-
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
-#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
