@@ -6,20 +6,33 @@
 *************************************************************/
 
 #include "../include/def.h"
-//#define LEXICAL_ANALISIS_MODE 1
-//#define SEMANTIC_ANALISIS_MODE 2
-//#define FULL_COMPILER_MODE 4
-
-//#define DEBUG_MODE 512
-
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE | SYNTAX_ANALISIS_MODE | SEMANTIC_ANALISIS_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
 
 
 #define TOKENS_RE         ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
 #define KEYWORDS_RE       ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|NAME|DATA|BODY|END|BREAK|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
 #define IDENTIFIERS_RE    "_[A-Z][A-Z][A-Z][A-Z][A-Z][A-Z][A-Z]"
 #define UNSIGNEDVALUES_RE "0|[1-9][0-9]*"
+
+
+//#define USE_REVERSE_ASSIGNMENT
+#define USE_COMPARE_WITH_EQUAL
+
+
+#ifdef USE_REVERSE_ASSIGNMENT
+#define IF_USE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
+#define IF_NONUSE_REVERSE_ASSIGNMENT(...)
+#else
+#define IF_USE_REVERSE_ASSIGNMENT(...)
+#define IF_NONUSE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
+#endif
+
+#ifdef USE_COMPARE_WITH_EQUAL
+#define IF_USE_COMPARE_WITH_EQUAL(...) __VA_ARGS__
+#define IF_NONUSE_COMPARE_WITH_EQUAL(...)
+#else
+#define IF_USE_COMPARE_WITH_EQUAL(...)
+#define IF_NONUSE_COMPARE_WITH_EQUAL(...) __VA_ARGS__
+#endif
 
 
 #define T_BEGIN_BLOCK_0 "{"
@@ -229,21 +242,7 @@
 #define LA_IS  2
 #define LA_NOT 4 
 
-//#define USE_REVERSE_ASSIGNMENT
-//
-//#ifdef USE_REVERSE_ASSIGNMENT
-#ifdef USE_REVERSE_ASSIGNMENT
-#define IF_USE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
-#define IF_NONUSE_REVERSE_ASSIGNMENT(...)
-#else
-#define IF_USE_REVERSE_ASSIGNMENT(...)
-#define IF_NONUSE_REVERSE_ASSIGNMENT(...) __VA_ARGS__
-#endif
 
-//#define IS_REVERSE_ASSIGNMENT 1
-//#else
-//#define IS_REVERSE_ASSIGNMENT 0
-//#endif
 #define GRAMMAR_LL2__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", T_COLON_0}}\
@@ -308,12 +307,22 @@
 { LA_IS, { T_NOT_EQUAL_0 }, { "binary_operator",{\
     { LA_IS, {""}, 1, { T_NOT_EQUAL_0 }}\
 }}},\
+IF_NONUSE_COMPARE_WITH_EQUAL(\
+{ LA_IS, { T_LESS_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_LESS_0 }}\
+}}},\
+{ LA_IS, { T_GREATER_0 }, { "binary_operator",{\
+    { LA_IS, {""}, 1, { T_GREATER_0 }}\
+}}},\
+)\
+IF_USE_COMPARE_WITH_EQUAL(\
 { LA_IS, { T_LESS_OR_EQUAL_0 }, { "binary_operator",{\
     { LA_IS, {""}, 1, { T_LESS_OR_EQUAL_0 }}\
 }}},\
 { LA_IS, { T_GREATER_OR_EQUAL_0 }, { "binary_operator",{\
     { LA_IS, {""}, 1, { T_GREATER_OR_EQUAL_0 }}\
 }}},\
+)\
 { LA_IS, { T_ADD_0 }, { "binary_operator",{\
     { LA_IS, {""}, 1, { T_ADD_0 }}\
 }}},\
@@ -329,9 +338,16 @@
 { LA_IS, { T_MOD_0 }, { "binary_operator",{\
     { LA_IS, {""}, 1, { T_MOD_0 }}\
 }}},\
+IF_NONUSE_COMPARE_WITH_EQUAL(\
+{ LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_0, T_GREATER_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action",{\
+    { LA_IS, {""}, 2, { "binary_operator", "expression" }}\
+}}},\
+)\
+IF_USE_COMPARE_WITH_EQUAL(\
 { LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action",{\
     { LA_IS, {""}, 2, { "binary_operator", "expression" }}\
 }}},\
+)\
 {LA_IS, { "(" }, { "left_expression",{\
     {LA_IS, { "" }, 1, { "group_expression" }}\
 }}},\
@@ -357,12 +373,22 @@
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "expression",{\
     {LA_IS, {""}, 2, { "left_expression", "binary_action__iteration" }}\
 }}},\
+IF_NONUSE_COMPARE_WITH_EQUAL(\
+{LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_0, T_GREATER_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
+    {LA_IS, {""}, 2, { "binary_action", "binary_action__iteration" }}\
+}}},\
+{LA_NOT, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_0, T_GREATER_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
+    {LA_IS, {""}, 0, { "" }}\
+}}},\
+)\
+IF_USE_COMPARE_WITH_EQUAL(\
 {LA_IS, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
     {LA_IS, {""}, 2, { "binary_action", "binary_action__iteration" }}\
 }}},\
 {LA_NOT, { T_AND_0, T_OR_0, T_EQUAL_0, T_NOT_EQUAL_0, T_LESS_OR_EQUAL_0, T_GREATER_OR_EQUAL_0, T_ADD_0, T_SUB_0, T_MUL_0, T_DIV_0, T_MOD_0 }, { "binary_action__iteration",{\
     {LA_IS, {""}, 0, { "" }}\
 }}},\
+)\
 {LA_IS, { "(" }, { "group_expression",{\
     {LA_IS, {""}, 3, { "(", "expression", ")" }}\
 }}},\
@@ -413,19 +439,25 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "cycle_counter",{\
     {LA_IS, {""}, 1, { "ident" }}\
 }}},\
+IF_NONUSE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "cycle_counter_rl_init",{\
     {LA_IS, {""}, 3, { "cycle_counter", T_RLBIND_0, "cycle_begin_expression" }}\
 }}},\
+)\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_lr_init",{\
     {LA_IS, {""}, 3, { "cycle_begin_expression", T_LRBIND_0, "cycle_counter" }}\
 }}},\
+)\
 {LA_IS, { "ident_terminal" }, { "cycle_counter_init",{\
-    {LA_IS, { T_RLBIND_0 }, 1, { "cycle_counter_rl_init" }},\
-    {LA_NOT, { T_RLBIND_0 }, 1, { "cycle_counter_lr_init" }}\
+    IF_NONUSE_REVERSE_ASSIGNMENT({LA_IS, { T_RLBIND_0 }, 1, { "cycle_counter_rl_init" }})\
+    IF_USE_REVERSE_ASSIGNMENT({LA_NOT, { T_RLBIND_0 }, 1, { "cycle_counter_lr_init" }})\
 }}},\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "unsigned_value_terminal" }, { "cycle_counter_init",{\
     {LA_IS, {""}, 1, { "cycle_counter_lr_init" }}\
 }}},\
+)\
 {LA_IS, { "(", T_NOT_0, T_ADD_0, T_SUB_0, "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_last_value",{\
     {LA_IS, {""}, 1, { "cycle_end_expression" }}\
 }}},\
@@ -486,7 +518,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "statement", {\
     IF_NONUSE_REVERSE_ASSIGNMENT({ LA_IS, { T_RLBIND_0, "[" }, 1, {"bind_right_to_left"}},)\
     { LA_IS, { T_COLON_0 }, 1, {"labeled_point"}},\
-    IF_USE_REVERSE_ASSIGNMENT({ LA_NOT, { T_RLBIND_0, T_COLON_0 }, 1, {"bind_left_to_right"}})\
+    IF_USE_REVERSE_ASSIGNMENT({ LA_NOT, { T_COLON_0 }, 1, {"bind_left_to_right"}})\
 }}},\
 IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0 }, { "statement", {\
@@ -833,12 +865,16 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 {LA_IS, { "(" }, { "group_expression",{\
     {LA_IS, {""}, 3, { "(", "expression", ")" }}\
 }}},\
+IF_NONUSE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "bind_right_to_left",{\
     {LA_IS, {""}, 4, { "ident", "index_action_optional", ":=", "expression" }}\
 }}},\
+)\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", "NOT", "+", "-", "ident_terminal", "unsigned_value_terminal" }, { "bind_left_to_right",{\
     {LA_IS, {""}, 4, { "expression", "=:", "ident", "index_action_optional" }}\
 }}},\
+)\
 {LA_IS, { "(", "NOT", "+", "-", "ident_terminal", "unsigned_value_terminal" }, { "if_expression",{\
     {LA_IS, {""}, 1, { "expression" }}\
 }}},\
@@ -876,19 +912,25 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 {LA_IS, { "ident_terminal" }, { "cycle_counter",{\
     {LA_IS, {""}, 1, { "ident" }}\
 }}},\
+IF_NONUSE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "ident_terminal" }, { "cycle_counter_rl_init",{\
     {LA_IS, {""}, 3, { "cycle_counter", ":=", "cycle_begin_expression" }}\
 }}},\
+)\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", "NOT", "+", "-", "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_lr_init",{\
     {LA_IS, {""}, 3, { "cycle_begin_expression", "=:", "cycle_counter" }}\
 }}},\
+)\
 {LA_IS, { "ident_terminal" }, { "cycle_counter_init",{\
-    {LA_IS, {":="}, 1, { "cycle_counter_rl_init" }},\
-    {LA_NOT, { ":=" }, 1, { "cycle_counter_lr_init" }}\
+    IF_NONUSE_REVERSE_ASSIGNMENT({LA_IS, {":="}, 1, { "cycle_counter_rl_init" }})\
+    IF_USE_REVERSE_ASSIGNMENT({LA_NOT, { ":=" }, 1, { "cycle_counter_lr_init" }})\
 }}},\
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", "NOT", "+", "-", "unsigned_value_terminal" }, { "cycle_counter_init",{\
     {LA_IS, {""}, 1, { "cycle_counter_lr_init" }}\
 }}},\
+)\
 {LA_IS, { "(", "NOT", "+", "-", "ident_terminal", "unsigned_value_terminal" }, { "cycle_counter_last_value",{\
     {LA_IS, {""}, 1, { "cycle_end_expression" }}\
 }}},\
@@ -947,13 +989,15 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {LA_IS, { "" }, 2, {"PUT", "expression"} }\
 }}},\
 {LA_IS, { "ident_terminal" }, { "statement", {\
-    { LA_IS, { ":=" }, 1, {"bind_right_to_left"}},\
+    IF_NONUSE_REVERSE_ASSIGNMENT({ LA_IS, { ":=", "[" }, 1, {"bind_right_to_left"}},)\
     { LA_IS, { ":" }, 1, {"labeled_point"}},\
-    { LA_NOT, { ":=", ":" }, 1, {"bind_left_to_right"}} \
-}}},\
+    IF_USE_REVERSE_ASSIGNMENT({ LA_NOT, { ":" }, 1, {"bind_left_to_right"}})\
+} }}, \
+IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(", "NOT", "unsigned_value_terminal", "+", "-" }, { "statement", {\
     { LA_IS, {""}, 1, {"bind_left_to_right"}}\
-}}},\
+} }}, \
+)\
 {LA_IS, { "IF" }, { "statement",{\
     {LA_IS, {""}, 1, {"cond_block"}}\
 }}},\
