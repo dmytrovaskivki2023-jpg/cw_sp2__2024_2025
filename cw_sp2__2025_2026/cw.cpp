@@ -65,10 +65,31 @@ int main(int argc, char* argv[]) {
 	char* text;
 	size_t sourceSize = loadSource(&text, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
 	if (!sourceSize) {
-		printf("Empty source . . .");
-		printf("Press Enter to exit . . .");
-		getchar();
+		printf("Empty source . . .\r\n");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (!_getcwd(path, PATH_NAME_LENGH))
@@ -100,9 +121,30 @@ int main(int argc, char* argv[]) {
 		int commentRemoverResult = commentRemover(text, "#*", "*#");
 		if (commentRemoverResult) {
 			printf("Comment remover return %d\r\n", commentRemoverResult);
-			printf("Press Enter to exit . . .");
 			(void)getchar();
+			printf("\r\nPress Enter: ");
+			(void)getchar();
+#ifdef RERUN_MODE
+			if (mode & INTERACTIVE_MODE) {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				//(void)getchar();
+				printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+				printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+				char valueByGetChar = getchar();
+				if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+					system("CLS");
+					fflush(stdin);
+					fflush(stdout);
+					fflush(stderr);
+					system((std::string("\"") + argv[0] + "\"").c_str());
+				}
+			}
+#else
 			return 0;
+#endif
 		}
 		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
 			printf("Source after comment removing:\r\n");
@@ -121,9 +163,30 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				printLexemesToFile(lexemesInfoTable, 1, parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
 			}
-			printf("Press Enter to exit . . .");
 			(void)getchar();
+			printf("\r\nPress Enter: ");
+			(void)getchar();
+#ifdef RERUN_MODE
+			if (mode & INTERACTIVE_MODE) {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				//(void)getchar();
+				printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+				printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+				char valueByGetChar = getchar();
+				if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+					system("CLS");
+					fflush(stdin);
+					fflush(stdout);
+					fflush(stderr);
+					system((std::string("\"") + argv[0] + "\"").c_str());
+				}
+			}
+#else
 			return 0;
+#endif
 		}
 		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
 			printLexemes(lexemesInfoTable, 0);
@@ -165,7 +228,30 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				writeBytesToFile(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"AST build failed.", strlen("AST build failed."));
 			}
+			(void)getchar();
+			printf("\r\nPress Enter: ");
+			(void)getchar();
+#ifdef RERUN_MODE
+			if (mode & INTERACTIVE_MODE) {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				//(void)getchar();
+				printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+				printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+				char valueByGetChar = getchar();
+				if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+					system("CLS");
+					fflush(stdin);
+					fflush(stdout);
+					fflush(stderr);
+					system((std::string("\"") + argv[0] + "\"").c_str());
+				}
+			}
+#else
 			return 0;
+#endif
 		}
 
 		if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
@@ -180,8 +266,30 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		printf("\r\ncw terminated.");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
@@ -201,7 +309,30 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				writeBytesToFile(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));
 			}
+			(void)getchar();
+			printf("\r\nPress Enter: ");
+			(void)getchar();
+#ifdef RERUN_MODE
+			if (mode & INTERACTIVE_MODE) {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				//(void)getchar();
+				printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+				printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+				char valueByGetChar = getchar();
+				if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+					system("CLS");
+					fflush(stdin);
+					fflush(stdout);
+					fflush(stderr);
+					system((std::string("\"") + argv[0] + "\"").c_str());
+				}
+			}
+#else
 			return 0;
+#endif
 		}
 
 		if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
@@ -215,8 +346,30 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		printf("\r\ncw terminated.");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
@@ -257,8 +410,30 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		printf("\r\ncw terminated.");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
@@ -364,8 +539,30 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		printf("\r\ncw terminated.");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
@@ -437,8 +634,30 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		printf("\r\ncw terminated.");
+		(void)getchar();
+		printf("\r\nPress Enter: ");
+		(void)getchar();
+#ifdef RERUN_MODE
+		if (mode & INTERACTIVE_MODE) {
+			system("CLS");
+			fflush(stdin);
+			fflush(stdout);
+			fflush(stderr);
+			//(void)getchar();
+			printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+			printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+			char valueByGetChar = getchar();
+			if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+				system("CLS");
+				fflush(stdin);
+				fflush(stdout);
+				fflush(stderr);
+				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+		}
+#else
 		return 0;
+#endif
 	}
 
 	if (mode & INTERACTIVE_MODE || mode & RUN_BINARY) {
