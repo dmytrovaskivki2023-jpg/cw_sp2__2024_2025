@@ -190,7 +190,11 @@ void makePrepare4IdentifierOrValue(struct LexemInfo** lastLexemInfoInTable, stru
 	if ((*lastLexemInfoInTable)->tokenType == IDENTIFIER_LEXEME_TYPE || (*lastLexemInfoInTable)->tokenType == VALUE_LEXEME_TYPE) {
 		int prevNonOpenParenthesesIndex = -1;
 		for (; !strncmp((*lastLexemInfoInTable)[prevNonOpenParenthesesIndex].lexemStr, "(", MAX_LEXEM_SIZE); --prevNonOpenParenthesesIndex);
-		if (!strncmp((*lastLexemInfoInTable)[1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)
+		if (!strncmp((*lastLexemInfoInTable)[1].lexemStr, "INDEX", MAX_LEXEM_SIZE)
+			||
+			!strncmp((*lastLexemInfoInTable)[1].lexemStr, "INDEX_TO_VALUE", MAX_LEXEM_SIZE)
+			||
+			!strncmp((*lastLexemInfoInTable)[1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)
 			||
 			!strncmp((*lastLexemInfoInTable)[-1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)
 			||
