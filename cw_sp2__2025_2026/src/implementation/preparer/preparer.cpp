@@ -402,6 +402,9 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 			if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)) {
 				bindDetect = true;
 			}
+			else if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)) {
+				bindDetect = true;
+			}
 			else {
 				int openBracketCount = 1;
 				for (int tempLexemInfoInTableAddonScanIndex = 1; tempLexemInfoInTable[tempLexemInfoInTableAddonScanIndex].lexemStr[0] != '\0'; ++tempLexemInfoInTableAddonScanIndex) {
