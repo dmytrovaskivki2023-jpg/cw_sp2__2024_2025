@@ -278,8 +278,8 @@ struct LexemInfo* syntaxLL2(Grammar* grammar, char * ruleName, struct LexemInfo*
                 //exit(0);
                 if (badLexemInfo != NULL) {
                     *badLexemInfo = currTapeElement;
-                    return currTapeElement;
                 }
+                return currTapeElement;
             }
 
             ASTNode* parent = stackPop();
@@ -337,11 +337,10 @@ int syntaxAnalyze(struct LexemInfo* lexemInfoTable, Grammar* grammar, char synta
     else {
         unexpectedLexemfailedTerminal = lastLexemInfo; // TODO: ...
         printf("Parse failed.\r\n");
-        printf("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+        printf("    (The predicted terminal does not match the expected one.\r\n    Unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
         errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed.\r\n");
-        errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Possible unexpected terminal \"#\" on line # at position #.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
+        errorMessagesPtrToLastBytePtr += snprintf(errorMessagesPtrToLastBytePtr, MAX_LEXEM_SIZE + 128 + strlen("    (The predicted terminal does not match the expected one.\r\n    Unexpected terminal \"#\" on line # at position #.)\r\n"), "    (The predicted terminal does not match the expected one.\r\n    Unexpected terminal \"%s\" on line %lld at position %lld.)\r\n", unexpectedLexemfailedTerminal->lexemStr, unexpectedLexemfailedTerminal->row, unexpectedLexemfailedTerminal->col);
         //exit(0);
-        extern int td;
-        return ~SUCCESS_STATE & td;
+        return ~SUCCESS_STATE;
     }
 }
