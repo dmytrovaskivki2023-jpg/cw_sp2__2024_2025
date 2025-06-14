@@ -86,6 +86,9 @@ int main(int argc, char* argv[]) {
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
 			}
+			else {
+				return 0;
+			}
 		}
 #else
 		return 0;
@@ -141,6 +144,9 @@ int main(int argc, char* argv[]) {
 					fflush(stderr);
 					system((std::string("\"") + argv[0] + "\"").c_str());
 				}
+				else {
+					return 0;
+				}
 			}
 #else
 			return 0;
@@ -182,6 +188,9 @@ int main(int argc, char* argv[]) {
 					fflush(stdout);
 					fflush(stderr);
 					system((std::string("\"") + argv[0] + "\"").c_str());
+				}
+				else {
+					return 0;
 				}
 			}
 #else
@@ -248,6 +257,9 @@ int main(int argc, char* argv[]) {
 					fflush(stderr);
 					system((std::string("\"") + argv[0] + "\"").c_str());
 				}
+				else {
+					return 0;
+				}
 			}
 #else
 			return 0;
@@ -285,6 +297,9 @@ int main(int argc, char* argv[]) {
 				fflush(stdout);
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+			else {
+				return 0;
 			}
 		}
 #else
@@ -329,6 +344,9 @@ int main(int argc, char* argv[]) {
 					fflush(stderr);
 					system((std::string("\"") + argv[0] + "\"").c_str());
 				}
+				else {
+					return 0;
+				}
 			}
 #else
 			return 0;
@@ -365,6 +383,9 @@ int main(int argc, char* argv[]) {
 				fflush(stdout);
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+			else {
+				return 0;
 			}
 		}
 #else
@@ -429,6 +450,9 @@ int main(int argc, char* argv[]) {
 				fflush(stdout);
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+			else {
+				return 0;
 			}
 		}
 #else
@@ -559,6 +583,9 @@ int main(int argc, char* argv[]) {
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
 			}
+			else {
+				return 0;
+			}
 		}
 #else
 		return 0;
@@ -653,6 +680,9 @@ int main(int argc, char* argv[]) {
 				fflush(stdout);
 				fflush(stderr);
 				system((std::string("\"") + argv[0] + "\"").c_str());
+			}
+			else {
+				return 0;
 			}
 		}
 #else
