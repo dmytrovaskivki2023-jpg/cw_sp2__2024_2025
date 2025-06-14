@@ -27,7 +27,8 @@ namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 
 #define SAME_RULE(RULE) ((RULE) | (RULE))
-
+//#define USE_REVERSE_ASSIGNMENT
+#define USE_COMPARE_WITH_EQUAL
 template <typename Iterator>
 struct cwgrammar : qi::grammar<Iterator> {
     cwgrammar(std::ostringstream& error_stream) : cwgrammar::base_type(program), error_stream_(error_stream) {
@@ -44,7 +45,11 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         unary_operator = tokenNOT | tokenMINUS | tokenPLUS;
         unary_operation = unary_operator >> expression;
+#ifdef USE_COMPARE_WITH_EQUAL
         binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
+#else
+        binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESS | tokenGREATER | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
+#endif
         binary_action = binary_operator >> expression;
         //
         left_expression = group_expression | unary_operation | ident >> -index_action | value;
@@ -52,8 +57,11 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         group_expression = tokenGROUPEXPRESSIONBEGIN >> expression >> tokenGROUPEXPRESSIONEND;
         //
-        bind_right_to_left = ident >> -index_action >> tokenRLBIND >> expression;
+#ifdef USE_REVERSE_ASSIGNMENT
         bind_left_to_right = expression >> tokenLRBIND >> ident >> -index_action;
+#else
+        bind_right_to_left = ident >> -index_action >> tokenRLBIND >> expression;
+#endif
         //
         if_expression = SAME_RULE(expression);
         body_for_true = SAME_RULE(block_statements_in_while_and_if_body); //tokenBEGINBLOCK >> *statement_in_while_and_if_body >> tokenENDBLOCK; // block_statements_in_while_and_if_body;
@@ -65,9 +73,16 @@ struct cwgrammar : qi::grammar<Iterator> {
         cycle_begin_expression = SAME_RULE(expression);
         cycle_end_expression = SAME_RULE(expression);
         cycle_counter = SAME_RULE(ident);
-        cycle_counter_rl_init = cycle_counter >> tokenRLBIND >> cycle_begin_expression;
+#ifdef USE_REVERSE_ASSIGNMENT
         cycle_counter_lr_init = cycle_begin_expression >> tokenLRBIND >> cycle_counter;
-        cycle_counter_init = cycle_counter_rl_init | cycle_counter_lr_init;
+#else
+        cycle_counter_rl_init = cycle_counter >> tokenRLBIND >> cycle_begin_expression;
+#endif
+#ifdef USE_REVERSE_ASSIGNMENT
+        cycle_counter_init = SAME_RULE(cycle_counter_lr_init);
+#else
+        cycle_counter_init = SAME_RULE(cycle_counter_rl_init);
+#endif
         cycle_counter_last_value = SAME_RULE(cycle_end_expression);
         cycle_body = tokenDO >> (statement | block_statements);
         forto_cycle = tokenFOR >> cycle_counter_init >> tokenTO >> cycle_counter_last_value >> cycle_body;
@@ -96,7 +111,11 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenGROUPEXPRESSIONEND.name("tokenGROUPEXPRESSIONEND");
 #endif
         output = tokenPUT >> expression;
-        statement = bind_right_to_left | bind_left_to_right | cond_block | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
+#ifdef USE_REVERSE_ASSIGNMENT
+        statement = bind_left_to_right | cond_block | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
+#else
+        statement = bind_right_to_left | cond_block | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
+#endif
         block_statements = tokenBEGINBLOCK >> *statement >> tokenENDBLOCK;
         program = tokenNAME >> program_name >> tokenSEMICOLON >> tokenBODY >> tokenDATA >> (-declaration) >> tokenSEMICOLON >> *statement >> tokenEND;
         //
@@ -133,8 +152,13 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenOR = "OR" >> STRICT_BOUNDARIES;
         tokenEQUAL = "==" >> BOUNDARIES;
         tokenNOTEQUAL = "!=" >> BOUNDARIES;
+#ifdef USE_COMPARE_WITH_EQUAL
         tokenLESSOREQUAL = "<=" >> BOUNDARIES;
         tokenGREATEROREQUAL = ">=" >> BOUNDARIES;
+#else
+        tokenLESS = "<" >> BOUNDARIES;
+        tokenGREATER = ">" >> BOUNDARIES;
+#endif
         tokenPLUS = "+" >> BOUNDARIES;
         tokenMINUS = "-" >> BOUNDARIES;
         tokenMUL = "*" >> BOUNDARIES;
@@ -259,8 +283,11 @@ struct cwgrammar : qi::grammar<Iterator> {
         left_expression,
         expression,
         group_expression,
-        bind_right_to_left,
+#ifdef USE_REVERSE_ASSIGNMENT
         bind_left_to_right,
+#else
+        bind_right_to_left,
+#endif
         if_expression,
         body_for_true,
         false_cond_block_without_else,
@@ -269,8 +296,11 @@ struct cwgrammar : qi::grammar<Iterator> {
         cycle_begin_expression,
         cycle_end_expression,
         cycle_counter,
-        cycle_counter_rl_init,
+#ifdef USE_REVERSE_ASSIGNMENT
         cycle_counter_lr_init,
+#else
+        cycle_counter_rl_init,
+#endif
         cycle_counter_init,
         cycle_counter_last_value,
         cycle_body,
@@ -289,8 +319,15 @@ struct cwgrammar : qi::grammar<Iterator> {
         block_statements,
         program,
         //
-        tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL, tokenLESSOREQUAL,
-        tokenGREATEROREQUAL, tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
+        tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL,
+#ifdef USE_COMPARE_WITH_EQUAL
+        tokenLESSOREQUAL,
+        tokenGREATEROREQUAL,
+#else
+        tokenLESS,
+        tokenGREATER,
+#endif
+        tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
         tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenWHILE, tokenCONTINUE, tokenBREAK, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
