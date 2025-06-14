@@ -261,7 +261,7 @@ struct LexemInfo* syntaxLL2(Grammar* grammar, char * ruleName, struct LexemInfo*
         if (currTapeElement->tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(CURRENT_STACK_TOP_ELEMENT, "ident_terminal")
             || currTapeElement->tokenType == VALUE_LEXEME_TYPE && !strcmp(CURRENT_STACK_TOP_ELEMENT, "unsigned_value_terminal")
             || !strcmp(currTapeElement->lexemStr, CURRENT_STACK_TOP_ELEMENT)) {
-            printf("Processed: \"%s\"\n", currTapeElement->lexemStr); // debug
+            // printf("Processed: \"%s\"\n", currTapeElement->lexemStr); // out // debug
             scrollTapeOneStep(&currTapeElement, &nextTapeElement);
             ASTNode* node = stackPop();
             if (node) {

@@ -737,12 +737,9 @@ SET_QUADRUPLE_STR_MACRO_IN_ARRAY(tokenStruct, NULL_STATEMENT)\
 
 extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT];
 
-#define RERUN_MODE
-
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
-#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
 
 ///////////////////////////////////////////////////////////////
+
 #define GRAMMAR_LL2_ORIGINAL__2025 {\
 { LA_IS, {"ident_terminal"}, { "labeled_point",{\
     { LA_IS, {""}, 2, {"ident", ":"}}\
@@ -1076,3 +1073,8 @@ IF_USE_REVERSE_ASSIGNMENT(\
 //    { LA_IS, {""}, 7, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";" }} // !!!
 //} }},
 ///////////////////////////////////////////////////////////////
+
+#define RERUN_MODE
+
+//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
+#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
