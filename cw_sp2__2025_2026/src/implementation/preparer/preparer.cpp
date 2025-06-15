@@ -379,6 +379,23 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 
 	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
 
+		if (false && tempLexemInfoInTable[1].tokenType == VALUE_LEXEME_TYPE &&
+			tempLexemInfoInTable[-1].tokenType == KEYWORD_LEXEME_TYPE
+			) {
+			// no unary operation
+			if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_ADD][0], MAX_LEXEM_SIZE)) {
+				*lexemInfoInTable = *++tempLexemInfoInTable;
+				++lexemInfoInTable;
+				continue;
+			}
+			// no unary operation
+			else if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_SUB][0], MAX_LEXEM_SIZE)) {
+				*lexemInfoInTable = *++tempLexemInfoInTable;
+				lexemInfoInTable[0].ifvalue *= -1;
+				++lexemInfoInTable;
+				continue;
+			}
+		}
 		if (!strncmp(tempLexemInfoInTable->lexemStr, "]"/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
 			*lexemInfoInTable = *tempLexemInfoInTable;
 			strcpy(lexemInfoInTable->lexemStr, ")"/*TODO: add to config.h*/);
