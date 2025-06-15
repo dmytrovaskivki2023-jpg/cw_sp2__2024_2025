@@ -548,7 +548,7 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		byteCountWritedToTempCodeBuffer = makeCode(&lastLexemInfoInTableTemp, tempCodeBuffer, MACHINE_X86_WIN32_CODER_MODE) - tempCodeBuffer;
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
 			viewCode(tempCodeBuffer, byteCountWritedToTempCodeBuffer, 16);
 			printf("\r\n\r\n");
 		}
@@ -608,7 +608,7 @@ int main(int argc, char* argv[]) {
 
 		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
 			viewCode(outCodeBuffer, objectSize, 16);
 			printf("\r\n\r\n");
 		}
@@ -644,7 +644,7 @@ int main(int argc, char* argv[]) {
 
 		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
 			viewCode(outCodeBuffer, imageSize, 16);
 			printf("\r\n\r\n");
 		}

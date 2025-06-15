@@ -31,7 +31,7 @@ unsigned char* makeGetCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 			const unsigned char code__add_ebx_edi[] = { 0x33, 0xDF };
 			const unsigned char code__mov_stackTopByEBX_eax[] = { 0x89, 0x03 };
 			const unsigned char code__mov_ecx_edi[] = { 0x8B, 0xCF };
-			const unsigned char code__add_ecx_2048[] = { 0x81, 0xC1, 0x00, 0x08, 0x00, 0x00 };
+			const unsigned char code__add_ecx_24576[] = { 0x81, 0xC1, 0x00, 0x60, 0x00, 0x00 };
 
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECX, 2);
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_edx_address, 5);
@@ -51,7 +51,7 @@ unsigned char* makeGetCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ebx_edi, 2);
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_stackTopByEBX_eax, 2);
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_ecx_edi, 2);
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ecx_2048, 6);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ecx_24576, 6);
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
@@ -74,7 +74,7 @@ unsigned char* makeGetCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 			currBytePtr += sprintf((char*)currBytePtr, "    add ebx, edi\r\n");
 			currBytePtr += sprintf((char*)currBytePtr, "    mov dword ptr [ebx], eax\r\n");
 			currBytePtr += sprintf((char*)currBytePtr, "    mov ecx, edi ; reset second stack\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 800h ; reset second stack\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 24576 ; reset second stack\r\n");
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");

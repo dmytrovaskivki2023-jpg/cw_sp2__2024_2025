@@ -200,6 +200,14 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 			}
 			else {
 				*mode |= SKIP_INTERACTIVE_IN_INTERACTIVE_MODE;
+				(void)getchar();
+				//(void)getchar();
+			}
+//		}
+		printf("View native/obj/exe('y') or pass('n' or other key): ");
+//		if (*mode & INTERACTIVE_MODE) {
+			if (getchar() == 'y') {
+				*mode |= VIEW_NATIVE_OBJ_EXE_MODE;
 			}
 //		}
 	}

@@ -8,7 +8,7 @@
 #include "../../include/def.h"
 #include "../../include/config.h"
 
-// TODO: CHANGE BY fRESET() TO END
+// TODO: CHENGE BY fRESET() TO END
 #define C_CODER_MODE                   0x01
 #define ASSEMBLY_X86_WIN32_CODER_MODE  0x02
 #define MACHINE_X86_WIN32_CODER_MODE   0x04
@@ -26,12 +26,22 @@ extern unsigned char generatorMode;
 //unsigned long long int dataOffsetMinusCodeOffset = 0x00003000;
 #define dataOffsetMinusCodeOffset 0x00004000ull
 
+//#define dataOffsetMinusCodeOffset 0x00003000ull
+
 //unsigned long long int codeOffset = 0x000004AF;
 //unsigned long long int baseOperationOffset = codeOffset + 49;// 0x00000031;
-#define baseOperationObjectOffset 0x0000018Bull
-#define baseOperationOffset 0x000004AFull
-#define putProcOffset 0x0000001Bull
-#define getProcOffset 0x00000044ull
+//#define baseOperationObjectOffset 0x0000018Eull // 0x0000018Bull
+//#define baseOperationOffset 0x000004DFull // 0x000004AFull
+//#define baseOperationObjectOffset 0x0000018Bull + 2048 // + 15)
+//#define baseOperationOffset 0x000004AFull + 2048      // + 15 + 16)
+//#define baseOperationObjectOffset 0x0000019Dull // 0x0000018Bull // + 15
+//#define baseOperationOffset 0x000004BEull // 0x000004AFull // + 15
+#define baseOperationObjectOffset 0x0000018Bull // + 2048 // + 15)
+#define baseOperationOffset 0x000004FAull      // + 15 + 16)
+#define putProcOffset 0x0000001Eull
+#define getProcOffset 0x00000047ull
+//#define putProcOffset 0x0000001Eull
+//#define getProcOffset 0x00000047ull
 
 //unsigned long long int startCodeSize = 64 - 14; // 50 // -1
 

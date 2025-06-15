@@ -51,29 +51,6 @@ unsigned char outText[MAX_OUTTEXT_SIZE] = ""; // !!!
 #define MAX_WORD_COUNT (MAX_TEXT_SIZE / 5)
 #define MAX_LEXEM_SIZE 1024
 
-#if 0
-
-#define CODEGEN_DATA_TYPE int
-
-#define START_DATA_OFFSET 0x800
-#define OUT_DATA_OFFSET (START_DATA_OFFSET + 0x800)
-
-#define M1 1024
-#define M2 1024
-
-//unsigned long long int dataOffsetMinusCodeOffset = 0x00003000;
-unsigned long long int dataOffsetMinusCodeOffset = 0x00004000;
-
-//unsigned long long int codeOffset = 0x000004AF;
-//unsigned long long int baseOperationOffset = codeOffset + 49;// 0x00000031;
-unsigned long long int baseOperationOffset = 0x000004AF;
-unsigned long long int putProcOffset = 0x0000001B;
-unsigned long long int getProcOffset = 0x00000044;
-
-//unsigned long long int startCodeSize = 64 - 14; // 50 // -1
-
-#endif
-
 struct LabelOffsetInfo {
 	char labelStr[MAX_LEXEM_SIZE];
 	unsigned char* labelBytePtr;
@@ -362,7 +339,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		currBytePtr += sprintf((char*)currBytePtr, "    add edi, 0%08Xh\r\n", (int)dataOffsetMinusCodeOffset);
 		//currBytePtr += sprintf((char*)currBytePtr, "    xor ebp, ebp\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    mov ecx, edi\r\n");
-		currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 800h\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 24576\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    jmp initConsole\r\n");
 
 		currBytePtr += sprintf((char*)currBytePtr, "    putProc PROC\r\n");
@@ -438,6 +415,10 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "convert_loop :\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        movzx ecx, byte ptr[esi]\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "        cmp ecx, '+'\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "        jz done\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "        cmp ecx, '-'\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "        jz neg_and_done\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        test ecx, ecx\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        jz done\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        sub ecx, '0'\r\n");
@@ -447,6 +428,8 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		currBytePtr += sprintf((char*)currBytePtr, "        dec esi\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        jmp convert_loop\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "neg_and_done:\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "        neg eax\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "done:\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "        ret\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    string_to_int ENDP\r\n");
