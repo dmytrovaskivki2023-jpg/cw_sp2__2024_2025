@@ -43,7 +43,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         index_action = tokenLEFTSQUAREBRACKETS >> expression >> tokenRIGHTSQUAREBRACKETS;
         //
-        unary_operator = tokenNOT | tokenMINUS | tokenPLUS;
+        unary_operator = SAME_RULE(tokenNOT);
         unary_operation = unary_operator >> expression;
 #ifdef USE_COMPARE_WITH_EQUAL
         binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
@@ -407,20 +407,18 @@ binary_action____iteration_after_two
         declaration = value_type__ident >> other_declaration_ident____iteration_after_one                                          // +
             | value_type >> ident;                                                                                         // + (!)
 //
-        unary_operator = tokenNOT          // + (!)
-            | tokenMINUS                   // + (!)
-            | tokenPLUS;                   // + (!)
-        binary_operator = tokenAND         // + (!)
-            | tokenOR                      // + (!)
-            | tokenEQUAL                   // + (!)
-            | tokenNOTEQUAL                // + (!)
-            | tokenLESSOREQUAL             // + (!)
-            | tokenGREATEROREQUAL          // + (!)
-            | tokenPLUS                    // + (!)
-            | tokenMINUS                   // + (!)
-            | tokenMUL                     // + (!)
-            | tokenDIV                     // + (!)
-            | tokenMOD;                    // + (!)
+        unary_operator = SAME_RULE(tokenNOT);  // + (!)
+        binary_operator = tokenAND             // + (!)
+            | tokenOR                          // + (!)
+            | tokenEQUAL                       // + (!)
+            | tokenNOTEQUAL                    // + (!)
+            | tokenLESSOREQUAL                 // + (!)
+            | tokenGREATEROREQUAL              // + (!)
+            | tokenPLUS                        // + (!)
+            | tokenMINUS                       // + (!)
+            | tokenMUL                         // + (!)
+            | tokenDIV                         // + (!)
+            | tokenMOD;                        // + (!)
         binary_action = binary_operator >> expression; // +
         //
         left_expression = tokenGROUPEXPRESSIONBEGIN__expression >> tokenGROUPEXPRESSIONEND            // + (!)
