@@ -287,13 +287,7 @@
 { LA_IS, { T_NOT_0 }, { "unary_operator",{\
     { LA_IS, {""}, 1, { T_NOT_0 }}\
 }}},\
-{ LA_IS, { T_SUB_0 }, { "unary_operator",{\
-    { LA_IS, {""}, 1, { T_SUB_0 }}\
-}}},\
-{ LA_IS, { T_ADD_0 }, { "unary_operator",{\
-    { LA_IS, {""}, 1, { T_ADD_0 }}\
-}}},\
-{ LA_IS, { T_NOT_0, T_ADD_0, T_SUB_0 }, { "unary_operation",{\
+{ LA_IS, { T_NOT_0 }, { "unary_operation",{\
     { LA_IS, {""}, 2, { "unary_operator", "expression" }}\
 }}},\
 { LA_IS, { T_AND_0 }, { "binary_operator",{\
@@ -784,13 +778,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 { LA_IS, { "NOT" }, { "unary_operator",{\
     { LA_IS, {""}, 1, { "NOT" }}\
 }}},\
-{ LA_IS, { "-" }, { "unary_operator",{\
-    { LA_IS, {""}, 1, { "-" }}\
-}}},\
-{ LA_IS, { "+" }, { "unary_operator",{\
-    { LA_IS, {""}, 1, { "+" }}\
-}}},\
-{ LA_IS, { "NOT", "+", "-" }, { "unary_operation",{\
+{ LA_IS, { "NOT" }, { "unary_operation",{\
     { LA_IS, {""}, 2, { "unary_operator", "expression" }}\
 }}},\
 { LA_IS, { "AND" }, { "binary_operator",{\
