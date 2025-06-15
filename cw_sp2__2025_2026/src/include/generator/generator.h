@@ -17,8 +17,8 @@ extern unsigned char generatorMode;
 
 #define CODEGEN_DATA_TYPE int
 
-#define START_DATA_OFFSET 512
-#define OUT_DATA_OFFSET (START_DATA_OFFSET + 512)
+#define START_DATA_OFFSET 0x800
+#define OUT_DATA_OFFSET (START_DATA_OFFSET + 0x800)
 
 #define M1 1024
 #define M2 1024

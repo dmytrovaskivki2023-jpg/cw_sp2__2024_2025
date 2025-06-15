@@ -55,8 +55,8 @@ unsigned char outText[MAX_OUTTEXT_SIZE] = ""; // !!!
 
 #define CODEGEN_DATA_TYPE int
 
-#define START_DATA_OFFSET 512
-#define OUT_DATA_OFFSET (START_DATA_OFFSET + 512)
+#define START_DATA_OFFSET 0x800
+#define OUT_DATA_OFFSET (START_DATA_OFFSET + 0x800)
 
 #define M1 1024
 #define M2 1024
@@ -362,7 +362,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 		currBytePtr += sprintf((char*)currBytePtr, "    add edi, 0%08Xh\r\n", (int)dataOffsetMinusCodeOffset);
 		//currBytePtr += sprintf((char*)currBytePtr, "    xor ebp, ebp\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    mov ecx, edi\r\n");
-		currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 512\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 800h\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    jmp initConsole\r\n");
 
 		currBytePtr += sprintf((char*)currBytePtr, "    putProc PROC\r\n");

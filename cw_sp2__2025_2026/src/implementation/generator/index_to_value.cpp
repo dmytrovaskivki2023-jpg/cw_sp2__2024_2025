@@ -18,37 +18,39 @@ unsigned char* makeIndexToValueCode(struct LexemInfo** lastLexemInfoInTable, uns
 		if (generatorMode == MACHINE_X86_WIN32_CODER_MODE) {
 			const unsigned char code__mov_eax_stackTopByECX[] = { 0x8B, 0x01 };
 			const unsigned char code__mov_ebx_stackTopByECXMinus4[] = { 0x8B, 0x59, 0xFC };
-			const unsigned char code__sub_ecx_8[] = { 0x83, 0xE9, 0x08 };
+			const unsigned char code__imul_eax_immediate[] = { 0x69, 0xC0, 0x00, 0x00, 0x00, 0x00 };
+			const unsigned char code__sub_ecx_4[] = { 0x83, 0xE9, 0x04 };
 			const unsigned char code__add_ebx_edi[] = { 0x03, 0xDF };
-			const unsigned char code__mov_addrFromEBX_eax[] = { 0x89, 0x03 };
-			const unsigned char code__mov_ecx_edi[] = { 0x8B, 0xCF };
-			const unsigned char code__add_ecx_512[] = { 0x81, 0xC1, 0x00, 0x02, 0x00, 0x00 };
+			const unsigned char code__add_ebx_eax[] = { 0x03, 0xD8 };
+			const unsigned char code__mov_eax_stackTopByEBX[] = { 0x8B, 0x03 };
+			const unsigned char code__mov_stackTopByECX_eax[] = { 0x89, 0x01 };
 
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByECX, 2);
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_ebx_stackTopByECXMinus4, 3);
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__sub_ecx_8, 3);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__imul_eax_immediate, 6);
+			*(unsigned int*)(currBytePtr - 4) = ARRAY_INTERVAL;
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__sub_ecx_4, 3);
 			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ebx_edi, 2);
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_addrFromEBX_eax, 2);
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_ecx_edi, 2);
-			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ecx_512, 6);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__add_ebx_eax, 2);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_eax_stackTopByEBX, 2);
+			currBytePtr = outBytes2Code(currBytePtr, (unsigned char*)code__mov_stackTopByECX_eax, 2);
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\"\r\n", tokenStruct[MULTI_TOKEN_RLBIND][0]);
-			//
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"INDEX_TO_VALUE\"\r\n");
 			currBytePtr += sprintf((char*)currBytePtr, "    mov eax, dword ptr[ecx]\r\n");
 			currBytePtr += sprintf((char*)currBytePtr, "    mov ebx, dword ptr[ecx - 4]\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    sub ecx, 8\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    imul eax, %d\r\n", ARRAY_INTERVAL);
+			currBytePtr += sprintf((char*)currBytePtr, "    sub ecx, 4\r\n");
 			currBytePtr += sprintf((char*)currBytePtr, "    add ebx, edi\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    mov dword ptr [ebx], eax\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    mov ecx, edi ; reset second stack\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    add ecx, 512 ; reset second stack\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    add ebx, eax\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    mov eax, dword ptr[ebx]\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    mov dword ptr[ecx], eax\r\n");
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\"\r\n", tokenStruct[MULTI_TOKEN_RLBIND][0]);
-			currBytePtr += sprintf((char*)currBytePtr, "    lastBindDataIndex = opStack[opStackIndex - 1];\r\n");
-			currBytePtr += sprintf((char*)currBytePtr, "    data[lastBindDataIndex] = opTemp = opStack[opStackIndex], opStackIndex = 0;\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    //\"INDEX_TO_VALUE\"\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    opTemp = opStack[opStackIndex - 1] = data[opStack[opStackIndex - 1] += (%d * opStack[opStackIndex--])];\r\n", ARRAY_INTERVAL);
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;

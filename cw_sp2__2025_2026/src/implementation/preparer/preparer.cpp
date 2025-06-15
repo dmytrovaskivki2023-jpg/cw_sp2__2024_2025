@@ -378,19 +378,7 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 	memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
 
 	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
-		//printf("%s = %s\n", lexemInfoInTable->lexemStr, tempLexemInfoInTable->lexemStr);
-		//printf("", );
-		//strncpy(lexemInfoInTable->lexemStr, tempLexemInfoInTable->lexemStr, MAX_LEXEM_SIZE);
-		//*lexemInfoInTable++ = *tempLexemInfoInTable;
 
-		//strncpy(this->lexemStr, lexemStr, MAX_LEXEM_SIZE);
-		//this->lexemId = lexemId;
-		//this->tokenType = tokenType;
-		//this->ifvalue = ifvalue;
-		//this->row = row;
-		//this->col = col;
-
-		//continue;
 		if (!strncmp(tempLexemInfoInTable->lexemStr, "]"/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
 			*lexemInfoInTable = *tempLexemInfoInTable;
 			strcpy(lexemInfoInTable->lexemStr, ")"/*TODO: add to config.h*/);
@@ -399,10 +387,10 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 		}
 		if (!strncmp(tempLexemInfoInTable->lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
 			bool bindDetect = false;
-			if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)) {
+			if (!strncmp(tempLexemInfoInTable[-2].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)) {
 				bindDetect = true;
 			}
-			else if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)) {
+			else if (!strncmp(tempLexemInfoInTable[-2].lexemStr, tokenStruct[MULTI_TOKEN_INPUT][0], MAX_LEXEM_SIZE)) {
 				bindDetect = true;
 			}
 			else {
@@ -456,22 +444,6 @@ void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexe
 	}
 
 	makePrePrepare(*lastLexemInfoInTable + passMakePrepareElementCount, *lastTempLexemInfoInTable);
-
-//	*lastLexemInfoInTable += lastDataSectionLexemIndex;
-//	while (lastDataSectionLexemIndex--) {
-//	
-//	}
-//
-//	for (; false && (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {
-//		if (passMakePrepareElementCount) {
-//			--passMakePrepareElementCount;
-//			++lexemInfoInTable;
-//			continue;
-//		}
-//		else {
-//			break;
-//		}
-//	}
 
 	lexemInfoTransformationTempStackSize = 0;
 	for (; (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {
