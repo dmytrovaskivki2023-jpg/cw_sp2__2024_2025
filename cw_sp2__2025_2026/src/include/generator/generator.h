@@ -23,25 +23,15 @@ extern unsigned char generatorMode;
 #define M1 1024
 #define M2 1024
 
-//unsigned long long int dataOffsetMinusCodeOffset = 0x00003000;
-#define dataOffsetMinusCodeOffset 0x00004000ull
 
+#define dataOffsetMinusCodeOffset 0x00004000ull
 //#define dataOffsetMinusCodeOffset 0x00003000ull
 
-//unsigned long long int codeOffset = 0x000004AF;
-//unsigned long long int baseOperationOffset = codeOffset + 49;// 0x00000031;
-//#define baseOperationObjectOffset 0x0000018Eull // 0x0000018Bull
-//#define baseOperationOffset 0x000004DFull // 0x000004AFull
-//#define baseOperationObjectOffset 0x0000018Bull + 2048 // + 15)
-//#define baseOperationOffset 0x000004AFull + 2048      // + 15 + 16)
-//#define baseOperationObjectOffset 0x0000019Dull // 0x0000018Bull // + 15
-//#define baseOperationOffset 0x000004BEull // 0x000004AFull // + 15
-#define baseOperationObjectOffset 0x0000018Bull // + 2048 // + 15)
-#define baseOperationOffset 0x000004FAull      // + 15 + 16)
+#define baseOperationObjectOffset 0x000001D6ull
+#define baseOperationOffset 0x000004FAull
 #define putProcOffset 0x0000001Eull
 #define getProcOffset 0x00000047ull
-//#define putProcOffset 0x0000001Eull
-//#define getProcOffset 0x00000047ull
+
 
 //unsigned long long int startCodeSize = 64 - 14; // 50 // -1
 

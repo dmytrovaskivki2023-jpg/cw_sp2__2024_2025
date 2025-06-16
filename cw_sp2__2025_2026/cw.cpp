@@ -66,11 +66,11 @@ int main(int argc, char* argv[]) {
 	size_t sourceSize = loadSource(&text, parameters[INPUT_FILENAME_WITH_EXTENSION_PARAMETER]);
 	if (!sourceSize) {
 		printf("Empty source . . .\r\n");
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -89,6 +89,9 @@ int main(int argc, char* argv[]) {
 			else {
 				return 0;
 			}
+		}
+		else {
+			return 0;
 		}
 #else
 		return 0;
@@ -114,21 +117,23 @@ int main(int argc, char* argv[]) {
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & LEXICAL_ANALYZE_MODE) {
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_INPUT_MODE) {
 			printf("Original source:\r\n");
 			printf("-------------------------------------------------------------------\r\n");
 			printf("%s\r\n", text);
 			printf("-------------------------------------------------------------------\r\n\r\n");
+			printf("\r\nPress Enter: ");
+			(void)getchar();
 		}
 
 		int commentRemoverResult = commentRemover(text, "#*", "*#");
 		if (commentRemoverResult) {
 			printf("Comment remover return %d\r\n", commentRemoverResult);
-			(void)getchar();
-			printf("\r\nPress Enter: ");
-			(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 			if (mode & INTERACTIVE_MODE) {
+			    (void)getchar();
+			    (void)printf("\r\nPress Enter: ");
+			    (void)getchar();
 				system("CLS");
 				fflush(stdin);
 				fflush(stdout);
@@ -152,11 +157,13 @@ int main(int argc, char* argv[]) {
 			return 0;
 #endif
 		}
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_INPUT_MODE) {
 			printf("Source after comment removing:\r\n");
 			printf("-------------------------------------------------------------------\r\n");
 			printf("%s\r\n", text);
 			printf("-------------------------------------------------------------------\r\n\r\n");
+			printf("\r\nPress Enter: ");
+			(void)getchar();
 		}
 
 		struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
@@ -169,11 +176,11 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				printLexemesToFile(lexemesInfoTable, 1, parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
 			}
-			(void)getchar();
-			printf("\r\nPress Enter: ");
-			(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 			if (mode & INTERACTIVE_MODE) {
+			    (void)getchar();
+			    printf("\r\nPress Enter: ");
+			    (void)getchar();
 				system("CLS");
 				fflush(stdin);
 				fflush(stdout);
@@ -197,21 +204,21 @@ int main(int argc, char* argv[]) {
 			return 0;
 #endif
 		}
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			printLexemesToFile(lexemesInfoTable, 0, parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
+		}
+		if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			writeBytesToFile(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"No error.", strlen("No error."));
+		}
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			printLexemes(lexemesInfoTable, 0);
-			if (parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
-				printLexemesToFile(lexemesInfoTable, 0, parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
-			}
-			if (parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
-				writeBytesToFile(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"No error.", strlen("No error."));
-			}
 		}
 		else {
 			printf("Lexical analysis complete success\r\n");
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
@@ -230,18 +237,18 @@ int main(int argc, char* argv[]) {
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & SYNTAX_ANALYZE_MODE) {
 		errorMessagesPtrToLastBytePtr[0] = '\0';
 		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
-		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, 0, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char*)&errorMessagesPtrToLastBytePtr, mode & (DEBUG_MODE | INTERACTIVE_MODE))) { // TODO: add AST param	
+		if (SUCCESS_STATE != syntaxAnalyze(lexemesInfoTable, &grammar, 0, parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (char*)&errorMessagesPtrToLastBytePtr, mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE)) { // TODO: add AST param	
 			if (parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {			
 				writeBytesToFile(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));		
 			}
 			if (parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				writeBytesToFile(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], (unsigned char*)"AST build failed.", strlen("AST build failed."));
 			}
-			(void)getchar();
-			printf("\r\nPress Enter: ");
-			(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 			if (mode & INTERACTIVE_MODE) {
+			    (void)getchar();
+			    printf("\r\nPress Enter: ");
+			    (void)getchar();
 				system("CLS");
 				fflush(stdin);
 				fflush(stdout);
@@ -272,17 +279,17 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
 	}
 	else {
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -324,11 +331,11 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				writeBytesToFile(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));
 			}
-			(void)getchar();
-			printf("\r\nPress Enter: ");
-			(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 			if (mode & INTERACTIVE_MODE) {
+			    (void)getchar();
+			    printf("\r\nPress Enter: ");
+			    (void)getchar();
 				system("CLS");
 				fflush(stdin);
 				fflush(stdout);
@@ -358,17 +365,17 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
 	}
 	else {
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    (void)printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -404,14 +411,14 @@ int main(int argc, char* argv[]) {
 	}
 	fflush(stdin);
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & MAKE_PREPARE) {
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
-			printLexemes(lexemesInfoTable, 0);
-		}
+//		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
+//			printLexemes(lexemesInfoTable, 0);
+//		}
 
 		lastLexemInfoInTable = lexemesInfoTable;
 		makePrepare(lexemesInfoTable, &lastLexemInfoInTable, &lastLexemInfoInTableTemp);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			printLexemes(lexemesInfoTableTemp, 0);
 			if (parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				printLexemesToFile(lexemesInfoTableTemp, 0, parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
@@ -425,17 +432,17 @@ int main(int argc, char* argv[]) {
 			if (parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				printf("File \"%s\" saved.\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
 			}
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
 	}
 	else {
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    (void)printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -475,7 +482,7 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		makeCode(&lastLexemInfoInTableTemp, outCodeBuffer, C_CODER_MODE); /*The lexem info table will be changed and will need to be rebuilt. TODO: change the implementation!*/
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
 		}
 		else {
@@ -487,7 +494,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
@@ -511,7 +518,7 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		makeCode(&lastLexemInfoInTableTemp, outCodeBuffer, ASSEMBLY_X86_WIN32_CODER_MODE);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE)) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			printf("\r\n\r\n%s\r\n\r\n", outCodeBuffer);
 		}
 		else {
@@ -523,7 +530,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
@@ -548,7 +555,7 @@ int main(int argc, char* argv[]) {
 		//outCodeBuffer[0] = '\0';
 		byteCountWritedToTempCodeBuffer = makeCode(&lastLexemInfoInTableTemp, tempCodeBuffer, MACHINE_X86_WIN32_CODER_MODE) - tempCodeBuffer;
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			viewCode(tempCodeBuffer, byteCountWritedToTempCodeBuffer, 16);
 			printf("\r\n\r\n");
 		}
@@ -557,17 +564,17 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
 	}
 	else {
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    (void)printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -608,7 +615,7 @@ int main(int argc, char* argv[]) {
 
 		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			viewCode(outCodeBuffer, objectSize, 16);
 			printf("\r\n\r\n");
 		}
@@ -618,8 +625,12 @@ int main(int argc, char* argv[]) {
 
 		writeBytesToFile(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, objectSize);
 
+		printf("\r\nTo create an exe file (from obj-file), use the following command in the Visual Studio terminal (no cmd):\r\n"
+			   "link /SUBSYSTEM:CONSOLE \"%s\" \"kernel32.lib\" \"user32.lib\""
+			   "\r\n\r\n", parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]);
+
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
@@ -644,7 +655,7 @@ int main(int argc, char* argv[]) {
 
 		(void)outBytes2Code(currBytePtr, tempCodeBuffer, byteCountWritedToTempCodeBuffer);
 
-		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_NATIVE_OBJ_EXE_MODE) {
+		if (mode & (DEBUG_MODE | INTERACTIVE_MODE) && mode & VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE) {
 			viewCode(outCodeBuffer, imageSize, 16);
 			printf("\r\n\r\n");
 		}
@@ -654,18 +665,20 @@ int main(int argc, char* argv[]) {
 
 		writeBytesToFile(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], outCodeBuffer, imageSize);
 
+		(void)printf("\r\nPress Enter: "); // (void)getchar();
+
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("\r\nPress Enter to next step");
+			//printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
 		}
 	}
-	else {
-		(void)getchar();
-		printf("\r\nPress Enter: ");
-		(void)getchar();
-#ifdef RERUN_MODE
+	else /*if (mode & INTERACTIVE_MODE)*/ {
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 		if (mode & INTERACTIVE_MODE) {
+		    (void)getchar();
+		    (void)printf("\r\nPress Enter: ");
+		    (void)getchar();
 			system("CLS");
 			fflush(stdin);
 			fflush(stdout);
@@ -736,7 +749,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-#ifdef RERUN_MODE
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
 	if (mode & INTERACTIVE_MODE) {
 		system("CLS");
 		fflush(stdin);

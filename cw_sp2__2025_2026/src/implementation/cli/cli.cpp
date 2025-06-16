@@ -194,9 +194,9 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		printf("No command line arguments.\r\nGo to step-by-step interactive mode('y') or start instant processing by default('n' or other key): ");
 //		if (*mode & INTERACTIVE_MODE) {
 			if (getchar() == 'y') {
-				printf("Press Enter to next step");
+				printf("Press Enter: ");
 				(void)getchar();
-				(void)getchar();
+				//(void)getchar();
 			}
 			else {
 				*mode |= SKIP_INTERACTIVE_IN_INTERACTIVE_MODE;
@@ -204,11 +204,19 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 				//(void)getchar();
 			}
 //		}
-		printf("View native/obj/exe('y') or pass('n' or other key): ");
+		printf("View input file('y') or pass('n' or other key): ");
 //		if (*mode & INTERACTIVE_MODE) {
 			if (getchar() == 'y') {
-				*mode |= VIEW_NATIVE_OBJ_EXE_MODE;
+				*mode |= VIEW_INPUT_MODE;
+			}				
+			(void)getchar();
+//		}
+		printf("View lexems/ast/c/assembly/native/obj/exe('y') or pass('n' or other key): ");
+//		if (*mode & INTERACTIVE_MODE) {
+			if (getchar() == 'y') {
+				*mode |= VIEW_LEXEMS_AST_C_ASSEMBLY_NATIVE_OBJ_EXE_MODE;
 			}
+			//(void)getchar();
 //		}
 	}
 
@@ -246,7 +254,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], "_lexemes.txt", PATH_NAME_LENGH - strlen(parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -264,7 +272,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_lexeme_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out error lexeme filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_LEXEME_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -282,7 +290,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER], ".ast", PATH_NAME_LENGH - strlen(parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out AST filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_AST_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -300,7 +308,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_syntax_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out syntax error filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SYNTAX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -318,7 +326,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], "_semantix_error.txt", PATH_NAME_LENGH - strlen(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out semantix error filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -336,7 +344,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER], "_prepared_lexemes.txt", PATH_NAME_LENGH - strlen(parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out prepared lexemes sequense filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -354,7 +362,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER], ".c", PATH_NAME_LENGH - strlen(parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out C filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_C_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 			//(void)getchar();
 		}
@@ -372,7 +380,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER], ".asm", PATH_NAME_LENGH - strlen(parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out assembly filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_ASSEMBLY_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 		}
 	}
@@ -389,7 +397,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER], ".obj", PATH_NAME_LENGH - strlen(parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out object filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_OBJECT_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 		}
 	}
@@ -406,7 +414,7 @@ void comandLineParser(int argc, char* argv[], unsigned long long int* mode, char
 		strncat(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER], ".exe", PATH_NAME_LENGH - strlen(parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]));
 		printf("Out binary filename not setted. Used defaule input filename \"%s\"\r\n", parameters[OUT_BINARY_FILENAME_WITH_EXTENSION_PARAMETER]);
 		if (*mode & INTERACTIVE_MODE && !(*mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			printf("Press Enter to next step");
+			printf("Press Enter: ");
 			(void)getchar();
 		}
 	}
