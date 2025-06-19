@@ -32,8 +32,6 @@ Grammar grammar = {
 
 
 struct ASTNode {
-    //char isPartialSuccess; // TODO: ...
-    //
     std::string value;
     bool isTerminal;
     std::vector<ASTNode*> childrens;

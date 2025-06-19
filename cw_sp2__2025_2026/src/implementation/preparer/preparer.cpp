@@ -378,17 +378,16 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 	memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
 
 	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
-
-		if (false && tempLexemInfoInTable[1].tokenType == VALUE_LEXEME_TYPE &&
+		if (tempLexemInfoInTable[1].tokenType == VALUE_LEXEME_TYPE &&
 			tempLexemInfoInTable[-1].tokenType == KEYWORD_LEXEME_TYPE
 			) {
-			// no unary operation
+			// no implement unary operar
 			if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_ADD][0], MAX_LEXEM_SIZE)) {
 				*lexemInfoInTable = *++tempLexemInfoInTable;
 				++lexemInfoInTable;
 				continue;
 			}
-			// no unary operation
+			// no implement unary operar
 			else if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_SUB][0], MAX_LEXEM_SIZE)) {
 				*lexemInfoInTable = *++tempLexemInfoInTable;
 				lexemInfoInTable[0].ifvalue *= -1;
