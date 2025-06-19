@@ -457,7 +457,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, { "cycle_end_expression" }}\
 }}},\
 {LA_IS, { T_DO_0 }, { "cycle_body",{\
-    {LA_IS, {""}, 2, { T_DO_0, "statement__or__block_statements" }}\
+    {LA_IS, {""}, 2, { T_DO_0, "statements__or__block_statements" }}\
 }}},\
 {LA_IS, { T_FOR_0 }, { "forto_cycle",{\
     {LA_IS, {""}, 5, { T_FOR_0, "cycle_counter_init", T_TO_0, "cycle_counter_last_value", "cycle_body" }}\
@@ -490,12 +490,12 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, { "expression" }}\
 }}},\
 {LA_IS, { T_REPEAT_0 }, { "repeat_until_cycle",{\
-    {LA_IS, {""}, 4, { T_REPEAT_0, "statement__or__block_statements", T_UNTIL_0, "repeat_until_cycle_cond" }}\
+    {LA_IS, {""}, 4, { T_REPEAT_0, "statements__or__block_statements", T_UNTIL_0, "repeat_until_cycle_cond" }}\
 }}},\
-{LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement__or__block_statements",{\
-    {LA_IS, {""}, 1, { "statement" }}\
+{LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statements__or__block_statements",{\
+    {LA_IS, {""}, 1, { "statement__iteration" }}\
 }}},\
-{LA_IS, { T_BEGIN_BLOCK_0 }, { "statement__or__block_statements",{\
+{LA_IS, { T_BEGIN_BLOCK_0 }, { "statements__or__block_statements",{\
     {LA_IS, {""}, 1, { "block_statements" }}\
 }}},\
 {LA_IS, { T_INPUT_0 }, { "input",{\
@@ -921,7 +921,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, { "cycle_end_expression" }}\
 }}},\
 {LA_IS, { "DO" }, { "cycle_body",{\
-    {LA_IS, {""}, 2, { "DO", "statement__or__block_statements" }}\
+    {LA_IS, {""}, 2, { "DO", "statements__or__block_statements" }}\
 }}},\
 {LA_IS, { "FOR" }, { "forto_cycle",{\
     {LA_IS, {""}, 5, { "FOR", "cycle_counter_init", "TO", "cycle_counter_last_value", "cycle_body" }}\
@@ -954,12 +954,12 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, { "expression" }}\
 }}},\
 {LA_IS, { "REPEAT" }, { "repeat_until_cycle",{\
-    {LA_IS, {""}, 4, { "REPEAT", "statement__or__block_statements", "UNTIL", "repeat_until_cycle_cond" }}\
+    {LA_IS, {""}, 4, { "REPEAT", "statements__or__block_statements", "UNTIL", "repeat_until_cycle_cond" }}\
 }}},\
-{LA_IS, { "ident_terminal", "(", "NOT", "unsigned_value_terminal", "+", "-", "IF", "FOR", "WHILE", "REPEAT", "GOTO", "GET", "PUT", ";" }, { "statement__or__block_statements",{\
-    {LA_IS, {""}, 1, { "statement" }}\
+{LA_IS, { "ident_terminal", "(", "NOT", "unsigned_value_terminal", "+", "-", "IF", "FOR", "WHILE", "REPEAT", "GOTO", "GET", "PUT", ";" }, { "statements__or__block_statements",{\
+    {LA_IS, {""}, 1, { "statement__iteration" }}\
 }}},\
-{LA_IS, { "{" }, { "statement__or__block_statements",{\
+{LA_IS, { "{" }, { "statements__or__block_statements",{\
     {LA_IS, {""}, 1, { "block_statements" }}\
 }}},\
 {LA_IS, { "GET" }, { "input",{\
