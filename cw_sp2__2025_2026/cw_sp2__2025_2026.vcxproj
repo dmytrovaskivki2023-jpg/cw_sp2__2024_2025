@@ -188,9 +188,21 @@
     <None Include="..\base_test_programs_2025\file1.k03" />
     <None Include="..\base_test_programs_2025\file2.k03" />
     <None Include="..\base_test_programs_2025\file3.k03" />
+    <None Include="..\other_test_programs_2025\file10.k03" />
+    <None Include="..\other_test_programs_2025\file10_.k03" />
+    <None Include="..\other_test_programs_2025\file11.k03" />
+    <None Include="..\other_test_programs_2025\file12.k03" />
+    <None Include="..\other_test_programs_2025\file13.k03" />
+    <None Include="..\other_test_programs_2025\file14.k03" />
+    <None Include="..\other_test_programs_2025\file15.k03" />
     <None Include="..\other_test_programs_2025\file4.k03" />
     <None Include="..\other_test_programs_2025\file5.k03" />
     <None Include="..\other_test_programs_2025\file6.k03" />
+    <None Include="..\other_test_programs_2025\file6_.k03" />
+    <None Include="..\other_test_programs_2025\file6__.k03" />
+    <None Include="..\other_test_programs_2025\file7.k03" />
+    <None Include="..\other_test_programs_2025\file8.k03" />
+    <None Include="..\other_test_programs_2025\file9.k03" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\cli\cli.h" />
