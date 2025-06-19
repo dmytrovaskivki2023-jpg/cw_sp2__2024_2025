@@ -95,7 +95,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         while_cycle = tokenWHILE >> while_cycle_head_expression >> block_statements_in_while_and_if_body;
         //
         repeat_until_cycle_cond = SAME_RULE(expression);
-        repeat_until_cycle = tokenREPEAT >> (statement | block_statements) >> tokenUNTIL >> repeat_until_cycle_cond;
+        repeat_until_cycle = tokenREPEAT >> (*statement | block_statements) >> tokenUNTIL >> repeat_until_cycle_cond;
         //
         input =
 #ifdef DEBUG__IF_ERROR
