@@ -454,7 +454,7 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	unsigned long long int nullStatementIndex = 0;
 	unsigned long long int passMakePrepareElementCount = getDataSectionLastLexemIndex(*lastLexemInfoInTable, &grammar);
-	if (passMakePrepareElementCount++ == ~0) {
+	if (passMakePrepareElementCount/*++*/ == ~0) {
 		printf("Error: bad section!\r\n");
 		exit(0);
 	}
