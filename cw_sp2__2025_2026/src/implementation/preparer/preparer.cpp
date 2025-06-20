@@ -329,12 +329,13 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 
 	for (unsigned long long int index = prevEndOfExpressionIndex + 2; lexemInfoInTable[index].lexemStr[0] != '\0'; ++index) {
 
-		if (!strncmp(lexemInfoInTable[index].lexemStr, "(", MAX_LEXEM_SIZE) || !strncmp(lexemInfoInTable[index].lexemStr, ")", MAX_LEXEM_SIZE)) {
+		if (!strcmp(lexemInfoInTable[index].lexemStr, "(") || !strcmp(lexemInfoInTable[index].lexemStr, ")")) {
 			continue;
 		}
 
 		long long int prevNonParenthesesIndex = getPrevNonParenthesesIndex(lexemInfoInTable, index);
-
+		if (prevNonParenthesesIndex < prevEndOfExpressionIndex) prevNonParenthesesIndex = prevEndOfExpressionIndex + 1;
+	
 		if (lexemInfoInTable[index].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[index].tokenType == VALUE_LEXEME_TYPE) {
 			if (lexemInfoInTable[prevNonParenthesesIndex].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[prevNonParenthesesIndex].tokenType == VALUE_LEXEME_TYPE) {
 				return getEndOfNewPrevExpressioIndex(lexemInfoInTable, index);
