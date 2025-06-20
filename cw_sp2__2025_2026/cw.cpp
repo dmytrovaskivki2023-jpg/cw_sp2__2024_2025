@@ -168,7 +168,7 @@ int main(int argc, char* argv[]) {
 
 		printf("Lexical analysis in progress, please wait...");
 		struct LexemInfo ifBadLexemeInfo = tokenize(text, &lastLexemInfoInTable, identifierIdsTable, lexicalAnalyze);
-		printf("\r                                                    ");
+		printf("\r                                                    \r");
 
 		if (ifBadLexemeInfo.tokenType == UNEXPEXTED_LEXEME_TYPE) {
 			UNEXPEXTED_LEXEME_TYPE;
