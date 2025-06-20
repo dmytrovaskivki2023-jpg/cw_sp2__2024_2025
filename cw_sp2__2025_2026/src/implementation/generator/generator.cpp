@@ -527,7 +527,7 @@ unsigned char* makeInitCode(struct LexemInfo** lastLexemInfoInTable, unsigned ch
 
 unsigned char* initMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
 	//return currBytePtr;
-	unsigned long long int lastDataSectionLexemIndex = getDataSectionLastLexemIndex(*lastLexemInfoInTable, &grammar);
+	unsigned long long int lastDataSectionLexemIndex = getPostDataSectionLexemIndex(*lastLexemInfoInTable, &grammar);
 	if(lastDataSectionLexemIndex == ~0) {
 		printf("Error: bad section!\r\n");
 		exit(0);
