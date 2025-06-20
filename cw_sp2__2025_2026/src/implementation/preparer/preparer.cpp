@@ -334,7 +334,7 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 		}
 
 		long long int prevNonParenthesesIndex = getPrevNonParenthesesIndex(lexemInfoInTable, index);
-		if (prevNonParenthesesIndex < prevEndOfExpressionIndex) prevNonParenthesesIndex = prevEndOfExpressionIndex + 1;
+		if (prevNonParenthesesIndex < prevEndOfExpressionIndex) prevNonParenthesesIndex = prevEndOfExpressionIndex + 1; /*!*/
 	
 		if (lexemInfoInTable[index].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[index].tokenType == VALUE_LEXEME_TYPE) {
 			if (lexemInfoInTable[prevNonParenthesesIndex].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[prevNonParenthesesIndex].tokenType == VALUE_LEXEME_TYPE) {
