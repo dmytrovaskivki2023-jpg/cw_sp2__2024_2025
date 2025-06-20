@@ -586,6 +586,7 @@ unsigned char* noMake(struct LexemInfo** lastLexemInfoInTable, unsigned char* cu
 		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_BODY_0, MAX_LEXEM_SIZE)
 		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_DATA_TYPE_0, MAX_LEXEM_SIZE)
 		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_COMA_0, MAX_LEXEM_SIZE)
+		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_BEGIN_0, MAX_LEXEM_SIZE)
 		|| !strncmp((*lastLexemInfoInTable)->lexemStr, T_END_0, MAX_LEXEM_SIZE)
 		) {
 
