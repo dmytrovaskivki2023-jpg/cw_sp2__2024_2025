@@ -587,7 +587,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 \
 \
 { LA_IS, { T_NAME_0 }, { "program____part1",{\
-    { LA_IS, {""}, 6, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional" }}\
+    { LA_IS, {""}, 7, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional", T_SEMICOLON_0 }}\
 }}},\
 \
 },\
@@ -1051,7 +1051,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 \
 \
 { LA_IS, { "NAME" }, { "program____part1",{\
-    { LA_IS, {""}, 6, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional" }}\
+    { LA_IS, {""}, 7, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";" }}\
 }}},\
 \
 },\
