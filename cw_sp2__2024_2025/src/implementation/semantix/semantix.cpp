@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
 * N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
-*                         file: semantix.cpp                *
+*                         file: semantix.cpp   (semantics)  *
 *                                                  (draft!) *
 *************************************************************/
 
@@ -23,7 +23,7 @@
 //
 //#define NO_IMPLEMENT_CODE_STATE 256
 
-unsigned long long int getDataSectionLastLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
+unsigned long long int getPostDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
 	int lexemIndex = 0;
 	const struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
 
@@ -39,7 +39,7 @@ unsigned long long int getDataSectionLastLexemIndex(LexemInfo* lexemInfoTable, G
 int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char ** errorMessagesPtrToLastBytePtr) {
 //	int returnState = SUCCESS_STATE;
 	unsigned long long int lastDataSectionLexemIndex = 0;
-	if (~0 == (lastDataSectionLexemIndex = getDataSectionLastLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+	if (~0 == (lastDataSectionLexemIndex = getPostDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
 		*errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Error get of data section last lexem index.\r\n");
 		return ~SUCCESS_STATE;
 	}
@@ -121,7 +121,7 @@ int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, 
 	int returnState = SUCCESS_STATE;
 
 	unsigned long long int lastDataSectionLexemIndex = 0;
-	if (~0 == (lastDataSectionLexemIndex = getDataSectionLastLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+	if (~0 == (lastDataSectionLexemIndex = getPostDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
 		*errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Error get of data section last lexem index.\r\n");
 		return ~SUCCESS_STATE;
 	}

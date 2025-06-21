@@ -6,15 +6,6 @@
 *************************************************************/
 
 #include "../include/def.h"
-//#define LEXICAL_ANALISIS_MODE 1
-//#define SEMANTIC_ANALISIS_MODE 2
-//#define FULL_COMPILER_MODE 4
-
-//#define DEBUG_MODE 512
-
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
-//#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE | SYNTAX_ANALISIS_MODE | SEMANTIC_ANALISIS_MODE | MAKE_ASSEMBLY | MAKE_BINARY)
-
 
 #define TOKENS_RE         ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
 #define KEYWORDS_RE       ";|<<|>>|\\+|-|\\*|,|==|!=|:|\\(|\\)|NAME|DATA|BODY|END|EXIT|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
@@ -23,6 +14,7 @@
 
 
 // first column of the cw term paper option
+// program____part2 in the example starts with ";" (to simplify implementation)
 #define PROGRAM_FORMAT \
 {"tokenNAME__program_name", 2, {"tokenNAME","program_name"}},\
 {"tokenSEMICOLON__tokenBODY", 2, {"tokenSEMICOLON","tokenBODY"}},\
@@ -752,6 +744,8 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
+
+#define RERUN_MODE_FOR_INTERACTIVE_MODE
 
 //#define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALISIS_MODE)
 #define DEFAULT_MODE (DEBUG_MODE | LEXICAL_ANALYZE_MODE | SYNTAX_ANALYZE_MODE | SEMANTIX_ANALYZE_MODE | MAKE_ASSEMBLY | MAKE_BINARY)

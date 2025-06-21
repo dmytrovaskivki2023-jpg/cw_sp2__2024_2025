@@ -102,6 +102,10 @@ void printLexemes(struct LexemInfo* lexemInfoTable, char printBadLexeme) {
 }
 
 void printLexemesToFile(struct LexemInfo* lexemInfoTable, char printBadLexeme, const char* filename) {
+	if (lexemInfoTable == NULL || filename == NULL) {
+		printf("Error\n");
+		exit(0);
+	}
 	FILE* file = fopen(filename, "wb");
 	if (!file) {
 		perror("Failed to open file");
@@ -130,6 +134,10 @@ void printLexemesToFile(struct LexemInfo* lexemInfoTable, char printBadLexeme, c
 			lexemInfoTable[index].col);
 	}
 	fprintf(file, "-------------------------------------------------------------------\r\n\r\n");
+
+#ifdef DEBUG_MODE
+	printf("File \"%s\" saved.\n", filename);
+#endif
 
 	fclose(file);
 }

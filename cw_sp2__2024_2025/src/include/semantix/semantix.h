@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 /************************************************************
 * N.Kozak // Lviv'2024-2025 // cw_sp2__2024_2025            *
-*                         file: semantix.h                  *
+*                         file: semantix.h  (semantics)     *
 *                                                  (draft!) *
 *************************************************************/
 
@@ -19,7 +19,7 @@
 
 #define NO_IMPLEMENT_CODE_STATE 256
 
-unsigned long long int getDataSectionLastLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar);
+unsigned long long int getPostDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar);
 int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr);
 int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr);
 int checkingCollisionInDeclarationsByKeyWords(char(*identifierIdsTable)[MAX_LEXEM_SIZE], char** errorMessagesPtrToLastBytePtr);

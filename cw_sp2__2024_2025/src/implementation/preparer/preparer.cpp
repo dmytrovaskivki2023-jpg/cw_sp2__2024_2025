@@ -17,60 +17,61 @@
 #include "stdlib.h"
 #include "string.h"
 
+#define PRECEDENCE_MAX_LEVEL 100
 int precedenceLevel(char* lexemStr) {
 	if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_NOT][0], MAX_LEXEM_SIZE)) {		
-		return 6;
+		return PRECEDENCE_MAX_LEVEL - 3;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT][0], MAX_LEXEM_SIZE)) {		
-		return 6;
+		return PRECEDENCE_MAX_LEVEL - 3;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_AND][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 10;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_AND][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 13;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_MUL][0], MAX_LEXEM_SIZE)) {	
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_DIV][0], MAX_LEXEM_SIZE)) {		
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_MOD][0], MAX_LEXEM_SIZE)) {	
-		return 5;
+		return PRECEDENCE_MAX_LEVEL - 5;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_BITWISE_OR][0], MAX_LEXEM_SIZE)) {	
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 12;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_OR][0], MAX_LEXEM_SIZE)) {	
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 14;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_ADD][0], MAX_LEXEM_SIZE)) {
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 6;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_SUB][0], MAX_LEXEM_SIZE)) {
-		return 4;
+		return PRECEDENCE_MAX_LEVEL - 6;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 9;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_NOT_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 9;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_LESS_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_GREATER_OR_EQUAL][0], MAX_LEXEM_SIZE)) {
-		return 3;
+		return PRECEDENCE_MAX_LEVEL - 8;
 	}
 
 	else if (!strncmp(lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)) {
@@ -310,12 +311,13 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 
 	for (unsigned long long int index = prevEndOfExpressionIndex + 2; lexemInfoInTable[index].lexemStr[0] != '\0'; ++index) {
 
-		if (!strncmp(lexemInfoInTable[index].lexemStr, "(", MAX_LEXEM_SIZE) || !strncmp(lexemInfoInTable[index].lexemStr, ")", MAX_LEXEM_SIZE)) {
+		if (!strcmp(lexemInfoInTable[index].lexemStr, "(") || !strcmp(lexemInfoInTable[index].lexemStr, ")")) {
 			continue;
 		}
 
 		long long int prevNonParenthesesIndex = getPrevNonParenthesesIndex(lexemInfoInTable, index);
-
+		/*!!*/if (prevNonParenthesesIndex < prevEndOfExpressionIndex) prevNonParenthesesIndex = prevEndOfExpressionIndex + 1;
+	
 		if (lexemInfoInTable[index].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[index].tokenType == VALUE_LEXEME_TYPE) {
 			if (lexemInfoInTable[prevNonParenthesesIndex].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[prevNonParenthesesIndex].tokenType == VALUE_LEXEME_TYPE) {
 				return getEndOfNewPrevExpressioIndex(lexemInfoInTable, index);
@@ -341,29 +343,58 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 	return ~0;
 }
 
+void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLexemInfoInTable) {
+
+	if (lexemInfoInTable == NULL || tempLexemInfoInTable == NULL) {
+		printf("Error: no data for makePrePrepare.\n");
+		exit(0);
+	}
+
+	struct LexemInfo* firstLexemInfoInTable = lexemInfoInTable;
+	struct LexemInfo* firstTempLexemInfoInTable = tempLexemInfoInTable;
+	
+	for (/*lexemInfoInTable = firstLexemInfoInTable*/; lexemInfoInTable->lexemStr[0] != '\0'; ++lexemInfoInTable, ++tempLexemInfoInTable) {
+		*tempLexemInfoInTable = *lexemInfoInTable;
+		memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
+	}
+	*tempLexemInfoInTable = *lexemInfoInTable;
+	memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
+
+	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
+		if (tempLexemInfoInTable[1].tokenType == VALUE_LEXEME_TYPE &&
+			tempLexemInfoInTable[-1].tokenType == KEYWORD_LEXEME_TYPE
+			) {
+			// no implement unary operar
+			if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_ADD][0], MAX_LEXEM_SIZE)) {
+				*lexemInfoInTable = *++tempLexemInfoInTable;
+				++lexemInfoInTable;
+				continue;
+			}
+			// no implement unary operar
+			else if (!strncmp(tempLexemInfoInTable[0].lexemStr, tokenStruct[MULTI_TOKEN_SUB][0], MAX_LEXEM_SIZE)) {
+				*lexemInfoInTable = *++tempLexemInfoInTable;
+				lexemInfoInTable[0].ifvalue *= -1;
+				++lexemInfoInTable;
+				continue;
+			}
+		}
+		else *lexemInfoInTable++ = *tempLexemInfoInTable;
+	}
+
+	for (tempLexemInfoInTable = firstTempLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
+		memset(tempLexemInfoInTable, '\0', sizeof(*tempLexemInfoInTable));
+	}
+}
+
 void makePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo** lastLexemInfoInTable, struct LexemInfo** lastTempLexemInfoInTable) {
 	unsigned long long int nullStatementIndex = 0;
-	unsigned long long int passMakePrepareElementCount = getDataSectionLastLexemIndex(*lastLexemInfoInTable, &grammar);
-	if (passMakePrepareElementCount++ == ~0) {
+	unsigned long long int passMakePrepareElementCount = getPostDataSectionLexemIndex(*lastLexemInfoInTable, &grammar);
+	if (passMakePrepareElementCount/*++*/ == ~0) {
 		printf("Error: bad section!\r\n");
 		exit(0);
 	}
 
-//	*lastLexemInfoInTable += lastDataSectionLexemIndex;
-//	while (lastDataSectionLexemIndex--) {
-//	
-//	}
-//
-//	for (; false && (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {
-//		if (passMakePrepareElementCount) {
-//			--passMakePrepareElementCount;
-//			++lexemInfoInTable;
-//			continue;
-//		}
-//		else {
-//			break;
-//		}
-//	}
+	makePrePrepare(*lastLexemInfoInTable + passMakePrepareElementCount, *lastTempLexemInfoInTable);
 
 	lexemInfoTransformationTempStackSize = 0;
 	for (; (*lastLexemInfoInTable)->lexemStr[0] != '\0'; *(*lastTempLexemInfoInTable)++ = *(*lastLexemInfoInTable)++) {

@@ -14,7 +14,7 @@
 
 #define DEFAULT_SYNTAX_ANAlYZE_MODE SYNTAX_ANALYZE_BY_CYK_ALGORITHM
 
-using namespace std;
+//using namespace std;
 
 #define MAX_RULES 356
 
