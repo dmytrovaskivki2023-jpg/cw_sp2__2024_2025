@@ -38,8 +38,8 @@ unsigned long long int getPostDataSectionLexemIndex(LexemInfo* lexemInfoTable, G
 
 int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifierIdsTable)[MAX_LEXEM_SIZE], char ** errorMessagesPtrToLastBytePtr) {
 //	int returnState = SUCCESS_STATE;
-	unsigned long long int lastDataSectionLexemIndex = 0;
-	if (~0 == (lastDataSectionLexemIndex = getPostDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
+	unsigned long long int postDataSectionLexemIndex = 0;
+	if (~0 == (postDataSectionLexemIndex = getPostDataSectionLexemIndex(lexemInfoTable, grammar))) { // TODO: ADD TO START CODE
 		*errorMessagesPtrToLastBytePtr += sprintf(*errorMessagesPtrToLastBytePtr, "Error get of data section last lexem index.\r\n");
 		return ~SUCCESS_STATE;
 	}
@@ -48,7 +48,7 @@ int checkingInternalCollisionInDeclarations(LexemInfo* lexemInfoTable, Grammar* 
 		char isDeclaredIdentifierCollision = 0;
 		unsigned int lexemIndex = 0;
 
-		for (lexemIndex = 0; lexemIndex <= lastDataSectionLexemIndex; ++lexemIndex) {
+		for (lexemIndex = 0; lexemIndex < postDataSectionLexemIndex; ++lexemIndex) {
 			if (lexemesInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE) {
 				if (!strncmp(identifierIdsTable[index], lexemesInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)) {
 					if (isDeclaredIdentifier) {
