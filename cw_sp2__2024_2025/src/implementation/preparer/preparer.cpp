@@ -378,7 +378,7 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 				continue;
 			}
 		}
-		else *lexemInfoInTable++ = *tempLexemInfoInTable;
+		*lexemInfoInTable++ = *tempLexemInfoInTable;
 	}
 
 	for (tempLexemInfoInTable = firstTempLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
