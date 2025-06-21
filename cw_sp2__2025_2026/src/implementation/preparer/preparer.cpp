@@ -402,7 +402,7 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 			++lexemInfoInTable;
 			continue;
 		}
-		if (!strncmp(tempLexemInfoInTable->lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
+		else if (!strncmp(tempLexemInfoInTable->lexemStr, "["/*TODO: add to config.h*/, MAX_LEXEM_SIZE)) {
 			bool bindDetect = false;
 			if (!strncmp(tempLexemInfoInTable[-2].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)) {
 				bindDetect = true;
