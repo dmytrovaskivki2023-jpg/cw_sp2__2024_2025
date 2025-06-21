@@ -94,6 +94,7 @@ unsigned char* makeNullStatementWhileCycleCode(struct LexemInfo** lastLexemInfoI
 }
 
 unsigned char* makeContinueWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
+	// No suport multi-if-continue: TODO: add a check for this to the semantics
 	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_CONTINUE_WHILE);
 	if (multitokenSize) {
 		if (
@@ -216,6 +217,7 @@ unsigned char* makeContinueWhileCycleCode(struct LexemInfo** lastLexemInfoInTabl
 }
 
 unsigned char* makeExitWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, unsigned char* currBytePtr, unsigned char generatorMode) {
+	// No suport multi-if-exit: TODO: add a check for this to the semantics
 	unsigned char multitokenSize = detectMultiToken(*lastLexemInfoInTable, MULTI_TOKEN_EXIT_WHILE);
 	if (multitokenSize) {
 		if (
