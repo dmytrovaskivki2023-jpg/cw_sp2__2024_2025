@@ -365,8 +365,6 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"declaration", 2, {"value_type", "ident"}},\
 \
         {"unary_operator", 1, {T_NOT_0}},\
-        {"unary_operator", 1, {T_SUB_0}},\
-        {"unary_operator", 1, {T_ADD_0}},\
         {"binary_operator", 1, {T_AND_0}},\
         {"binary_operator", 1, {T_OR_0}},\
         {"binary_operator", 1, {T_EQUAL_0}},\
@@ -423,7 +421,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
         {"cycle_body", 2, {"tokenDO","statement"}},\
         {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
-        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","cycle_counter_last_value"}},\
+        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
         {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},\
         {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},\
         {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
@@ -555,8 +553,6 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"declaration", 2, {"value_type", "ident"}},\
 \
     {"unary_operator", 1, {"NOT"}},\
-    {"unary_operator", 1, {"-"}},\
-    {"unary_operator", 1, {"+"}},\
     {"binary_operator", 1, {"AND"}},\
     {"binary_operator", 1, {"OR"}},\
     {"binary_operator", 1, {"=="}},\
@@ -613,7 +609,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
     {"cycle_body", 2, {"tokenDO","statement"}},\
     {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
-    {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","cycle_counter_last_value"}},\
+    {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
     {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},\
     {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},\
     {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
