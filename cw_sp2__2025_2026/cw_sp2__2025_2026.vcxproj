@@ -181,7 +181,7 @@
     <ClCompile Include="src\implementation\generator\while_block.cpp" />
     <ClCompile Include="src\implementation\lexica\lexica.cpp" />
     <ClCompile Include="src\implementation\preparer\preparer.cpp" />
-    <ClCompile Include="src\implementation\semantix\semantix.cpp" />
+    <ClCompile Include="src\implementation\semantics\semantics.cpp" />
     <ClCompile Include="src\implementation\syntax\syntax.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -245,7 +245,7 @@
     <ClInclude Include="src\include\generator\while_block.h" />
     <ClInclude Include="src\include\lexica\lexica.h" />
     <ClInclude Include="src\include\preparer\preparer.h" />
-    <ClInclude Include="src\include\semantix\semantix.h" />
+    <ClInclude Include="src\include\semantics\semantics.h" />
     <ClInclude Include="src\include\syntax\syntax.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

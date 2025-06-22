@@ -15,14 +15,13 @@
 
 extern unsigned char generatorMode;
 
-#define CODEGEN_DATA_TYPE int
+//#define CODEGEN_DATA_TYPE int /*!*/
 
-#define START_DATA_OFFSET 0x800
-#define OUT_DATA_OFFSET (START_DATA_OFFSET + 0x800)
+//#define START_DATA_OFFSET 0x800
+//#define OUT_DATA_OFFSET (START_DATA_OFFSET + 0x800)
 
-#define M1 1024
-#define M2 1024
-
+//#define M1 1024
+//#define M2 1024
 
 #define dataOffsetMinusCodeOffset 0x00004000ull
 //#define dataOffsetMinusCodeOffset 0x00003000ull

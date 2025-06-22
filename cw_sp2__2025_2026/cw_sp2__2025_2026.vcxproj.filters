@@ -123,9 +123,6 @@
     <ClCompile Include="src\implementation\preparer\preparer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\implementation\semantix\semantix.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\implementation\syntax\syntax.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -145,6 +142,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\implementation\generator\index_to_value.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\implementation\semantics\semantics.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -271,9 +271,6 @@
     <ClInclude Include="src\include\preparer\preparer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\semantix\semantix.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="src\include\syntax\syntax.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -293,6 +290,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\include\generator\index_to_value.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\semantics\semantics.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

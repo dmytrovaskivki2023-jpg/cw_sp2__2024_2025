@@ -164,15 +164,15 @@ unsigned long long int lexemInfoTransformationTempStackSize = 0;
 //
 
 
-unsigned long long int getVariableOffset(char* identifierStr) {
-	for (unsigned long long int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
-		if (!strncmp(identifierIdsTable[index], identifierStr, MAX_LEXEM_SIZE)) {
-			return START_DATA_OFFSET + sizeof(CODEGEN_DATA_TYPE) * index;
-		}
-	}
-
-	return OUT_DATA_OFFSET;
-}
+//unsigned long long int getVariableOffset(char* identifierStr) {
+//	for (unsigned long long int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
+//		if (!strncmp(identifierIdsTable[index], identifierStr, MAX_LEXEM_SIZE)) {
+//			return START_DATA_OFFSET + sizeof(CODEGEN_DATA_TYPE) * index;
+//		}
+//	}
+//
+//	return OUT_DATA_OFFSET;
+//}
 
 unsigned char* outBytes2Code(unsigned char* currBytePtr, unsigned char* fragmentFirstBytePtr, unsigned long long int bytesCout) {
 	for (; bytesCout--; *currBytePtr++ = *fragmentFirstBytePtr++);
