@@ -381,7 +381,9 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"left_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
         {"left_expression", 2, {"unary_operator","expression"}},\
         {"left_expression", 1, {"ident_terminal"}},\
-        {"left_expression", 1, {"value_terminal"}},\
+        {"left_expression", 1, {"unsigned_value_terminal"}},\
+        {"left_expression", 2, { "tokenPLUS", "unsigned_value" }},\
+        {"left_expression", 2, { "tokenMINUS", "unsigned_value" }},\
         {"binary_action____iteration_after_two", 2, {"binary_action","binary_action____iteration_after_two"}},\
         {"binary_action____iteration_after_two", 2, {"binary_action","binary_action"}},\
         {"expression", 2, {"left_expression","binary_action____iteration_after_two"}},\
@@ -389,7 +391,9 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
         {"expression", 2, {"unary_operator","expression"}},\
         {"expression", 1, {"ident_terminal"}},\
-        {"expression", 1, {"value_terminal"}},\
+        {"expression", 1, {"unsigned_value_terminal"}},\
+        {"expression", 2, { "tokenPLUS", "unsigned_value" }},\
+        {"expression", 2, { "tokenMINUS", "unsigned_value" }},\
 \
         {"tokenGROUPEXPRESSIONBEGIN__expression", 2, {"tokenGROUPEXPRESSIONBEGIN","expression"}},\
         {"group_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
@@ -417,7 +421,6 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"lr_expression", 2, {"expression","tokenLRBIND"}},\
         {"cycle_counter_init", 2, {"cycle_counter","rl_expression"}},\
         {"cycle_counter_init", 2, {"lr_expression","cycle_counter"}},\
-        {"cycle_counter_last_value", 1, {"value_terminal"}},\
         {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
         {"cycle_body", 2, {"tokenDO","statement"}},\
         {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
@@ -531,13 +534,16 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"tokenEND", 1, {T_END_0}},\
         {"tokenSEMICOLON", 1, {T_SEMICOLON_0}},\
 \
-        {"value", 1, {"value_terminal"}},\
+        {"unsigned_value", 1, {"unsigned_value_terminal"}},\
+        {"value", 1, {"unsigned_value_terminal"}},\
+        {"value", 2, { "tokenPLUS", "unsigned_value" }},\
+        {"value", 2, { "tokenMINUS", "unsigned_value" }},\
 \
         {"ident", 1, {"ident_terminal"}},\
 \
         {"", 2, {"",""}}\
 },\
-178,\
+182,\
 "program"
 
 #define ORIGINAL_GRAMMAR {\
@@ -569,7 +575,9 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"left_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
     {"left_expression", 2, {"unary_operator","expression"}},\
     {"left_expression", 1, {"ident_terminal"}},\
-    {"left_expression", 1, {"value_terminal"}},\
+    {"left_expression", 1, {"unsigned_value_terminal"}},\
+    {"left_expression", 2, { "tokenPLUS", "unsigned_value" }},\
+    {"left_expression", 2, { "tokenMINUS", "unsigned_value" }},\
     {"binary_action____iteration_after_two", 2, {"binary_action","binary_action____iteration_after_two"}},\
     {"binary_action____iteration_after_two", 2, {"binary_action","binary_action"}},\
     {"expression", 2, {"left_expression","binary_action____iteration_after_two"}},\
@@ -577,7 +585,9 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
     {"expression", 2, {"unary_operator","expression"}},\
     {"expression", 1, {"ident_terminal"}},\
-    {"expression", 1, {"value_terminal"}},\
+    {"expression", 1, {"unsigned_value_terminal"}},\
+    {"expression", 2, { "tokenPLUS", "unsigned_value" }},\
+    {"expression", 2, { "tokenMINUS", "unsigned_value" }},\
 \
     {"tokenGROUPEXPRESSIONBEGIN__expression", 2, {"tokenGROUPEXPRESSIONBEGIN","expression"}},\
     {"group_expression", 2, {"tokenGROUPEXPRESSIONBEGIN__expression","tokenGROUPEXPRESSIONEND"}},\
@@ -605,7 +615,6 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"lr_expression", 2, {"expression","tokenLRBIND"}},\
     {"cycle_counter_init", 2, {"cycle_counter","rl_expression"}},\
     {"cycle_counter_init", 2, {"lr_expression","cycle_counter"}},\
-    {"cycle_counter_last_value", 1, {"value_terminal"}},\
     {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
     {"cycle_body", 2, {"tokenDO","statement"}},\
     {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
@@ -728,14 +737,17 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"tokenEND", 1, {"END"}},\
     {"tokenSEMICOLON", 1, {";"}},\
 \
-    {"value", 1, {"value_terminal"}},\
+    {"unsigned_value", 1, { "unsigned_value_terminal" }},\
+    {"value", 1, { "unsigned_value_terminal" }}, \
+    {"value", 2, { "tokenPLUS", "unsigned_value" }},\
+    {"value", 2, { "tokenMINUS", "unsigned_value" }},\
 \
     {"ident", 1, {"ident_terminal"}},\
 \
     {"", 2, {"",""}}\
 \
 },\
-176,\
+180,\
 "program"
 
 ///////////////////////////////////////////////////////////////
