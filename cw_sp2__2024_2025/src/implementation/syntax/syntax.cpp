@@ -249,30 +249,6 @@ void printASTToFile(struct LexemInfo* lexemInfoTable, const ASTNode* node, std::
     }
 }
 
-void printAST__OLD_123(struct LexemInfo* lexemInfoTable, const ASTNode* node, int depth = 0) {
-    static int lexemInfoTableIndexForPrintAST = 0; // ATTENTION: multithreading is not supported for this!
-    if (!node) {
-        return;
-    }
-    if (!depth) {
-        lexemInfoTableIndexForPrintAST = 0;
-    }
-    for (unsigned int depthIndex = 0; depthIndex <= depth; ++depthIndex) {
-        std::cout << "    " << "|";
-    }
-    std::cout << "--";
-    if (node->isTerminal) {
-        std::cout << "\"" << lexemInfoTable[lexemInfoTableIndexForPrintAST++].lexemStr << "\"";
-    }
-    else {
-        std::cout << node->value;
-    }
-    std::cout << "\n";
-    for (const ASTNode* child : node->children) {
-        printAST(lexemInfoTable, child, depth + 1);
-    }
-}
-
 void displayParseInfoTable(const map<int, map<int, set<string>>>& parseInfoTable) {
     constexpr int CELL_WIDTH = 128;
 
@@ -386,7 +362,7 @@ bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* gramm
             // If a terminal is found
             if (rule.rhs_count == 1 && (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 )) {
                 insertIntoSymbolSet(&parseInfoTable[lexemIndex][lexemIndex], rule.lhs);
@@ -451,7 +427,7 @@ bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, 
         if (rule.rhs_count == 1) {
             if (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 ) {
                 ++lexemIndex;
@@ -493,7 +469,7 @@ const LexemInfo* recursiveDescentParserWithDebug_(const char* ruleName, int& lex
         if (rule.rhs_count == 1) {
             if (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 ) {
                 ++lexemIndex;
@@ -538,6 +514,11 @@ bool recursiveDescentParserRuleWithDebugWithBuildAST(const char* ruleName, int& 
         printf("Error: Maximum recursion depth reached.\n");
         return false;
     }
+
+#ifdef DEBUG_STATES
+    cout << "\r" << "recursiveDescentParse in progress.....[please wait]: now depth is" << std::setw(6) << depth;
+#endif
+
     char isError = false;
     for (int i = 0; i < grammar->rule_count; ++i) {
         Rule& rule = grammar->rules[i];
@@ -547,7 +528,7 @@ bool recursiveDescentParserRuleWithDebugWithBuildAST(const char* ruleName, int& 
         if (rule.rhs_count == 1) {
             if (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 ) {
                 ++lexemIndex;
@@ -582,6 +563,10 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
         return nullptr;
     }
 
+#ifdef DEBUG_STATES
+    cout << "\r" << "recursiveDescentParse in progress.....[please wait]: now depth is" << std::setw(6) << depth;
+#endif
+
     ASTNode* node = new ASTNode(ruleName, false);
     node->isPartialSuccess = 0;
     for (int i = 0; i < grammar->rule_count; ++i) {
@@ -596,7 +581,7 @@ ASTNode* recursiveDescentParserRuleWithDebugWithBuildErrorAST(const char* ruleNa
         if (rule.rhs_count == 1) {
             if (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 ) {
                 node->children.push_back(new ASTNode(lexemInfoTable[lexemIndex].lexemStr, true));
@@ -709,7 +694,19 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
         int lexemIndex = 0;
         const struct LexemInfo* unexpectedLexemfailedTerminal = nullptr;
 
+
+#if defined(_DEBUG)
+        printf("ATTENTION: for better performance, use Release mode!\r\n");
+#endif
+
+#ifndef DEBUG_STATES
+        cout << "recursiveDescentParse in progress.....[please wait]";
+#else
+        cout << "\r" << "recursiveDescentParse in progress.....[please wait]: now depth is      0";
+#endif
+
         if (recursiveDescentParserRuleWithDebug(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal)) {           
+            cout << "\r" << "recursiveDescentParse ................[  finish   ]\n";
             if (lexemInfoTable[lexemIndex].lexemStr[0] == '\0') {
                 printf("Parse successful.\n");
                 printf("%d.\n", lexemIndex);
@@ -724,7 +721,14 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             }
         }
         else {
+            cout << "\r" << "recursiveDescentParse ................[  finish   ]\n";
+#ifndef DEBUG_STATES
+            cout << "recursiveDescentParse in progress.....[please wait]";
+#else
+            cout << "\r" << "recursiveDescentParse in progress.....[please wait]: now depth is      0";
+#endif
             ASTNode* ast = recursiveDescentParserRuleWithDebugWithBuildErrorAST(grammar->start_symbol, lexemIndex, lexemInfoTable, grammar, 0, &unexpectedLexemfailedTerminal);
+            cout << "\r" << "recursiveDescentParse ................[  finish   ]\n";
             char errorMark = 0;
             int lexemInfoTableIndexForPrintAST = getSyntaxError(lexemInfoTable, ast, errorMark);
             delete ast;
@@ -825,7 +829,7 @@ bool cykAlgorithmImplementationByCPPMap(struct LexemInfo* lexemInfoTable, Gramma
             // If a terminal is found
             if (rule.rhs_count == 1 && (
                 lexemInfoTable[lexemIndex].tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(rule.rhs[0], "ident_terminal")
-                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "value_terminal")
+                || lexemInfoTable[lexemIndex].tokenType == VALUE_LEXEME_TYPE && !strcmp(rule.rhs[0], "unsigned_value_terminal")
                 || !strncmp(rule.rhs[0], lexemInfoTable[lexemIndex].lexemStr, MAX_LEXEM_SIZE)
                 )) {
                 parseInfoTable[lexemIndex][lexemIndex].insert(lhs);
