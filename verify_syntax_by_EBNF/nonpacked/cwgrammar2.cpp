@@ -11,7 +11,13 @@
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix.hpp> //
 
+#define CW_GRAMMAR cwgrammar
+
 #define DEBUG__IF_ERROR
+
+#define RERUN_MODE
+
+#define DEFAULT_INPUT_FILE "../test_programs/file1.cwl"
 
 #define MAX_TEXT_SIZE 8192
 
@@ -31,7 +37,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         other_declaration_ident = tokenCOMMA >> ident;
         declaration = value_type >> ident >> *other_declaration_ident;
         //
-        unary_operator = tokenNOT | tokenMINUS | tokenPLUS;
+        unary_operator = SAME_RULE(tokenNOT);
         unary_operation = unary_operator >> expression;
         binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
         binary_action = binary_operator >> expression;
@@ -54,7 +60,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         cycle_counter_rl_init = cycle_counter >> tokenRLBIND >> cycle_begin_expression;
         cycle_counter_lr_init = cycle_begin_expression >> tokenLRBIND >> cycle_counter;
         cycle_counter_init = cycle_counter_rl_init | cycle_counter_lr_init;
-        cycle_counter_last_value = SAME_RULE(value);
+        cycle_counter_last_value = SAME_RULE(expression);
         cycle_body = tokenDO >> statement >> *statement;
         forto_cycle = tokenFOR >> cycle_counter_init >> tokenTO >> cycle_counter_last_value >> cycle_body >> tokenSEMICOLON;
         //
@@ -335,20 +341,18 @@ binary_action____iteration_after_two
         declaration = value_type__ident >> other_declaration_ident____iteration_after_one                                          // +
             | value_type >> ident;                                                                                         // + (!)
 //
-        unary_operator = tokenNOT          // + (!)
-            | tokenMINUS                   // + (!)
-            | tokenPLUS;                   // + (!)
-        binary_operator = tokenAND         // + (!)
-            | tokenOR                      // + (!)
-            | tokenEQUAL                   // + (!)
-            | tokenNOTEQUAL                // + (!)
-            | tokenLESSOREQUAL             // + (!)
-            | tokenGREATEROREQUAL          // + (!)
-            | tokenPLUS                    // + (!)
-            | tokenMINUS                   // + (!)
-            | tokenMUL                     // + (!)
-            | tokenDIV                     // + (!)
-            | tokenMOD;                    // + (!)
+        unary_operator = SAME_RULE(tokenNOT); // + (!)
+        binary_operator = tokenAND            // + (!)
+            | tokenOR                         // + (!)
+            | tokenEQUAL                      // + (!)
+            | tokenNOTEQUAL                   // + (!)
+            | tokenLESSOREQUAL                // + (!)
+            | tokenGREATEROREQUAL             // + (!)
+            | tokenPLUS                       // + (!)
+            | tokenMINUS                      // + (!)
+            | tokenMUL                        // + (!)
+            | tokenDIV                        // + (!)
+            | tokenMOD;                       // + (!)
         binary_action = binary_operator >> expression; // +
         //
         left_expression = tokenGROUPEXPRESSIONBEGIN__expression >> tokenGROUPEXPRESSIONEND            // + (!)
@@ -390,7 +394,7 @@ binary_action____iteration_after_two
         lr_expression = expression >> tokenLRBIND;                                                                                           // + (!)
         cycle_counter_init = cycle_counter >> rl_expression                                                                                  // +
             | lr_expression >> cycle_counter;                                                                                 // +
-        cycle_counter_last_value = SAME_RULE(value);                                                                                         // + (!)
+        cycle_counter_last_value = SAME_RULE(expression);                                                                                         // + (!)
         cycle_body = tokenDO >> statement____iteration_after_two                                                               // + (!)
             | tokenDO >> statement;                                                                                                  // + (!)
         tokenFOR__cycle_counter_init = tokenFOR >> cycle_counter_init;                                                                       // + (!)
@@ -783,22 +787,32 @@ int commentRemover(char* text, const char* openStrSpc, const char* closeStrSpc) 
     return 0;
 }
 
-#define DEFAULT_INPUT_FILE "../../test_programs/file1.cwl"
 
-int main() {
+int main(int argc, char* argv[]) {
     char* text_;
     char fileName[128] = DEFAULT_INPUT_FILE;
     char choice[2] = { fileName[0], fileName[1] };
-    std::cout << "Enter file name(Enter \"" << choice[0] << "\" to use default \"" DEFAULT_INPUT_FILE "\"):\n";
+    system("CLS");
+    std::cout << "Enter file name(Enter \"" << choice[0] << "\" to use default \"" DEFAULT_INPUT_FILE "\"):";
     std::cin >> fileName;
     if (fileName[0] == choice[0] && fileName[1] == '\0') {
         fileName[1] = choice[1];
     }
     size_t sourceSize = loadSource(&text_, fileName);
     if (!sourceSize) {
+#ifdef RERUN_MODE
+        (void)getchar();
+        printf("\nEnter 'y' to rerun program action(to pass action enter other key): ");
+        char valueByGetChar = getchar();
+        if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+            system((std::string("\"") + argv[0] + "\"").c_str());
+        }
+        return 0;
+#else
         printf("Press Enter to exit . . .");
         (void)getchar();
         return 0;
+#endif
     }
     printf("Original source:\r\n");
     printf("-------------------------------------------------------------------\r\n");
@@ -822,7 +836,7 @@ int main() {
     typedef str_t::iterator str_t_it;
 
     std::ostringstream error_stream;
-    cwgrammar_2<str_t_it> cwg(error_stream);
+    CW_GRAMMAR<str_t_it> cwg(error_stream);
 
     str_t_it begin = text.begin(), end = text.end();
 
@@ -841,6 +855,16 @@ int main() {
     }
 
     free(text_);
-	
-	return 0;
+
+    (void)getchar();
+
+#ifdef RERUN_MODE
+    printf("\nEnter 'y' to rerun program action(to pass action enter other key): ");
+    char valueByGetChar = getchar();
+    if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+        system((std::string("\"") + argv[0] + "\"").c_str());
+    }
+#endif
+
+    return 0;
 }
