@@ -38,7 +38,7 @@
 #include "src/include/lexica/lexica.h"
 
 #include "src/include/syntax/syntax.h"
-#include "src/include/semantix/semantix.h"
+#include "src/include/semantics/semantics.h"
 #include "src/include/preparer/preparer.h"
 #include "src/include/generator/generator.h"
 
@@ -329,7 +329,7 @@ int main(int argc, char* argv[]) {
 	if (mode & INTERACTIVE_MODE && (mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE || getchar() == 'y') || mode & SEMANTIX_ANALYZE_MODE) {
 		errorMessagesPtrToLastBytePtr[0] = '\0';
 		unsigned char* errorMessagesPtrToLastBytePtr_ = errorMessagesPtrToLastBytePtr;
-		if (SUCCESS_STATE != semantixAnalyze(lexemesInfoTable, &grammar, identifierIdsTable, (char *)errorMessagesPtrToLastBytePtr)) {
+		if (SUCCESS_STATE != semanticsAnalyze(lexemesInfoTable, &grammar, identifierIdsTable, (char *)errorMessagesPtrToLastBytePtr)) {
 			if (parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
 				writeBytesToFile(parameters[OUT_SEMANTIX_ERROR_FILENAME_WITH_EXTENSION_PARAMETER], errorMessagesPtrToLastBytePtr, strlen((const char*)errorMessagesPtrToLastBytePtr));
 			}
