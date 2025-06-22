@@ -787,7 +787,6 @@ int commentRemover(char* text, const char* openStrSpc, const char* closeStrSpc) 
     return 0;
 }
 
-
 int main(int argc, char* argv[]) {
     char* text_;
     char fileName[128] = DEFAULT_INPUT_FILE;
