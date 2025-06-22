@@ -11,7 +11,7 @@
 #include "../../../src/include/config.h"
 #include "../../../src/include/lexica/lexica.h"
 #include "../../../src/include/syntax/syntax.h"
-#include "../../../src/include/semantix/semantix.h"
+#include "../../../src/include/semantics/semantics.h"
 #include "../../../src/include/generator/generator.h"
 #include "stdio.h"
 #include "stdlib.h"
