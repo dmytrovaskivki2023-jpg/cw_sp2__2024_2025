@@ -710,13 +710,11 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
             if (lexemInfoTable[lexemIndex].lexemStr[0] == '\0') {
                 printf("Parse successful.\n");
                 printf("%d.\n", lexemIndex);
-                exit(0);
                 return SUCCESS_STATE;
             }
             else {
                 printf("Parse failed: Extra tokens remain.\r\n");
                 errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: Extra tokens remain.\r\n");
-                exit(0);
                 return ~SUCCESS_STATE;
             }
         }
@@ -743,11 +741,9 @@ int syntaxAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnaly
                 printf("Parse failed: unexpected terminal.\r\n");
                 errorMessagesPtrToLastBytePtr += sprintf(errorMessagesPtrToLastBytePtr, "Parse failed: unexpected terminal.\r\n");
             }
-            exit(0);
             return ~SUCCESS_STATE;
         }
     }
-    exit(0);
     return ~SUCCESS_STATE;
 }
 
