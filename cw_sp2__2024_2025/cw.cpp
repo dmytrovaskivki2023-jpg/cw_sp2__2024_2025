@@ -225,6 +225,35 @@ int main(int argc, char* argv[]) {
 			(void)getchar();
 		}
 	}
+	else {
+#ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
+	    if (mode & INTERACTIVE_MODE) {
+	    	(void)getchar();
+	    	printf("\r\nPress Enter: ");
+	    	(void)getchar();
+	    	system("CLS");
+	    	fflush(stdin);
+	    	fflush(stdout);
+	    	fflush(stderr);
+	    	//(void)getchar();
+	    	printf("No command line arguments are entered, so you are working in interactive mode.\r\n");
+	    	printf("\nEnter 'y' to rerun compiler (to pass action enter other key): ");
+	    	char valueByGetChar = getchar();
+	    	if (valueByGetChar == 'y' || valueByGetChar == 'Y') {
+	    		system("CLS");
+	    		fflush(stdin);
+	    		fflush(stdout);
+	    		fflush(stderr);
+	    		system((std::string("\"") + argv[0] + "\"").c_str());
+	    	}
+	    	else {
+	    		return 0;
+	    	}
+	    }
+#else
+	return 0;
+#endif
+	}
 
 	if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
 		system("CLS");
