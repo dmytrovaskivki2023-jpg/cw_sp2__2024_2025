@@ -167,6 +167,8 @@
     <None Include="..\other_test_programs_2025\file13.k03" />
     <None Include="..\other_test_programs_2025\file14.k03" />
     <None Include="..\other_test_programs_2025\file15.k03" />
+    <None Include="..\other_test_programs_2025\file16.k03" />
+    <None Include="..\other_test_programs_2025\file17.k03" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\include\config.h">
