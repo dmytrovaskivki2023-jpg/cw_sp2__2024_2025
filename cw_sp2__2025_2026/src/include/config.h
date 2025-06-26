@@ -4,10 +4,15 @@
 *                         file: config.h                    *
 *                                                  (draft!) *
 *************************************************************/
-
 #include "../include/def.h"
 
+
 #define ARRAY_INTERVAL 128
+
+
+#define COMMENT_BEGIN_STR "#*"
+#define COMMENT_END_STR   "*#"
+
 
 #define TOKENS_RE         ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|<=|>=|[_0-9A-Za-z]+|[^ \t\r\f\v\n]"
 #define KEYWORDS_RE       ";|:=|=:|\\+|-|\\*|,|==|!=|:|\\[|\\]|\\(|\\)|\\{|\\}|NAME|DATA|BODY|END|BREAK|CONTINUE|GET|PUT|IF|ELSE|FOR|TO|DOWNTO|DO|WHILE|REPEAT|UNTIL|GOTO|DIV|MOD|<=|>=|NOT|AND|OR|INTEGER16"
