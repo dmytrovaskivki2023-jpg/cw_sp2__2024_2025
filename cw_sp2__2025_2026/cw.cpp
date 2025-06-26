@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
 			(void)getchar();
 		}
 
-		int commentRemoverResult = commentRemover(text, "#*", "*#");
+		int commentRemoverResult = commentRemover(text, COMMENT_BEGIN_STR, COMMENT_END_STR);
 		if (commentRemoverResult) {
 			printf("Comment remover return %d\r\n", commentRemoverResult);
 #ifdef RERUN_MODE_FOR_INTERACTIVE_MODE
