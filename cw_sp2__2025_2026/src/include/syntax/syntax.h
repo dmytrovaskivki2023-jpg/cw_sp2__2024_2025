@@ -21,21 +21,25 @@
 #define MAX_TOKEN_SIZE 128
 #define MAX_RTOKEN_COUNT 16
 
+#define MAX_RHSCONTEINER_COUNT 3
+
+#define MAX_MARK_COUNT 16
+
 typedef struct {
 	char invertedSecondMarks;
-	char secondMarks[16][MAX_TOKEN_SIZE];
+	char secondMarks[MAX_MARK_COUNT][MAX_TOKEN_SIZE];
 	int rhs_count;
 	char rhs[MAX_RTOKEN_COUNT][MAX_TOKEN_SIZE];
 } RHSConteiner;
 
 typedef struct {
 	char lhs[MAX_TOKEN_SIZE];
-	RHSConteiner rhss[3];
+	RHSConteiner rhss[MAX_RHSCONTEINER_COUNT];
 } Rule;
 
 typedef struct {
 	char invertedFirstMarks;
-	char firstMarks[16][MAX_TOKEN_SIZE];
+	char firstMarks[MAX_MARK_COUNT][MAX_TOKEN_SIZE];
 	Rule rule;
 } MarkedRule;
 
