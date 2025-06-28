@@ -6,7 +6,9 @@
 *************************************************************/
 //#pragma comment(linker, "/STACK:516777216")
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <windows.h>
+#endif
 //#include <winbase.h>
 //#include <winuser.h>
 //#include <shlobj.h>
@@ -53,7 +55,9 @@ unsigned char outCodeBuffer[8 * 1024 * 1024] = { '\0' };
 unsigned char errorMessagesPtrToLastBytePtr[8 * 1024 * 1024] = { '\0' };
 
 int main(int argc, char* argv[]) {
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 2, (UINT)LoadKeyboardLayoutA("00000409", KLF_ACTIVATE));
+#endif
 
 	char valueByGetChar = 'n';
 	char path[PATH_NAME_LENGH];
