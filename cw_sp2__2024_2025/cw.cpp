@@ -8,12 +8,16 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #include <windows.h>
-#endif
 //#include <winbase.h>
 //#include <winuser.h>
 //#include <shlobj.h>
 //#include <shlwapi.h>
 //#include <objbase.h>
+#elif defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+//
+#else
+//#   error "Unknown system"
+#endif
 
 #include "stdio.h"
 #include "stdlib.h"
