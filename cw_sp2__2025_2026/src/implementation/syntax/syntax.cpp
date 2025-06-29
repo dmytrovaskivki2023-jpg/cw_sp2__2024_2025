@@ -18,6 +18,9 @@
 #include <string>
 #include <set>
 
+#include "stdlib.h" // for exit() // TODO:...
+#include "string.h"
+
 using namespace std;
 
 Grammar grammar = {
@@ -65,13 +68,13 @@ ASTNode* addASTNodeToParent/*printStepAST*/(ASTNode* parent, char* lexemStr, cha
 
     if (lexemStr == NULL) {
         printf("Error: no lexem\n");
-        exit(0);
+        exit(0); // TODO:...
     }
 
     ASTNode* node = new(std::nothrow) ASTNode(lexemStr, false); // std::string(lexemStr)
     if (node == nullptr) { // if (!node)
         printf("Error: no parent\n");
-        exit(0);
+        exit(0); // TODO:...
     }
 
     node->parent = parent;
@@ -156,7 +159,7 @@ char isEmptyStack() { // FINIT STATE 0
 void stackPush(char* stackNewElement, ASTNode* node) {
     if (stackNewElement == NULL) {
         printf("Error\n");
-        exit(0);
+        exit(0); // TODO:...
     }
 
     if (strStackFirstFreeElementIndex < MAX_STRSTACK_SIZE) {
@@ -166,7 +169,7 @@ void stackPush(char* stackNewElement, ASTNode* node) {
     }
 
     printf("Stack error\n");
-    exit(0);
+    exit(0); // TODO:...
 }
 
 ASTNode* stackPop() {
@@ -175,7 +178,7 @@ ASTNode* stackPop() {
     }
 
     printf("Stack error\n");
-    exit(0);
+    exit(0); // TODO:...
 
     return NULL;
 }
@@ -183,7 +186,7 @@ ASTNode* stackPop() {
 RHSConteiner* getActualRHSConteinerRHS(Grammar* grammar, struct LexemInfo* currTapeLexemInfoElement, struct LexemInfo* nextTapeLexemInfoElement, char* currStackElement) {
     if (grammar == NULL || currTapeLexemInfoElement == NULL || nextTapeLexemInfoElement == NULL || currStackElement == NULL) {
         printf("Error\n");
-        exit(0);
+        exit(0); // TODO:...
     }
 
     for (MarkedRule* multiRule = grammar->multiRules; multiRule->invertedFirstMarks; ++multiRule) {
@@ -242,7 +245,7 @@ struct LexemInfo* syntaxLL2(Grammar* grammar, char * ruleName, struct LexemInfo*
 
     if (grammar == NULL || ruleName == NULL || lexemInfoTable == NULL || baseASTNode == NULL) {
         printf("Error\n");
-        exit(0);    
+        exit(0); // TODO:...
     }
 
     terminalChildrens.resize(0);
@@ -302,12 +305,12 @@ bool getIndexAfterFragmentSyntax(char* ruleName, int& lexemIndex, struct LexemIn
     struct LexemInfo* unexpectedLexemfailedTerminal = NULL;
     if (ruleName == NULL) {
         printf("Error: no start rule.\r\n");
-        exit(0);
+        exit(0); // TODO:...
     }
 
     if (lexemInfoTable == NULL || grammar == NULL) {
         printf("Error\r\n");
-        exit(0);
+        exit(0); // TODO:...
     }
     struct ASTNode* baseASTNode;
     struct LexemInfo* lastLexemInfo = syntaxLL2(grammar, ruleName, lexemInfoTable, &baseASTNode, &unexpectedLexemfailedTerminal);
