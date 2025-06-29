@@ -75,7 +75,7 @@ struct GotoPositionInfo* lastGotoPositionInfoInTable = gotoPositionsInfoTable; /
 
 char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMENT_PART_COUNT] = { NULL };
 
-INIT_TOKEN_STRUCT_NAME(0);
+INIT_TOKEN_STRUCT_NAME();
 
 unsigned char detectMultiToken(struct LexemInfo* lexemInfoTable, enum TokenStructName tokenStructName) {
 	if (lexemInfoTable == NULL) {

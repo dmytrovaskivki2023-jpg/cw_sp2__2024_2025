@@ -18,6 +18,9 @@
 #include <string>
 #include <set>
 
+#include "stdlib.h" // for exit() // TODO:...
+#include "string.h"
+
 using namespace std;
 
 Grammar grammar = {
@@ -884,7 +887,7 @@ bool parseByRecursiveDescent(LexemInfo* lexemInfoTable, Grammar* grammar) {
         }
         else {
             printf("Parse failed: Extra tokens remain.\n");
-            exit(0);
+            exit(0); // TODO:...
         }
     }
     else {
@@ -895,7 +898,7 @@ bool parseByRecursiveDescent(LexemInfo* lexemInfoTable, Grammar* grammar) {
         else {
             printf("Parse failed: unexpected terminal.\r\n");
         }
-        exit(0);
+        exit(0); // TODO:...
     }
     return false;
 }
@@ -912,7 +915,7 @@ bool parseByRecursiveDescent_(LexemInfo* lexemInfoTable, Grammar* grammar) {
         }
         else {
             printf("Parse failed: Extra tokens remain.\n");
-            exit(0);
+            exit(0); // TODO:...
         }
     }
     else {
@@ -923,7 +926,7 @@ bool parseByRecursiveDescent_(LexemInfo* lexemInfoTable, Grammar* grammar) {
         else {
             printf("Parse failed: unexpected terminal.\r\n");
         }
-        exit(0);
+        exit(0); // TODO:...
     }
     return false;
 }

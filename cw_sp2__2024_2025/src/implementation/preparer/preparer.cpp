@@ -190,8 +190,8 @@ void makePrepare4IdentifierOrValue(struct LexemInfo** lastLexemInfoInTable, stru
 			for (unsigned long long int index = 0; identifierIdsTable[index][0] != '\0'; ++index) {
 				if (!strncmp((*lastLexemInfoInTable)->lexemStr, identifierIdsTable[index], MAX_LEXEM_SIZE)) {
 					findComplete = true;
-					(*lastTempLexemInfoInTable)->ifvalue = /*dataOffset + */VALUE_SIZE * /*(unsigned long long int)*/index;
-					_itoa((*lastTempLexemInfoInTable)->ifvalue, (*lastTempLexemInfoInTable)->lexemStr, 10);
+					(*lastTempLexemInfoInTable)->ifvalue = /*dataOffset + */VALUE_SIZE * /*(unsigned long long int)*/index;				
+					snprintf((*lastTempLexemInfoInTable)->lexemStr, MAX_LEXEM_SIZE, "%lld", (*lastTempLexemInfoInTable)->ifvalue); // itoa_((*lastTempLexemInfoInTable)->ifvalue, (*lastTempLexemInfoInTable)->lexemStr, 10);
 					((*lastTempLexemInfoInTable)++)->tokenType = VALUE_LEXEME_TYPE; // ADDRESS_LEXEME_TYPE
 					++* lastLexemInfoInTable;
 				}

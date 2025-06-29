@@ -26,7 +26,7 @@
 #include "../../../src/include/config.h"
 #include "../../../src/include/generator/generator.h"
 #include "../../../src/include/lexica/lexica.h"
-//#include "stdio.h"
+#include "stdio.h"
 //#include "stdlib.h"
 //#include "string.h"
 

@@ -23,7 +23,6 @@ extern unsigned char generatorMode;
 //#define M1 1024
 //#define M2 1024
 
-
 #define dataOffsetMinusCodeOffset 0x00004000ull
 //#define dataOffsetMinusCodeOffset 0x00003000ull
 
