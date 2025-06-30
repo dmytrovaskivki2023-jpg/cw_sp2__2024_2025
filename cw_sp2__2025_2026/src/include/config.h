@@ -464,8 +464,16 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { T_DO_0 }, { "cycle_body",{\
     {LA_IS, {""}, 2, { T_DO_0, "statements__or__block_statements" }}\
 }}},\
+\
+{LA_IS, { T_TO_0 }, { "forto_direction",{\
+    {LA_IS, {""}, 1, { T_TO_0 }}\
+}}},\
+{LA_IS, { T_DOWNTO_0 }, { "forto_direction",{\
+    {LA_IS, {""}, 1, { T_DOWNTO_0 }}\
+}}},\
+\
 {LA_IS, { T_FOR_0 }, { "forto_cycle",{\
-    {LA_IS, {""}, 5, { T_FOR_0, "cycle_counter_init", T_TO_0, "cycle_counter_last_value", "cycle_body" }}\
+    {LA_IS, {""}, 5, { T_FOR_0, "cycle_counter_init", "forto_direction", "cycle_counter_last_value", "cycle_body" }}\
 }}},\
 {LA_IS, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement_in_while_and_if_body",{\
     {LA_IS, {""}, 1, { "statement" }}\
@@ -596,7 +604,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 }}},\
 \
 },\
-101,\
+103,\
 "program"
 // TODO:
 //{ LA_IS, { T_NAME_0 }, { "program____part1",{
