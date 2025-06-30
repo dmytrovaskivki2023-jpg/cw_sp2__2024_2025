@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -197,6 +198,7 @@
     <None Include="..\other_test_programs_2025\file15.k03" />
     <None Include="..\other_test_programs_2025\file16.k03" />
     <None Include="..\other_test_programs_2025\file17.k03" />
+    <None Include="..\other_test_programs_2025\file18.k03" />
     <None Include="..\other_test_programs_2025\file4.k03" />
     <None Include="..\other_test_programs_2025\file5.k03" />
     <None Include="..\other_test_programs_2025\file6.k03" />
