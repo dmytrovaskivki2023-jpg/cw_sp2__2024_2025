@@ -85,7 +85,7 @@ struct cwgrammar : qi::grammar<Iterator> {
 #endif
         cycle_counter_last_value = SAME_RULE(cycle_end_expression);
         cycle_body = tokenDO >> (statement | block_statements);
-        forto_cycle = tokenFOR >> cycle_counter_init >> tokenTO >> cycle_counter_last_value >> cycle_body;
+        forto_cycle = tokenFOR >> cycle_counter_init >> (tokenTO | tokenDOWNTO) >> cycle_counter_last_value >> cycle_body;
         //
         continue_while = SAME_RULE(tokenCONTINUE);
         break_while = SAME_RULE(tokenBREAK);
@@ -173,6 +173,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenDO = "DO" >> STRICT_BOUNDARIES;
         tokenFOR = "FOR" >> STRICT_BOUNDARIES;
         tokenTO = "TO" >> STRICT_BOUNDARIES;
+        tokenDOWNTO = "DOWNTO" >> STRICT_BOUNDARIES;
         tokenWHILE = "WHILE" >> STRICT_BOUNDARIES;
         tokenCONTINUE = "CONTINUE" >> STRICT_BOUNDARIES;
         tokenBREAK = "BREAK" >> STRICT_BOUNDARIES;
@@ -328,7 +329,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenGREATER,
 #endif
         tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
-        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenWHILE, tokenCONTINUE, tokenBREAK, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
+        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenBREAK, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
         NO_BOUNDARY,
