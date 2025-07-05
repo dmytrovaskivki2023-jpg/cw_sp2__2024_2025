@@ -464,14 +464,12 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { T_DO_0 }, { "cycle_body",{\
     {LA_IS, {""}, 2, { T_DO_0, "statements__or__block_statements" }}\
 }}},\
-\
 {LA_IS, { T_TO_0 }, { "forto_direction",{\
     {LA_IS, {""}, 1, { T_TO_0 }}\
 }}},\
 {LA_IS, { T_DOWNTO_0 }, { "forto_direction",{\
     {LA_IS, {""}, 1, { T_DOWNTO_0 }}\
 }}},\
-\
 {LA_IS, { T_FOR_0 }, { "forto_cycle",{\
     {LA_IS, {""}, 5, { T_FOR_0, "cycle_counter_init", "forto_direction", "cycle_counter_last_value", "cycle_body" }}\
 }}},\
@@ -511,7 +509,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { T_BEGIN_BLOCK_0 }, { "statements__or__block_statements",{\
     {LA_IS, {""}, 1, { "block_statements" }}\
 }}},\
-{LA_IS, { T_INPUT_0 }, { "input",{\
+{LA_IS, { T_INPUT_0 }, { "input_rule",{\
     {LA_IS, {""}, 2, { T_INPUT_0, "argument_for_input" }}\
 }}},\
 {LA_IS, { "ident_terminal" }, { "argument_for_input",{\
@@ -520,7 +518,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(" }, { "argument_for_input",{\
     {LA_IS, {""}, 4, { "(", "ident", "index_action_optional", ")" }}\
 }}},\
-{LA_IS, { T_OUTPUT_0 }, { "output", {\
+{LA_IS, { T_OUTPUT_0 }, { "output_rule", {\
     {LA_IS, { "" }, 2, {T_OUTPUT_0, "expression"} }\
 }}},\
 {LA_IS, { "ident_terminal" }, { "statement", {\
@@ -549,10 +547,10 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, {"goto_label"}}\
 }}},\
 {LA_IS, { T_INPUT_0 }, { "statement",{\
-    {LA_IS, {""}, 1, {"input"}}\
+    {LA_IS, {""}, 1, {"input_rule"}}\
 }}},\
 {LA_IS, { T_OUTPUT_0 }, { "statement",{\
-    {LA_IS, {""}, 1, {"output"}}\
+    {LA_IS, {""}, 1, {"output_rule"}}\
 }}},\
 {LA_IS, { T_SEMICOLON_0 }, { "statement",{\
     {LA_IS, {""}, 1, {";"}}\
@@ -566,7 +564,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 { LA_NOT, { "ident_terminal", "(", T_NOT_0, "unsigned_value_terminal", T_ADD_0, T_SUB_0, T_IF_0, T_FOR_0, T_WHILE_0, T_REPEAT_0, T_GOTO_0, T_INPUT_0, T_OUTPUT_0, T_SEMICOLON_0 }, { "statement__iteration",{\
     { LA_IS, {""}, 0, { "" }}\
 }}},\
-{ LA_IS, { T_NAME_0 }, { "program",{\
+{ LA_IS, { T_NAME_0 }, { "program_rule",{\
     { LA_IS, {""}, 9, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional", T_SEMICOLON_0, "statement__iteration", T_END_0 }}\
 }}},\
 { LA_IS, { T_DATA_TYPE_0 }, { "declaration_optional",{\
@@ -605,7 +603,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 \
 },\
 103,\
-"program"
+"program_rule"
 // TODO:
 //{ LA_IS, { T_NAME_0 }, { "program____part1",{
 //    { LA_IS, {""}, 7, { T_NAME_0, "program_name", T_SEMICOLON_0, T_BODY_0, T_DATA_0, "declaration_optional", T_SEMICOLON_0 }} // !!!
@@ -975,7 +973,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "{" }, { "statements__or__block_statements",{\
     {LA_IS, {""}, 1, { "block_statements" }}\
 }}},\
-{LA_IS, { "GET" }, { "input",{\
+{LA_IS, { "GET" }, { "input_rule",{\
     {LA_IS, {""}, 2, { "GET", "argument_for_input" }}\
 }}},\
 {LA_IS, { "ident_terminal" }, { "argument_for_input",{\
@@ -984,7 +982,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 {LA_IS, { "(" }, { "argument_for_input",{\
     {LA_IS, {""}, 4, { "(", "ident", "index_action_optional", ")" }}\
 }}},\
-{LA_IS, { "PUT" }, { "output", {\
+{LA_IS, { "PUT" }, { "output_rule", {\
     {LA_IS, { "" }, 2, {"PUT", "expression"} }\
 }}},\
 {LA_IS, { "ident_terminal" }, { "statement", {\
@@ -1013,10 +1011,10 @@ IF_USE_REVERSE_ASSIGNMENT(\
     {LA_IS, {""}, 1, {"goto_label"}}\
 }}},\
 {LA_IS, { "GET" }, { "statement",{\
-    {LA_IS, {""}, 1, {"input"}}\
+    {LA_IS, {""}, 1, {"input_rule"}}\
 }}},\
 {LA_IS, { "PUT" }, { "statement",{\
-    {LA_IS, {""}, 1, {"output"}}\
+    {LA_IS, {""}, 1, {"output_rule"}}\
 }}},\
 {LA_IS, { ";" }, { "statement",{\
     {LA_IS, {""}, 1, {";"}}\
@@ -1030,7 +1028,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 { LA_NOT, { "ident_terminal", "(", "NOT", "unsigned_value_terminal", "+", "-", "IF", "FOR", "WHILE", "REPEAT", "GOTO", "GET", "PUT", ";" }, { "statement__iteration",{\
     { LA_IS, {""}, 0, { "" }}\
 }}},\
-{ LA_IS, { "NAME" }, { "program",{\
+{ LA_IS, { "NAME" }, { "program_rule",{\
     { LA_IS, {""}, 9, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";", "statement__iteration", "END" }}\
 }}},\
 { LA_IS, { "INTEGER16" }, { "declaration_optional",{\
@@ -1069,7 +1067,7 @@ IF_USE_REVERSE_ASSIGNMENT(\
 \
 },\
 101,\
-"program"
+"program_rule"
 // TODO:
 //{ LA_IS, { "NAME" }, { "program____part1",{
 //    { LA_IS, {""}, 7, { "NAME", "program_name", ";", "BODY", "DATA", "declaration_optional", ";" }} // !!!
