@@ -428,10 +428,11 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
         {"cycle_body", 2, {"tokenDO","statement"}},\
         {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
-        {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
-        {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},\
+        {"tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
+        {"tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenDOWNTO","expression"}},\
+        {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO_tokenDOWNTO__cycle_counter_last_value"}},\
         {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},\
-        {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+        {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
 \
         {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},\
         {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},\
@@ -462,7 +463,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"statement", 2, {"lr_expression","ident"}},\
         {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
         {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-        {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+        {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
         {"statement", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
         {"statement", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
         {"statement", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
@@ -480,7 +481,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         { "statement_in_while_body", 2, {"lr_expression","ident"}},\
         { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
         { "statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-        { "statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+        { "statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
         { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
         { "statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
         { "statement_in_while_body", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
@@ -523,6 +524,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"tokenDO", 1, {T_DO_0}},\
         {"tokenFOR", 1, {T_FOR_0}},\
         {"tokenTO", 1, {T_TO_0}},\
+        {"tokenDOWNTO", 1, {T_DOWNTO_0}},\
         {"tokenWHILE", 1, {T_WHILE_0}},\
         {"tokenCONTINUE", 1, {T_CONTINUE_WHILE_0}},\
         {"tokenEXIT", 1, {T_EXIT_WHILE_0}},\
@@ -547,7 +549,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 \
         {"", 2, {"",""}}\
 },\
-182,\
+184,\
 "program_rule"
 
 #define ORIGINAL_GRAMMAR {\
@@ -622,10 +624,11 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"cycle_body", 2, {"tokenDO","statement____iteration_after_two"}},\
     {"cycle_body", 2, {"tokenDO","statement"}},\
     {"tokenFOR__cycle_counter_init", 2, {"tokenFOR","cycle_counter_init"}},\
-    {"tokenTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
-    {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO__cycle_counter_last_value"}},\
+    {"tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenTO","expression"}},\
+    {"tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenDOWNTO","expression"}},\
+    {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value", 2, {"tokenFOR__cycle_counter_init","tokenTO_tokenDOWNTO__cycle_counter_last_value"}},\
     {"cycle_body__tokenSEMICOLON", 2, {"cycle_body","tokenSEMICOLON"}},\
-    {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+    {"forto_cycle", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
 \
     {"continue_while", 2, {"tokenCONTINUE","tokenWHILE"}},\
     {"exit_while", 2, {"tokenEXIT","tokenWHILE"}},\
@@ -656,7 +659,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"statement", 2, {"lr_expression","ident"}},\
     {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
     {"statement", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-    {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+    {"statement", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
     {"statement", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
     {"statement", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
     {"statement", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
@@ -674,7 +677,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"statement_in_while_body", 2, {"lr_expression","ident"}},\
     {"statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true__body_for_false"}},\
     {"statement_in_while_body", 2, {"tokenIF__tokenGROUPEXPRESSIONBEGIN__expression__tokenGROUPEXPRESSIONEND","body_for_true"}},\
-    {"statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
+    {"statement_in_while_body", 2, {"tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value","cycle_body__tokenSEMICOLON"}},\
     {"statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body____iteration_after_two","tokenEND__tokenWHILE"}},\
     {"statement_in_while_body", 2, {"tokenWHILE__expression__statement_in_while_body","tokenEND__tokenWHILE"}},\
     {"statement_in_while_body", 2, {"tokenWHILE__expression","tokenEND__tokenWHILE"}},\
@@ -728,6 +731,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"tokenDO", 1, {"DO"}},\
     {"tokenFOR", 1, {"FOR"}},\
     {"tokenTO", 1, {"TO"}},\
+    {"tokenDOWNTO", 1, {"DOWNTO"}},\
     {"tokenWHILE", 1, {"WHILE"}},\
     {"tokenCONTINUE", 1, {"CONTINUE"}},\
     {"tokenEXIT", 1, {"EXIT"}},\
@@ -751,7 +755,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"", 2, {"",""}}\
 \
 },\
-180,\
+182,\
 "program_rule"
 
 ///////////////////////////////////////////////////////////////
