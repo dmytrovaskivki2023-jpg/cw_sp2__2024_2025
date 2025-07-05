@@ -31,7 +31,7 @@
 {"program____part2", 2, {"tokenSEMICOLON","statement____iteration_after_two__tokenEND"}},\
 {"program____part2", 2, {"tokenSEMICOLON","statement__tokenEND"}},\
 {"program____part2", 2, {"tokenSEMICOLON","tokenEND"}},\
-{"program", 2, {"program____part1","program____part2"}}, 
+{"program_rule", 2, {"program____part1","program____part2"}}, 
 
 
 #define T_NAME_0 "NAME"
@@ -452,11 +452,11 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 \
         {"input__first_part", 2, {"tokenGET","tokenGROUPEXPRESSIONBEGIN"}},\
         {"input__second_part", 2, {"ident","tokenGROUPEXPRESSIONEND"}},\
-        {"input", 2, {"input__first_part","input__second_part"}},\
+        {"input_rule", 2, {"input__first_part","input__second_part"}},\
 \
         {"output__first_part", 2, {"tokenPUT","tokenGROUPEXPRESSIONBEGIN"}},\
         {"output__second_part", 2, {"expression","tokenGROUPEXPRESSIONEND"}},\
-        {"output", 2, {"output__first_part","output__second_part"}},\
+        {"output_rule", 2, {"output__first_part","output__second_part"}},\
 \
         {"statement", 2, {"ident","rl_expression"}},\
         {"statement", 2, {"lr_expression","ident"}},\
@@ -548,7 +548,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
         {"", 2, {"",""}}\
 },\
 182,\
-"program"
+"program_rule"
 
 #define ORIGINAL_GRAMMAR {\
     {"labeled_point", 2, {"ident", "tokenCOLON"}},\
@@ -646,11 +646,11 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
  \
     {"input__first_part", 2, {"tokenGET","tokenGROUPEXPRESSIONBEGIN"}},\
     {"input__second_part", 2, {"ident","tokenGROUPEXPRESSIONEND"}},\
-    {"input", 2, {"input__first_part","input__second_part"}},\
+    {"input_rule", 2, {"input__first_part","input__second_part"}},\
 \
     {"output__first_part", 2, {"tokenPUT","tokenGROUPEXPRESSIONBEGIN"}},\
     {"output__second_part", 2, {"expression","tokenGROUPEXPRESSIONEND"}},\
-    {"output", 2, {"output__first_part","output__second_part"}},\
+    {"output_rule", 2, {"output__first_part","output__second_part"}},\
 \
     {"statement", 2, {"ident","rl_expression"}},\
     {"statement", 2, {"lr_expression","ident"}},\
@@ -701,7 +701,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
     {"program____part2", 2, {"tokenSEMICOLON","statement____iteration_after_two__tokenEND"}},\
     {"program____part2", 2, {"tokenSEMICOLON","statement__tokenEND"}},\
     {"program____part2", 2, {"tokenSEMICOLON","tokenEND"}},\
-    {"program", 2, {"program____part1","program____part2"}},\
+    {"program_rule", 2, {"program____part1","program____part2"}},\
 \
     {"tokenCOLON", 1, {":"}},\
     {"tokenGOTO", 1, {"GOTO"}},\
@@ -752,7 +752,7 @@ extern char* tokenStruct[MAX_TOKEN_STRUCT_ELEMENT_COUNT][MAX_TOKEN_STRUCT_ELEMEN
 \
 },\
 180,\
-"program"
+"program_rule"
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
