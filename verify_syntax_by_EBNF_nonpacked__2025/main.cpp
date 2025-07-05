@@ -129,8 +129,8 @@ struct cwgrammar : qi::grammar<Iterator> {
         //label = letter_in_lower_case >> *letter_in_lower_case >> STRICT_BOUNDARIES;
         //
         sign = sign_plus | sign_minus;
-        sign_plus = '+' >> BOUNDARIES;
-        sign_minus = '-' >> BOUNDARIES;
+        sign_plus = SAME_RULE(tokenPLUS); // '+' >> BOUNDARIES;
+        sign_minus = SAME_RULE(tokenMINUS); // '-' >> BOUNDARIES;
         //
         digit_0 = '0';
         digit_1 = '1';
@@ -377,8 +377,8 @@ tokenEND__tokenWHILE,\
 tokenWHILE__expression__statement_in_while_body_and_if_body,\
 tokenWHILE__expression__statement_in_while_body_and_if_body____iteration_after_two,\
 tokenFOR__cycle_counter_init,\
-tokenTO__cycle_counter_last_value,\
-tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value,\
+tokenTO_tokenDOWNTO__cycle_counter_last_value,\
+tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value,\
 /*cycle_body__tokenSEMICOLON,*/\
 \
 /*tokenELSE__statement_in_while_body_and_if_body,*/\
@@ -490,10 +490,11 @@ binary_action____iteration_after_two
         cycle_body = tokenDO >> block_statements // + NEW2025 // statement____iteration_after_two                                                               // + (!)
             | tokenDO >> statement;                                                                                                  // + (!)
         tokenFOR__cycle_counter_init = tokenFOR >> cycle_counter_init;                                                                       // + (!)
-        tokenTO__cycle_counter_last_value = tokenTO >> expression;    // + NEW2025 (last value as any expression)                                                         // + (!)
-        tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value = tokenFOR__cycle_counter_init >> tokenTO__cycle_counter_last_value; // +
+        tokenTO_tokenDOWNTO__cycle_counter_last_value = tokenTO >> expression      // + NEW2025 (last value as any expression)                                                         // + (!)
+                                                      | tokenDOWNTO >> expression; // + NEW2025 (last value as any expression)  
+		tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value = tokenFOR__cycle_counter_init >> tokenTO_tokenDOWNTO__cycle_counter_last_value; // +
         // cycle_body__tokenSEMICOLON = cycle_body >> tokenSEMICOLON;  // + NEW2025                                                                          // + (!)
-        forto_cycle = tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value >> cycle_body; // + NEW2025                       // +
+        forto_cycle = tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value >> cycle_body; // + NEW2025                       // +
         //
         continue_while = tokenCONTINUE >> tokenWHILE;                                                                                                       // + (!)
         exit_while = tokenEXIT >> tokenWHILE;                                                                                                               // + (!) 
@@ -534,7 +535,7 @@ binary_action____iteration_after_two
             | tokenIF__expression__body_for_true >> false_cond_block_without_else                                            // + NEW2025
             | tokenIF__expression__body_for_true >> body_for_false                                              // + NEW2025
             | tokenIF__expression >> block_statements_in_while_body_and_if_body                                 // + NEW2025
-            | tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value >> cycle_body/*__tokenSEMICOLON*/
+            | tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value >> cycle_body/*__tokenSEMICOLON*/
             | tokenWHILE__expression__statement_in_while_body_and_if_body____iteration_after_two >> tokenEND__tokenWHILE                                        // + NEW
             | tokenWHILE__expression__statement_in_while_body_and_if_body >> tokenEND__tokenWHILE                                                            // + NEW
             | tokenWHILE__expression >> tokenEND__tokenWHILE                                                                                      // + NEW
@@ -557,7 +558,7 @@ binary_action____iteration_after_two
             | tokenIF__expression__body_for_true >> false_cond_block_without_else                                            // + NEW2025
             | tokenIF__expression__body_for_true >> body_for_false                                              // + NEW2025
             | tokenIF__expression >> block_statements_in_while_body_and_if_body                                 // + NEW2025
-            | tokenFOR__cycle_counter_init__tokenTO__cycle_counter_last_value >> cycle_body/*__tokenSEMICOLON*/
+            | tokenFOR__cycle_counter_init__tokenTO_tokenDOWNTO__cycle_counter_last_value >> cycle_body/*__tokenSEMICOLON*/
             | tokenWHILE__expression__statement_in_while_body_and_if_body____iteration_after_two >> tokenEND__tokenWHILE                                        // + NEW
             | tokenWHILE__expression__statement_in_while_body_and_if_body >> tokenEND__tokenWHILE                                                            // + NEW
             | tokenWHILE__expression >> tokenEND__tokenWHILE                                                                                      // + NEW
@@ -614,8 +615,8 @@ binary_action____iteration_after_two
         //
         sign = sign_plus           // + (!)
             | sign_minus;         // + (!)
-        sign_plus = '+' >> BOUNDARIES;
-        sign_minus = '-' >> BOUNDARIES;
+        sign_plus = SAME_RULE(tokenPLUS); // '+' >> BOUNDARIES;
+        sign_minus = SAME_RULE(tokenMINUS); // '-' >> BOUNDARIES;
         //
         digit_0 = '0';
         digit_1 = '1';
@@ -653,6 +654,7 @@ binary_action____iteration_after_two
         tokenDO = "DO" >> STRICT_BOUNDARIES;
         tokenFOR = "FOR" >> STRICT_BOUNDARIES;
         tokenTO = "TO" >> STRICT_BOUNDARIES;
+        tokenDOWNTO = "DOWNTO" >> STRICT_BOUNDARIES;
         tokenWHILE = "WHILE" >> STRICT_BOUNDARIES;
         tokenCONTINUE = "CONTINUE" >> STRICT_BOUNDARIES;
         tokenEXIT = "EXIT" >> STRICT_BOUNDARIES;
@@ -787,7 +789,7 @@ binary_action____iteration_after_two
         //
         tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL, tokenLESSOREQUAL,
         tokenGREATEROREQUAL, tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
-        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
+        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
         NO_BOUNDARY,
