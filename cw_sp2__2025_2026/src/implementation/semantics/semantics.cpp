@@ -213,7 +213,9 @@ int semanticsAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifi
 	int returnState = SUCCESS_STATE;
 
 	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+#ifndef	DISABLE_CHECKING_VARIABLE_INITIALIZATION
 		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+#endif
 		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable, &errorMessagesPtrToLastBytePtr))
 		) {
 		return returnState;
