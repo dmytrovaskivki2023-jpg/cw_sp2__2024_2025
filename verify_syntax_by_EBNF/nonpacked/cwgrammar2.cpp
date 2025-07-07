@@ -149,6 +149,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenNAME = "NAME" >> STRICT_BOUNDARIES;
         tokenBODY = "BODY" >> STRICT_BOUNDARIES;
         tokenDATA = "DATA" >> STRICT_BOUNDARIES;
+        tokenBEGIN = "BEGIN" >> STRICT_BOUNDARIES;
         tokenEND = "END" >> STRICT_BOUNDARIES;
         tokenSEMICOLON = ";" >> BOUNDARIES;
         // 
@@ -270,7 +271,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL, tokenLESSOREQUAL,
         tokenGREATEROREQUAL, tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
-        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenSEMICOLON,
+        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenBEGIN, tokenEND, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
         NO_BOUNDARY,
@@ -555,6 +556,7 @@ binary_action____iteration_after_two
         tokenNAME = "NAME" >> STRICT_BOUNDARIES;
         tokenBODY = "BODY" >> STRICT_BOUNDARIES;
         tokenDATA = "DATA" >> STRICT_BOUNDARIES;
+        tokenBEGIN = "BEGIN" >> STRICT_BOUNDARIES;
         tokenEND = "END" >> STRICT_BOUNDARIES;
         tokenSEMICOLON = ";" >> BOUNDARIES;
         // 
@@ -673,7 +675,7 @@ binary_action____iteration_after_two
         //
         tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL, tokenLESSOREQUAL,
         tokenGREATEROREQUAL, tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
-        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenEND, tokenSEMICOLON,
+        tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenBEGIN, tokenEND, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
         NO_BOUNDARY,
