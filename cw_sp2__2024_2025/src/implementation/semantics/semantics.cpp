@@ -4,7 +4,6 @@
 *                         file: semantics.cpp               *
 *                                                  (draft!) *
 *************************************************************/
-
 //#include "../../include/config.h"
 #include "../../include/syntax/syntax.h"
 #include "../../include/semantics/semantics.h"
@@ -13,15 +12,6 @@
 
 //#include <iterator>
 #include <regex>
-
-//
-//#define COLLISION_II_STATE 128
-//#define COLLISION_LL_STATE 129
-//#define COLLISION_IL_STATE 130
-//#define COLLISION_I_STATE  132
-//#define COLLISION_L_STATE  133
-//
-//#define NO_IMPLEMENT_CODE_STATE 256
 
 unsigned long long int getPostDataSectionLexemIndex(LexemInfo* lexemInfoTable, Grammar* grammar) {
 	int lexemIndex = 0;
@@ -139,7 +129,7 @@ int checkingVariableInitialization(LexemInfo* lexemInfoTable, Grammar* grammar, 
 			}
 
 			int prevNonOpenParenthesesIndex = -1;
-			for (; !strncmp(lexemesInfoTable[lexemIndex + prevNonOpenParenthesesIndex].lexemStr, "(", MAX_LEXEM_SIZE); --prevNonOpenParenthesesIndex);
+			for (; !strcmp(lexemesInfoTable[lexemIndex + prevNonOpenParenthesesIndex].lexemStr, "("); --prevNonOpenParenthesesIndex);
 			if (!strncmp(lexemesInfoTable[lexemIndex + 1].lexemStr, tokenStruct[MULTI_TOKEN_RLBIND][0], MAX_LEXEM_SIZE)
 				||					
 				!strncmp(lexemesInfoTable[lexemIndex - 1].lexemStr, tokenStruct[MULTI_TOKEN_LRBIND][0], MAX_LEXEM_SIZE)
@@ -190,7 +180,9 @@ int semanticsAnalyze(LexemInfo* lexemInfoTable, Grammar* grammar, char(*identifi
 	int returnState = SUCCESS_STATE;
 
 	if (   SUCCESS_STATE != (returnState = checkingInternalCollisionInDeclarations(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+#ifndef	DISABLE_CHECKING_VARIABLE_INITIALIZATION
 		|| SUCCESS_STATE != (returnState = checkingVariableInitialization(lexemesInfoTable, grammar, identifierIdsTable, &errorMessagesPtrToLastBytePtr))
+#endif
 		|| SUCCESS_STATE != (returnState = checkingCollisionInDeclarationsByKeyWords(identifierIdsTable, &errorMessagesPtrToLastBytePtr))
 		) {
 		return returnState;
