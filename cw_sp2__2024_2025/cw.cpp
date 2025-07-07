@@ -468,9 +468,9 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (mode & INTERACTIVE_MODE && !(mode & SKIP_INTERACTIVE_IN_INTERACTIVE_MODE)) {
-			if (parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
-				printf("File \"%s\" saved.\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
-			}
+			//if (parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER][0] != '\0') {
+			//	printf("File \"%s\" saved.\n", parameters[OUT_PREPARED_LEXEMES_SEQUENSE_FILENAME_WITH_EXTENSION_PARAMETER]);
+			//}
 			printf("\r\nPress Enter: ");
 			(void)getchar();
 			(void)getchar();
