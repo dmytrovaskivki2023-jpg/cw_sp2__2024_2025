@@ -9,6 +9,8 @@
 #include "../../include/generator/generator.h"
 #include "../../include/lexica/lexica.h"
 
+#define	DISABLE_CHECKING_VARIABLE_INITIALIZATION
+
 #define COLLISION_II_STATE    128
 #define COLLISION_LL_STATE    129
 #define COLLISION_IL_STATE    130
