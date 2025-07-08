@@ -25,13 +25,13 @@ unsigned char* makeWhileCycleCode(struct LexemInfo** lastLexemInfoInTable, unsig
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    ;\"%s\"\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
 			//
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
 		}
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\"\r\n", tokenStruct[MULTI_TOKEN_WHILE][0]);
 			//
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
@@ -437,11 +437,11 @@ unsigned char* makePostWhileCode_(struct LexemInfo** lastLexemInfoInTable, unsig
 	}
 	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 		currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@WHILE_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
 	}
 	else if (generatorMode == C_CODER_MODE) {
 		currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__WHILE_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 4].lexemStr);
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_WHILE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
 	}
 
 	return currBytePtr;

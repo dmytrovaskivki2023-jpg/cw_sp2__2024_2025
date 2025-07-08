@@ -59,10 +59,10 @@ unsigned char* makePostElseCode_(struct LexemInfo** lastLexemInfoInTable, unsign
 		*(unsigned int*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue = (unsigned int)(currBytePtr - (unsigned char*)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].ifvalue - 4);
 	}
 	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 	}
 	else if (generatorMode == C_CODER_MODE) {
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 	}
 
 	return currBytePtr;

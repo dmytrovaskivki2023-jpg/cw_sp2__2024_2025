@@ -52,10 +52,10 @@ unsigned char* makeLabelCode(struct LexemInfo** lastLexemInfoInTable, unsigned c
 			//
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
 		}
 		else if (generatorMode == C_CODER_MODE) {
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__%016llX:\r\n", (unsigned long long int) & labelInfoTable[(*lastLexemInfoInTable)->lexemStr].first);
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;

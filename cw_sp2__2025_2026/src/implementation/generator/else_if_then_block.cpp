@@ -128,13 +128,13 @@ unsigned char* makePostThenCodeAfterElseIfCode_(struct LexemInfo** lastLexemInfo
 	}
 	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 		currBytePtr += sprintf((char*)currBytePtr, "    mov eax, 1\r\n");
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_THEN_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_THEN_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 	}
 	else if (generatorMode == C_CODER_MODE) {
 		currBytePtr += sprintf((char*)currBytePtr, "    opTemp = 1;\r\n");
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_THEN_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_ELSE_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 3].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_THEN_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 	}
 
 	return currBytePtr;
