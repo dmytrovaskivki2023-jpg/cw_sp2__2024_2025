@@ -346,7 +346,7 @@ unsigned long long int getNextEndOfExpressionIndex(struct LexemInfo* lexemInfoIn
 				return getEndOfNewPrevExpressioIndex(lexemInfoInTable, index);
 			}
 		}
-		else if (isSplittingOperator(lexemInfoInTable[index].lexemStr)) {
+		else if (isSplittingOperator(lexemInfoInTable[index].lexemStr)) { // split after split operator TODO: +presplit
 			if (lexemInfoInTable[prevNonParenthesesIndex].tokenType == IDENTIFIER_LEXEME_TYPE || lexemInfoInTable[prevNonParenthesesIndex].tokenType == VALUE_LEXEME_TYPE) {
 				return getEndOfNewPrevExpressioIndex(lexemInfoInTable, index);
 			}
@@ -379,6 +379,14 @@ void makePrePrepare(struct LexemInfo* lexemInfoInTable, struct LexemInfo* tempLe
 	memset(lexemInfoInTable, '\0', sizeof(*lexemInfoInTable));
 
 	for (tempLexemInfoInTable = firstTempLexemInfoInTable, lexemInfoInTable = firstLexemInfoInTable; tempLexemInfoInTable->lexemStr[0] != '\0'; ++tempLexemInfoInTable) {
+		if (isSplittingOperator(tempLexemInfoInTable[0].lexemStr)) {  // split before split operator; DONE: postsplit in getNextEndOfExpressionIndex
+			if (!strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_END_GROUPEXPRESSION][0], MAX_LEXEM_SIZE)
+				|| !strncmp(tempLexemInfoInTable[-1].lexemStr, tokenStruct[MULTI_TOKEN_END_BLOCK][0], MAX_LEXEM_SIZE)
+				// || ... // TODO: (not always)
+				) {
+				(void)createMultiToken(&lexemInfoInTable, MULTI_TOKEN_NULL_STATEMENT);
+			}
+		}
 		if (tempLexemInfoInTable[1].tokenType == VALUE_LEXEME_TYPE &&
 			tempLexemInfoInTable[-1].tokenType == KEYWORD_LEXEME_TYPE
 			) {
