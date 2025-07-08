@@ -95,10 +95,10 @@ unsigned char* makeToOrDowntoCycleCode(struct LexemInfo** lastLexemInfoInTable, 
 			}
 			currBytePtr += sprintf((char*)currBytePtr, "    push ebx\r\n");
 			if (toMode) {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_TO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_TO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 			}
 			else {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@AFTER_DOWNTO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@AFTER_DOWNTO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 			}
 		}
 		else if (generatorMode == C_CODER_MODE) {
@@ -110,10 +110,10 @@ unsigned char* makeToOrDowntoCycleCode(struct LexemInfo** lastLexemInfoInTable, 
 			}
 			currBytePtr += sprintf((char*)currBytePtr, "    contextStack[++contextStackIndex] = lastBindDataIndex;\r\n");
 			if (toMode) {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_TO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_TO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 			}
 			else {
-				currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__AFTER_DOWNTO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+				currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__AFTER_DOWNTO_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 			}
 		}
 
@@ -251,7 +251,7 @@ unsigned char* makePostForCode_(struct LexemInfo** lastLexemInfoInTable, unsigne
 		else {
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    jmp LABEL@AFTER_DOWNTO_%016llX\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 		}
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@EXIT_FOR_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@EXIT_FOR_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
 		currBytePtr += sprintf((char*)currBytePtr, "    add esp, 4; add esp, 8\r\n");
 	}
 	else if (generatorMode == C_CODER_MODE) {
@@ -261,7 +261,7 @@ unsigned char* makePostForCode_(struct LexemInfo** lastLexemInfoInTable, unsigne
 		else {
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    goto LABEL__AFTER_DOWNTO_%016llX;\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 		}
-		currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__EXIT_FOR_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
+		currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__EXIT_FOR_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 2].lexemStr);
 		currBytePtr += sprintf((char*)currBytePtr, "    --contextStackIndex;\r\n");
 	}
 

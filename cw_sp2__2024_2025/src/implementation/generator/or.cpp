@@ -63,9 +63,7 @@ unsigned char* makeOrCode(struct LexemInfo** lastLexemInfoInTable, unsigned char
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\"\r\n", tokenStruct[MULTI_TOKEN_OR][0]);
-			currBytePtr += sprintf((char*)currBytePtr, "    opTemp = opStack[opStackIndex - 1] = opStack[opStackIndex - 1] || opStack[opStackIndex--];\r\n");
-//			currBytePtr += sprintf((char*)currBytePtr, "    //--opStackIndex;\r\n");
-//			currBytePtr += sprintf((char*)currBytePtr, "    //opTemp = opStack[opStackIndex];\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    opTemp = opStack[opStackIndex - 1] = opStack[opStackIndex - 1] || opStack[opStackIndex]; --opStackIndex;\r\n");
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;

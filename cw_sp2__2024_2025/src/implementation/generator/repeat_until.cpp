@@ -33,10 +33,10 @@ unsigned char* makeRepeatCycleCode(struct LexemInfo** lastLexemInfoInTable, unsi
 			//
 		}
 		else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL@REPEAT_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL@REPEAT_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 		}
 		else if (generatorMode == C_CODER_MODE) {
-			currBytePtr += snprintf((char*)currBytePtr, 8192, "    LABEL__REPEAT_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
+			currBytePtr += snprintf((char*)currBytePtr, 8192, "LABEL__REPEAT_%016llX:\r\n", (unsigned long long int)lexemInfoTransformationTempStack[lexemInfoTransformationTempStackSize - 1].lexemStr);
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
