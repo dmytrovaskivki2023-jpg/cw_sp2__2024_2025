@@ -8,7 +8,7 @@ SET PATH=..\tools;..\tools\TDM-GCC-32\bin;%PATH%
 @echo off
 set CR=0x0D
 <nul set /p="Compile compiler:                                              [ in progress, please wait ]"
-g++                                                                                                     ^
+g++                                                                                   ^
 cw.cpp                                                                                ^
 src\implementation\cli\cli.cpp                                                        ^
 src\implementation\generator\add.cpp                                                  ^
