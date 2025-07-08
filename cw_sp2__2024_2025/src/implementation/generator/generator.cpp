@@ -267,7 +267,7 @@ unsigned char* makeDataSection(struct LexemInfo** lastLexemInfoInTable, unsigned
 	else if (generatorMode == ASSEMBLY_X86_WIN32_CODER_MODE) {
 		currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, ".data\r\n");
-		currBytePtr += sprintf((char*)currBytePtr, "    data_start db 8192 dup (0)\r\n");
+		currBytePtr += sprintf((char*)currBytePtr, "    data_start db 32768 dup (0)\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    ;title_msg db \"Output:\", 0\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    valueTemp_msg db 256 dup(0)\r\n");
 		currBytePtr += sprintf((char*)currBytePtr, "    valueTemp_fmt db \"%%d\", 10, 13, 0\r\n");
