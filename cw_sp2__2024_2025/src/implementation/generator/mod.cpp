@@ -42,7 +42,7 @@ unsigned char* makeModCode(struct LexemInfo** lastLexemInfoInTable, unsigned cha
 		else if (generatorMode == C_CODER_MODE) {
 			currBytePtr += sprintf((char*)currBytePtr, "\r\n");
 			currBytePtr += snprintf((char*)currBytePtr, 8192, "    //\"%s\"\r\n", tokenStruct[MULTI_TOKEN_MOD][0]);
-			currBytePtr += sprintf((char*)currBytePtr, "    opTemp = opStack[opStackIndex - 1] %= opStack[opStackIndex--];\r\n");
+			currBytePtr += sprintf((char*)currBytePtr, "    opTemp = opStack[opStackIndex - 1] %%= opStack[opStackIndex--];\r\n");
 		}
 
 		return *lastLexemInfoInTable += multitokenSize, currBytePtr;
