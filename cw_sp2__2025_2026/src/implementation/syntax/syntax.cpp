@@ -189,7 +189,7 @@ RHSConteiner* getActualRHSConteinerRHS(Grammar* grammar, struct LexemInfo* currT
         exit(0); // TODO:...
     }
 
-    for (MarkedRule* multiRule = grammar->multiRules; multiRule->invertedFirstMarks; ++multiRule) {
+    for (MarkedRule* multiRule = grammar->multiRules; multiRule->firstMarksType; ++multiRule) {
         if (strcmp(multiRule->rule.lhs, currStackElement)) {
             continue;
         }
@@ -198,17 +198,17 @@ RHSConteiner* getActualRHSConteinerRHS(Grammar* grammar, struct LexemInfo* currT
             if (currTapeLexemInfoElement->tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(multiRule->firstMarks[firstMarksIndex], "ident_terminal")
                 || currTapeLexemInfoElement->tokenType == VALUE_LEXEME_TYPE && !strcmp(multiRule->firstMarks[firstMarksIndex], "unsigned_value_terminal")
                 || !strcmp(currTapeLexemInfoElement->lexemStr, multiRule->firstMarks[firstMarksIndex])) {
-                if (multiRule->invertedFirstMarks == LA_NOT) {
+                if (multiRule->firstMarksType == LA_NOT) {
                     continue;
                 }
             }
             else {
-                if (multiRule->invertedFirstMarks == LA_IS) {
+                if (multiRule->firstMarksType == LA_IS) {
                     continue;
                 }
             }
 
-            for (int rhsVariantIndex = 0; multiRule->rule.rhss[rhsVariantIndex].invertedSecondMarks; ++rhsVariantIndex) {
+            for (int rhsVariantIndex = 0; multiRule->rule.rhss[rhsVariantIndex].secondMarksType; ++rhsVariantIndex) {
                 if (multiRule->rule.rhss[rhsVariantIndex].secondMarks[0][0] == '\0') {
                     return multiRule->rule.rhss + rhsVariantIndex;
                 }
@@ -216,12 +216,12 @@ RHSConteiner* getActualRHSConteinerRHS(Grammar* grammar, struct LexemInfo* currT
                     if (nextTapeLexemInfoElement->tokenType == IDENTIFIER_LEXEME_TYPE && !strcmp(multiRule->rule.rhss[rhsVariantIndex].secondMarks[secondMarksIndex], "ident_terminal")
                         || nextTapeLexemInfoElement->tokenType == VALUE_LEXEME_TYPE && !strcmp(multiRule->rule.rhss[rhsVariantIndex].secondMarks[secondMarksIndex], "unsigned_value_terminal")
                         || !strcmp(nextTapeLexemInfoElement->lexemStr, multiRule->rule.rhss[rhsVariantIndex].secondMarks[secondMarksIndex])) {
-                        if (multiRule->rule.rhss[rhsVariantIndex].invertedSecondMarks == LA_NOT) {
+                        if (multiRule->rule.rhss[rhsVariantIndex].secondMarksType == LA_NOT) {
                             continue;
                         }
                     }
                     else {
-                        if (multiRule->rule.rhss[rhsVariantIndex].invertedSecondMarks == LA_IS) {
+                        if (multiRule->rule.rhss[rhsVariantIndex].secondMarksType == LA_IS) {
                             continue;
                         }
                     }
