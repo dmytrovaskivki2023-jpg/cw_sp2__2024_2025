@@ -9,13 +9,6 @@
 #include "../../include/generator/generator.h"
 #include "../../include/lexica/lexica.h"
 
-//#define SYNTAX_ANALYZE_BY_CYK_ALGORITHM 0
-//#define SYNTAX_ANALYZE_BY_RECURSIVE_DESCENT 1
-//
-//#define DEFAULT_SYNTAX_ANAlYZE_MODE SYNTAX_ANALYZE_BY_CYK_ALGORITHM
-
-//using namespace std;
-
 #define MAX_RULES 356
 
 #define MAX_TOKEN_SIZE 128
@@ -26,7 +19,7 @@
 #define MAX_MARK_COUNT 16
 
 typedef struct {
-	char invertedSecondMarks;
+	char secondMarksType;
 	char secondMarks[MAX_MARK_COUNT][MAX_TOKEN_SIZE];
 	int rhs_count;
 	char rhs[MAX_RTOKEN_COUNT][MAX_TOKEN_SIZE];
@@ -38,7 +31,7 @@ typedef struct {
 } Rule;
 
 typedef struct {
-	char invertedFirstMarks;
+	char firstMarksType;
 	char firstMarks[MAX_MARK_COUNT][MAX_TOKEN_SIZE];
 	Rule rule;
 } MarkedRule;
@@ -53,9 +46,7 @@ extern Grammar grammar;
 
 #define DEBUG_STATES
 
-//bool recursiveDescentParserRuleWithDebug(const char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth, const struct LexemInfo** unexpectedLexemfailedTerminal);
 bool getIndexAfterFragmentSyntax(char* ruleName, int& lexemIndex, struct LexemInfo* lexemInfoTable, Grammar* grammar, int depth/* not used */);
 
-//bool cykAlgorithmImplementation(struct LexemInfo* lexemInfoTable, Grammar* grammar);
 //int syntaxAnalyze(       LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST);
 int syntaxAnalyze(struct LexemInfo* lexemInfoTable, Grammar* grammar, char syntaxlAnalyzeMode/* not used */, char* astFileName, char* errorMessagesPtrToLastBytePtr, bool viewAST);
