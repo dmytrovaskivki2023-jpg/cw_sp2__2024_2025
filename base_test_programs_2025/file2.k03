@@ -25,7 +25,7 @@ BODY DATA INTEGER16 _AAAAAAA , _BBBBBBB , _CCCCCCC , _MAXMAXM ;
     PUT ( 0 )
   }
 
-  IF ( _AAAAAAA >= ( _BBBBBBB + _CCCCCCC ) ) {
+  IF _AAAAAAA >= ( _BBBBBBB + _CCCCCCC ) {
     PUT ( 10 )
   } ELSE {
     PUT ( 0 )
