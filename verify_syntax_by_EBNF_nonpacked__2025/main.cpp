@@ -14,12 +14,13 @@
 
 #define CW_GRAMMAR cwgrammar
 
-#define DEBUG__IF_ERROR
+//#define DEBUG__IF_ERROR
 
 #define RERUN_MODE
 
 #define DEFAULT_INPUT_FILE "../base_test_programs_2025/file1.k03"
 //#define DEFAULT_INPUT_FILE "../other_test_programs_2025/file4.k03"
+#define DEFAULT_INPUT_FILE "file2.k03"
 
 #define MAX_TEXT_SIZE 8192
 
@@ -27,8 +28,6 @@ namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 
 #define SAME_RULE(RULE) ((RULE) | (RULE))
-//#define USE_REVERSE_ASSIGNMENT
-#define USE_COMPARE_WITH_EQUAL
 template <typename Iterator>
 struct cwgrammar : qi::grammar<Iterator> {
     cwgrammar(std::ostringstream& error_stream) : cwgrammar::base_type(program), error_stream_(error_stream) {
@@ -45,44 +44,29 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         unary_operator = SAME_RULE(tokenNOT);
         unary_operation = unary_operator >> expression;
-#ifdef USE_COMPARE_WITH_EQUAL
         binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
-#else
-        binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESS | tokenGREATER | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
-#endif
         binary_action = binary_operator >> expression;
         //
-        left_expression = group_expression | unary_operation | ident >> -index_action | value;
+        left_expression = group_expression | unary_operation | ident >> -index_action | value | cond_block__with_optionally_return_value;
         expression = left_expression >> *binary_action;
         //
         group_expression = tokenGROUPEXPRESSIONBEGIN >> expression >> tokenGROUPEXPRESSIONEND;
         //
-#ifdef USE_REVERSE_ASSIGNMENT
         bind_left_to_right = expression >> tokenLRBIND >> ident >> -index_action;
-#else
-        bind_right_to_left = ident >> -index_action >> tokenRLBIND >> expression;
-#endif
         //
         if_expression = SAME_RULE(expression);
-        body_for_true = SAME_RULE(block_statements_in_while_and_if_body); //tokenBEGINBLOCK >> *statement_in_while_and_if_body >> tokenENDBLOCK; // block_statements_in_while_and_if_body;
+        body_for_true__with_optionally_return_value = SAME_RULE(block_statements__with_optionally_return_value); //tokenBEGINBLOCK >> *statement_in_while_and_if_body >> tokenENDBLOCK; // block_statements_in_while_and_if_body;
         //false_cond_block = tokenELSE >> cond_block; // without else ! ==> tokenIF >> if_expression >> body_for_true
-        false_cond_block_without_else = tokenELSE >> tokenIF >> if_expression >> body_for_true;
-        body_for_false = tokenELSE >> block_statements_in_while_and_if_body;
-        cond_block = tokenIF >> if_expression >> body_for_true >> *false_cond_block_without_else >> (-body_for_false);
+        false_cond_block_without_else__with_optionally_return_value = tokenELSE >> tokenIF >> if_expression >> body_for_true__with_optionally_return_value;
+        body_for_false__with_optionally_return_value = tokenELSE >> block_statements__with_optionally_return_value;
+        cond_block__with_optionally_return_value = tokenIF >> if_expression >> body_for_true__with_optionally_return_value >> *false_cond_block_without_else__with_optionally_return_value >> (-body_for_false__with_optionally_return_value);
+        cond_block__with_optionally_return_value_and_optionally_bind = cond_block__with_optionally_return_value >> -(tokenLRBIND >> ident >> -index_action);
         //
         cycle_begin_expression = SAME_RULE(expression);
         cycle_end_expression = SAME_RULE(expression);
         cycle_counter = SAME_RULE(ident);
-#ifdef USE_REVERSE_ASSIGNMENT
         cycle_counter_lr_init = cycle_begin_expression >> tokenLRBIND >> cycle_counter;
-#else
-        cycle_counter_rl_init = cycle_counter >> tokenRLBIND >> cycle_begin_expression;
-#endif
-#ifdef USE_REVERSE_ASSIGNMENT
-        cycle_counter_init = SAME_RULE(cycle_counter_lr_init);
-#else
         cycle_counter_init = SAME_RULE(cycle_counter_rl_init);
-#endif
         cycle_counter_last_value = SAME_RULE(cycle_end_expression);
         cycle_body = tokenDO >> (statement | block_statements);
         forto_cycle = tokenFOR >> cycle_counter_init >> (tokenTO | tokenDOWNTO) >> cycle_counter_last_value >> cycle_body;
@@ -111,12 +95,9 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenGROUPEXPRESSIONEND.name("tokenGROUPEXPRESSIONEND");
 #endif
         output = tokenPUT >> expression;
-#ifdef USE_REVERSE_ASSIGNMENT
-        statement = bind_left_to_right | cond_block | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
-#else
-        statement = bind_right_to_left | cond_block | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
-#endif
+        statement = bind_left_to_right | cond_block__with_optionally_return_value_and_optionally_bind | forto_cycle | while_cycle | repeat_until_cycle | labeled_point | goto_label | input | output | tokenSEMICOLON;
         block_statements = tokenBEGINBLOCK >> *statement >> tokenENDBLOCK;
+        block_statements__with_optionally_return_value = tokenBEGINBLOCK >> *statement_in_while_and_if_body >> -expression >> tokenENDBLOCK;
         program = BOUNDARIES >> tokenNAME >> program_name >> tokenSEMICOLON >> tokenBODY >> tokenDATA >> (-declaration) >> tokenSEMICOLON >> *statement >> tokenEND;
         //
         digit = digit_0 | digit_1 | digit_2 | digit_3 | digit_4 | digit_5 | digit_6 | digit_7 | digit_8 | digit_9;
@@ -152,13 +133,10 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenOR = "OR" >> STRICT_BOUNDARIES;
         tokenEQUAL = "==" >> BOUNDARIES;
         tokenNOTEQUAL = "!=" >> BOUNDARIES;
-#ifdef USE_COMPARE_WITH_EQUAL
         tokenLESSOREQUAL = "<=" >> BOUNDARIES;
         tokenGREATEROREQUAL = ">=" >> BOUNDARIES;
-#else
         tokenLESS = "<" >> BOUNDARIES;
         tokenGREATER = ">" >> BOUNDARIES;
-#endif
         tokenPLUS = "+" >> BOUNDARIES;
         tokenMINUS = "-" >> BOUNDARIES;
         tokenMUL = "*" >> BOUNDARIES;
@@ -285,24 +263,20 @@ struct cwgrammar : qi::grammar<Iterator> {
         left_expression,
         expression,
         group_expression,
-#ifdef USE_REVERSE_ASSIGNMENT
         bind_left_to_right,
-#else
         bind_right_to_left,
-#endif
         if_expression,
         body_for_true,
-        false_cond_block_without_else,
-        body_for_false,
-        cond_block,
+        body_for_true__with_optionally_return_value,
+        false_cond_block_without_else__with_optionally_return_value,
+        body_for_false__with_optionally_return_value,
+        cond_block__with_optionally_return_value,
+        cond_block__with_optionally_return_value_and_optionally_bind,
         cycle_begin_expression,
         cycle_end_expression,
         cycle_counter,
-#ifdef USE_REVERSE_ASSIGNMENT
         cycle_counter_lr_init,
-#else
         cycle_counter_rl_init,
-#endif
         cycle_counter_init,
         cycle_counter_last_value,
         cycle_body,
@@ -319,16 +293,14 @@ struct cwgrammar : qi::grammar<Iterator> {
         output,
         statement,
         block_statements,
+        block_statements__with_optionally_return_value,
         program,
         //
         tokenCOLON, tokenGOTO, tokenINTEGER16, tokenCOMMA, tokenNOT, tokenAND, tokenOR, tokenEQUAL, tokenNOTEQUAL,
-#ifdef USE_COMPARE_WITH_EQUAL
         tokenLESSOREQUAL,
         tokenGREATEROREQUAL,
-#else
         tokenLESS,
         tokenGREATER,
-#endif
         tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
         tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenBREAK, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenBEGIN, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
         //
