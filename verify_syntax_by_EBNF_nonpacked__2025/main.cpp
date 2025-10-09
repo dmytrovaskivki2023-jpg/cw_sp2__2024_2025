@@ -66,7 +66,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         cycle_end_expression = SAME_RULE(expression);
         cycle_counter = SAME_RULE(ident);
         cycle_counter_lr_init = cycle_begin_expression >> tokenLRBIND >> cycle_counter;
-        cycle_counter_init = SAME_RULE(cycle_counter_rl_init);
+        cycle_counter_init = SAME_RULE(cycle_counter_lr_init);
         cycle_counter_last_value = SAME_RULE(cycle_end_expression);
         cycle_body = tokenDO >> (statement | block_statements);
         forto_cycle = tokenFOR >> cycle_counter_init >> (tokenTO | tokenDOWNTO) >> cycle_counter_last_value >> cycle_body;
@@ -144,7 +144,6 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenMOD = "MOD" >> STRICT_BOUNDARIES;
         tokenGROUPEXPRESSIONBEGIN = "(" >> BOUNDARIES;
         tokenGROUPEXPRESSIONEND = ")" >> BOUNDARIES;
-        tokenRLBIND = ":=" >> BOUNDARIES;
         tokenLRBIND = "=:" >> BOUNDARIES;
         tokenELSE = "ELSE" >> STRICT_BOUNDARIES;
         tokenIF = "IF" >> STRICT_BOUNDARIES;
@@ -264,7 +263,6 @@ struct cwgrammar : qi::grammar<Iterator> {
         expression,
         group_expression,
         bind_left_to_right,
-        bind_right_to_left,
         if_expression,
         body_for_true,
         body_for_true__with_optionally_return_value,
@@ -276,7 +274,6 @@ struct cwgrammar : qi::grammar<Iterator> {
         cycle_end_expression,
         cycle_counter,
         cycle_counter_lr_init,
-        cycle_counter_rl_init,
         cycle_counter_init,
         cycle_counter_last_value,
         cycle_body,
@@ -301,7 +298,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         tokenGREATEROREQUAL,
         tokenLESS,
         tokenGREATER,
-        tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenRLBIND, tokenLRBIND,
+        tokenPLUS, tokenMINUS, tokenMUL, tokenDIV, tokenMOD, tokenGROUPEXPRESSIONBEGIN, tokenGROUPEXPRESSIONEND, tokenLRBIND,
         tokenELSE, tokenIF, tokenDO, tokenFOR, tokenTO, tokenDOWNTO, tokenWHILE, tokenCONTINUE, tokenBREAK, tokenEXIT, tokenREPEAT, tokenUNTIL, tokenGET, tokenPUT, tokenNAME, tokenBODY, tokenDATA, tokenBEGIN, tokenEND, tokenBEGINBLOCK, tokenENDBLOCK, tokenLEFTSQUAREBRACKETS, tokenRIGHTSQUAREBRACKETS, tokenSEMICOLON,
         //
         STRICT_BOUNDARIES, BOUNDARIES, BOUNDARY, BOUNDARY_SPACE, BOUNDARY_TAB, BOUNDARY_CARRIAGE_RETURN, BOUNDARY_LINE_FEED, BOUNDARY_NULL,
