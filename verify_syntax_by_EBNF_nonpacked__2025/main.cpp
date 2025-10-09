@@ -44,7 +44,7 @@ struct cwgrammar : qi::grammar<Iterator> {
         //
         unary_operator = SAME_RULE(tokenNOT);
         unary_operation = unary_operator >> expression;
-        binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
+        binary_operator = tokenAND | tokenOR | tokenEQUAL | tokenNOTEQUAL | tokenLESS | tokenGREATER | tokenLESSOREQUAL | tokenGREATEROREQUAL | tokenPLUS | tokenMINUS | tokenMUL | tokenDIV | tokenMOD;
         binary_action = binary_operator >> expression;
         //
         left_expression = group_expression | unary_operation | ident >> -index_action | value | cond_block__with_optionally_return_value;
