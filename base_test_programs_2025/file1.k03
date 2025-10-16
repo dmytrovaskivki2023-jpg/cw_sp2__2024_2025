@@ -1,18 +1,31 @@
-NAME _PROGRAM ; 
-BODY DATA INTEGER16 _AAAAAAA , _BBBBBBB , _XXXXXXX , _YYYYYYY ;
-  GET ( _AAAAAAA )
-  GET ( _BBBBBBB )
-  
-  PUT ( _AAAAAAA + _BBBBBBB )
-  PUT ( _AAAAAAA - _BBBBBBB )
-  PUT ( _AAAAAAA * _BBBBBBB )
-  PUT ( _AAAAAAA DIV _BBBBBBB )
-  PUT ( _AAAAAAA MOD _BBBBBBB )
+fn main() {
+    let mut _AAAAAAA: i16;
+    let mut _BBBBBBB: i16;
+    let mut _XXXXXXX: i16;
+    let mut _YYYYYYY: i16;
 
-  (_AAAAAAA - _BBBBBBB) * 10 + (_AAAAAAA + _BBBBBBB) DIV 10 =: _XXXXXXX
-  _XXXXXXX + _XXXXXXX MOD 10 =: _YYYYYYY
+    println!("Введіть A:");
+    _AAAAAAA = input_i16();
 
-  PUT ( _XXXXXXX )
-  PUT ( _YYYYYYY )
+    println!("Введіть B:");
+    _BBBBBBB = input_i16();
 
-END
+    println!("{}", _AAAAAAA + _BBBBBBB);
+    println!("{}", _AAAAAAA - _BBBBBBB);
+    println!("{}", _AAAAAAA * _BBBBBBB);
+    println!("{}", _AAAAAAA / _BBBBBBB);
+    println!("{}", _AAAAAAA % _BBBBBBB);
+
+    _XXXXXXX = (_AAAAAAA - _BBBBBBB) * 10 + (_AAAAAAA + _BBBBBBB) / 10;
+    _YYYYYYY = _XXXXXXX + (_XXXXXXX % 10);
+
+    println!("{}", _XXXXXXX);
+    println!("{}", _YYYYYYY);
+}
+
+fn input_i16() -> i16 {
+    use std::io;
+    let mut s = String::new();
+    io::stdin().read_line(&mut s).unwrap();
+    s.trim().parse::<i16>().unwrap()
+}
