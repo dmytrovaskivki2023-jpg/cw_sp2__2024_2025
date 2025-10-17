@@ -1,15 +1,24 @@
-NAME _PROGRAM ; 
-BODY DATA INTEGER16 _AAAAAAA , _BBBBBBB , _CYCLEAA , _CYCLEBB , _XVALUEE;
+NAME _PROGRAM ;
+
+BODY DATA
+  INTEGER16 _AAAAAAA , _BBBBBBB , _CYCLEAA , _CYCLEBB , _XVALUEE ;
+
+  /* зчитування меж циклів */
   GET ( _AAAAAAA )
   GET ( _BBBBBBB )
 
+  /* перший цикл — від _AAAAAAA до _BBBBBBB, виводимо квадрат поточного значення */
   FOR _AAAAAAA =: _CYCLEAA TO _BBBBBBB DO
     PUT ( _CYCLEAA * _CYCLEAA )
 
+  /* обчислення кількості ітерацій подвійного циклу */
   0 =: _XVALUEE
+
   FOR 1 =: _CYCLEAA TO _AAAAAAA DO
     FOR 1 =: _CYCLEBB TO _BBBBBBB DO
-       _XVALUEE + 1 =: _XVALUEE
+      _XVALUEE + 1 =: _XVALUEE
+
+  /* вивід результату — кількість ітерацій */
   PUT ( _XVALUEE )
 
 END
